@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Obinna Oti — Product Design Portfolio</title>
-  <meta name="description" content="Portfolio of Obinna Oti, product designer. Selected work 2020–2025, presented as an interactive flip book.">
+  <meta name="description" content="Portfolio of Obinna Oti, product designer. Selected work 2020–2025, presented as interactive flip books.">
   <meta property="og:title" content="Obinna Oti — Product Design Portfolio">
-  <meta property="og:description" content="Selected work 2020–2025, presented as an interactive flip book.">
+  <meta property="og:description" content="Selected work 2020–2025, presented as interactive flip books.">
   <meta name="theme-color" content="#e8e8e6">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Cpath d='M7 9.5h8v13H7zM17 9.5h8v13h-8z' fill='%23fff'/%3E%3C/svg%3E">
   <link rel="preload" href="assets/fonts/TomatoGrotesk-ExtraBold.otf" as="font" type="font/otf" crossorigin>
@@ -16,408 +16,301 @@
 <body>
 <div class="app">
 
-  <header class="bar bar--top">
-    <a class="brand" href="#" data-goto="cover"><b>Obinna Oti</b><span>Product Design</span></a>
-    <span class="bar__section" id="sectionLabel" aria-live="polite"></span>
-    <nav class="bar__actions" aria-label="Book controls">
-      <button class="chip" id="indexBtn" type="button" aria-expanded="false" aria-controls="indexPanel">Index</button>
-      <button class="icon-btn" id="viewBtn" type="button" aria-pressed="false" title="Scroll view" aria-label="Switch to scroll view">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" class="i-scroll"><rect x="3" y="1.5" width="10" height="5" rx=".5"/><rect x="3" y="9.5" width="10" height="5" rx=".5"/></svg>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" class="i-book"><path d="M8 3.5C6.5 2.5 4 2.2 1.5 2.5v10c2.5-.3 5 0 6.5 1 1.5-1 4-1.3 6.5-1v-10C12 2.2 9.5 2.5 8 3.5Zm0 0v10"/></svg>
+  <!-- ═══════════ PROJECTS CAROUSEL (landing) ═══════════ -->
+  <section class="shelf" id="shelf" aria-label="Projects">
+    <header class="bar">
+      <a class="brand" href="#"><b>Obinna Oti</b><span>Product Design</span></a>
+      <a class="bar__link" href="mailto:obinna@example.com">obinna@example.com</a>
+    </header>
+
+    <p class="shelf__intro">I’ve worked with a wide range of clients, from luxury apparel brands to independent labels, helping them shape products that feel elevated, purposeful and manufacturable.</p>
+
+    <div class="carousel" id="carousel">
+      <div class="carousel__track" id="track" role="list"></div>
+    </div>
+
+    <div class="shelf__caption">
+      <span class="shelf__num" id="capNum"></span>
+      <div class="shelf__text">
+        <h1 class="shelf__title" id="capTitle"></h1>
+        <p class="shelf__meta" id="capMeta"></p>
+      </div>
+      <div class="shelf__controls">
+        <span class="shelf__pager" id="capPager"></span>
+        <button class="round-btn" id="carPrev" type="button" aria-label="Previous project">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
+        </button>
+        <button class="round-btn" id="carNext" type="button" aria-label="Next project">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <button class="btn btn--solid" id="openBtn" type="button">Open the book</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FLIP BOOK READER ═══════════ -->
+  <section class="reader" id="reader" aria-label="Flip book" hidden>
+    <header class="bar">
+      <button class="btn" id="closeBtn" type="button">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
+        All projects
       </button>
-      <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" title="Page sound" aria-label="Page turning sound">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h2.5L8 3v10L4.5 10H2z"/><path class="i-wave" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/><path class="i-mute" d="m10.5 6 4 4m0-4-4 4"/></svg>
+      <span class="bar__title" id="readerTitle" aria-live="polite"></span>
+      <div class="bar__actions">
+        <button class="round-btn" id="soundBtn" type="button" aria-pressed="true" title="Page sound" aria-label="Page turning sound">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h2.5L8 3v10L4.5 10H2z"/><path class="i-wave" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/><path class="i-mute" d="m10.5 6 4 4m0-4-4 4"/></svg>
+        </button>
+        <button class="round-btn" id="fsBtn" type="button" title="Full screen" aria-label="Full screen">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="book-wrap" id="bookWrap">
+        <div class="book-base" aria-hidden="true"></div>
+      </div>
+      <p class="hint" id="hint" aria-hidden="true"></p>
+    </main>
+
+    <footer class="bar bar--bottom">
+      <span class="counter" id="counter" aria-live="polite"></span>
+      <div class="progress" aria-hidden="true"><div class="progress__fill" id="progressFill"></div></div>
+      <button class="round-btn" id="prevBtn" type="button" aria-label="Previous page">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
       </button>
-      <button class="icon-btn" id="fsBtn" type="button" title="Full screen" aria-label="Full screen">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
+      <button class="round-btn" id="nextBtn" type="button" aria-label="Next page">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </button>
-    </nav>
-  </header>
+    </footer>
+  </section>
+</div>
 
-  <div class="index-panel" id="indexPanel" hidden>
-    <p class="index-panel__title">Index</p>
-    <ol id="indexList"></ol>
-  </div>
+<!--
+  THE LIBRARY
+  ─────────────────────────────────────────────────────────────
+  Each <article class="book-src"> is one project = one flip book, and one card in the carousel.
+  Carousel order = the order of the articles below.
 
-  <main class="stage" id="stage">
-    <div class="book-wrap" id="bookWrap">
-      <div class="book-base" id="bookBase" aria-hidden="true"></div>
+  Inside a book every .page is one page. The first page is the front cover (also used as the
+  carousel card), the last is the back cover. Each Figma frame is split across a spread:
+  odd pages sit on the LEFT, even pages on the RIGHT. Keep the page count EVEN.
 
-      <!--
-        THE BOOK
-        ─────────────────────────────────────────────────────────────
-        Every .page is one page of the book. With the cover shown on its own,
-        pages pair up into spreads: [0] · [1 2] · [3 4] · … · [last].
-        Odd pages sit on the LEFT, even pages on the RIGHT.
-        Keep the total number of pages EVEN so the back cover closes the book.
+  page--dark   black page          page--band   black image band across the top
+  .span        image drawn across both pages of a spread (use span--l on the left page, span--r on the right)
+  The running head ("Obinna Oti · 2020—2025") and page numbers are added by main.js.
+-->
+<div class="library" id="library">
 
-        data-section / data-anchor  → starts a chapter (Index menu, #links, contents page)
-        data-density="hard"         → stiff board pages (covers)
-        page--dark                  → black page
-        page--band                  → black image band across the top
-        The running head ("Obinna Oti · 2020—2025") and page numbers are added by main.js.
-      -->
-      <div class="book" id="book" data-head-left="Obinna Oti" data-head-right="2020—2025">
+  <!-- ═══════════ 01 · STING RAYS ═══════════ -->
+  <article class="book-src" data-slug="sting-rays" data-number="01" data-title="Sting Rays" data-meta="Product design · Eyewear">
 
-        <!-- ═══════════ 0 · FRONT COVER ═══════════ -->
-        <div class="page page--dark page--cover" data-density="hard" data-section="Cover" data-anchor="cover">
-          <div class="page__inner cover">
-            <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
-            <div>
-              <h1 class="cover__title">Port<br>folio</h1>
-              <div class="cover__sub">
-                <b>Product Design.</b>
-                <span class="cover__open">Open the book <span aria-hidden="true">↗</span></span>
-              </div>
-            </div>
-          </div>
+    <!-- Front cover -->
+    <div class="page page--dark page--cover" data-density="hard">
+      <div class="page__inner cover">
+        <img class="cover__img" src="assets/images/sting-rays-render-hero.webp" alt="" draggable="false">
+        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
+        <div class="cover__foot">
+          <p class="cover__kicker">01 — Product design, eyewear</p>
+          <h2 class="cover__title">Sting<br>rays</h2>
         </div>
-
-        <!-- ═══════════ 1–2 · INTRODUCTION (Frame 3) ═══════════ -->
-        <div class="page page--dark" data-density="hard" data-section="Introduction" data-anchor="intro">
-          <div class="page__inner">
-            <div class="end">
-              <h2 class="display">Obinna Oti</h2>
-              <p class="tagline">Product Design.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="page page--dark">
-          <div class="page__inner">
-            <div class="cols cols--stack-sm end">
-              <div>
-                <h3 class="label">Work Done</h3>
-                <p class="body">I’ve worked with a wide range of clients, from luxury apparel brands to independent labels, helping them shape products that feel elevated, purposeful and manufacturable. My work spans:</p>
-                <ul class="list">
-                  <li>Concept development, sketching and costing</li>
-                  <li>Footwear and industrial object design, blending sculptural form with technical function</li>
-                  <li>3D modelling, rendering and product visualisation for collections and campaigns</li>
-                  <li>Tech packs and production communication, guiding suppliers from proto through to SMS</li>
-                  <li>Material direction across trims, metals, fabrics, TPU, leathers and surface detail</li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="label">Process</h3>
-                <ol class="steps">
-                  <li><b>01</b><span><strong>Sketch</strong>Loose studies to find the flow of an idea.</span></li>
-                  <li><b>02</b><span><strong>Construct</strong>The strongest directions built to standard sizes and checked for fit.</span></li>
-                  <li><b>03</b><span><strong>Model</strong>Developed in 3D and rendered to test form, colour and material.</span></li>
-                  <li><b>04</b><span><strong>Detail</strong>Resolved for production through tech packs and supplier communication.</span></li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 3–4 · CONTENTS (Frame 29) ═══════════ -->
-        <div class="page" data-section="Contents" data-anchor="contents">
-          <div class="page__inner">
-            <div class="end">
-              <p class="kicker">Project</p>
-              <h2 class="title">Content</h2>
-              <nav class="toc" aria-label="Projects">
-                <a class="toc__item" href="#vivonne-cabin" data-goto="vivonne-cabin">
-                  <span class="toc__num">01</span>
-                  <span class="toc__text"><b>Vivonne Cabin</b>Architecture. A compact cabin taken from concept to construction detail.<i data-page-of="vivonne-cabin"></i></span>
-                </a>
-                <a class="toc__item" href="#sting-rays" data-goto="sting-rays">
-                  <span class="toc__num">02</span>
-                  <span class="toc__text"><b>Sting Rays</b>Product design. Sports eyewear, from first sketch to final render.<i data-page-of="sting-rays"></i></span>
-                </a>
-              </nav>
-            </div>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <p class="aside">Selected work, 2020—2025.<br>Choose a project to go straight to it.</p>
-            <nav class="toc end" aria-label="More projects">
-              <a class="toc__item" href="#project-03" data-goto="project-03">
-                <span class="toc__num">03</span>
-                <span class="toc__text"><b>Project Title</b>Discipline. One line about the project.<i data-page-of="project-03"></i></span>
-              </a>
-              <a class="toc__item" href="#project-04" data-goto="project-04">
-                <span class="toc__num">04</span>
-                <span class="toc__text"><b>Project Title</b>Discipline. One line about the project.<i data-page-of="project-04"></i></span>
-              </a>
-            </nav>
-          </div>
-        </div>
-
-        <!-- ═══════════ 5–6 · 01 VIVONNE CABIN (Frame 26) ═══════════ -->
-        <div class="page" data-section="Vivonne Cabin" data-anchor="vivonne-cabin">
-          <div class="page__inner">
-            <p class="kicker">01</p>
-            <h2 class="title">Vivonne Cabin</h2>
-            <div class="prose">
-              <h3 class="label label--caps">Context</h3>
-              <p>A compact, two-zone cabin set among trees. Sleeping and wet areas sit to the rear, while the living space opens to the landscape through a full-height glazed wall. The project was developed from early plans through to detailed construction drawings.</p>
-              <h3 class="label label--caps">AS &amp; NCC Requirements</h3>
-              <p>The design was documented to meet the relevant Australian Standards and the National Construction Code, covering structure, weatherproofing, insulation and energy efficiency. Each junction was resolved in section so the cabin can be built as drawn.</p>
-            </div>
-            <dl class="meta end">
-              <div><dt>Discipline</dt><dd>Architecture</dd></div>
-              <div><dt>Scope</dt><dd>Design &amp; documentation</dd></div>
-              <div><dt>Drawings</dt><dd>Axonometric, plan, details</dd></div>
-            </dl>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <figure class="fig grow">
-              <img src="assets/images/vivonne-axonometric.webp" alt="Axonometric drawing of Vivonne Cabin showing two rooms, a glazed wall and surrounding trees" draggable="false">
-              <figcaption class="fig__cap--end">Fig. 01 — Axonometric</figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <!-- ═══════════ 7–8 · ROOF DETAIL (Frame 25) ═══════════ -->
-        <div class="page" data-section="Roof Detail" data-anchor="roof-detail">
-          <div class="page__inner">
-            <div class="fig-row grow">
-              <figure class="fig">
-                <span class="tag">Plan</span>
-                <img src="assets/images/vivonne-floor-plan.webp" alt="Floor plan of the cabin" draggable="false">
-              </figure>
-              <figure class="fig">
-                <span class="tag">Detail 4</span>
-                <img src="assets/images/vivonne-roof-section.webp" alt="Section drawing of the roof and wall junction, Detail 4" draggable="false">
-              </figure>
-            </div>
-            <div class="end">
-              <p class="kicker">Task</p>
-              <h2 class="title">Roof Detail</h2>
-            </div>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <figure class="fig grow">
-              <span class="tag">3D Detail</span>
-              <img src="assets/images/vivonne-roof-3d.webp" alt="3D cutaway of the roof edge" draggable="false">
-            </figure>
-            <div class="cols cols--stack-sm end">
-              <div>
-                <h3 class="label">Section</h3>
-                <p class="body">Detail 4 resolves the eaves: trusses carrying battens and a corrugated metal roof over an insulated ceiling, with fascia, gutter and flashings detailed to shed water clear of the wall below.</p>
-              </div>
-              <div>
-                <h3 class="label">3D model</h3>
-                <p class="body">The same junction modelled in 3D to check the build sequence and how roof sheeting, fascia and wall lining meet at the corner.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 9–10 · 02 STING RAYS — sketches (Frame 14) ═══════════ -->
-        <div class="page" data-section="Sting Rays" data-anchor="sting-rays">
-          <div class="page__inner">
-            <div class="fig-row grow">
-              <figure class="fig">
-                <img src="assets/images/sting-rays-sketch-side.webp" alt="Side-view sketches of four eyewear concepts" draggable="false">
-              </figure>
-              <figure class="fig">
-                <figcaption class="note">Initial sketches to understand flow of concept</figcaption>
-                <img src="assets/images/sting-rays-sketch-perspective.webp" alt="Perspective sketches of the eyewear frame" draggable="false">
-              </figure>
-            </div>
-            <div class="cols cols--stack-sm end">
-              <div>
-                <p class="kicker">Projects</p>
-                <h2 class="title title--sentence">Sting rays</h2>
-              </div>
-              <div>
-                <h3 class="label">Construction process</h3>
-                <p class="body">Early sketches explored the flow of the frame: one sweeping line running from temple tip to lens. The strongest directions were then constructed around standard head sizes, checking front and side profiles for fit, coverage and wrap.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <div class="fig-row fig-row--wide-first grow">
-              <figure class="fig">
-                <figcaption class="note">Constructions of standard ideas selected from initial sketches</figcaption>
-                <img src="assets/images/sting-rays-sketch-construction.webp" alt="Front and side constructions of the frame on standard head sizes" draggable="false">
-              </figure>
-              <figure class="fig">
-                <figcaption class="note note--plain">Final idea selected and constructed to scale</figcaption>
-                <img src="assets/images/sting-rays-sketch-final.webp" alt="Top view of the final frame, drawn to scale" draggable="false">
-              </figure>
-            </div>
-            <div class="cols cols--stack-sm end">
-              <div>
-                <h3 class="label">Process</h3>
-                <p class="body">The final idea was drawn to scale, then modelled in 3D. The frame splits into a sculpted temple and a lens chassis joined by an exposed hinge, so each part could be refined on its own before the whole was rendered.</p>
-              </div>
-              <dl class="meta meta--stack">
-                <div><dt>Discipline</dt><dd>Product design</dd></div>
-                <div><dt>Category</dt><dd>Eyewear</dd></div>
-                <div><dt>Stages</dt><dd>Sketch, construction, 3D, render</dd></div>
-              </dl>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 11–12 · STING RAYS — hero render (Frame 38) ═══════════
-             The .span image is drawn across both pages of the spread. -->
-        <div class="page page--band">
-          <div class="page__inner">
-            <div class="band"><img class="span span--l" src="assets/images/sting-rays-render-hero.webp" alt="Render of the Sting Rays frame in cobalt blue with an amber lens" draggable="false"></div>
-            <h3 class="title title--sentence title--sm">Moodboard</h3>
-            <p class="body">Named after the stingray: a flat, gliding body with a long, whip-like tail. The frame borrows that silhouette, with wide wings that wrap the face and taper into a single sweeping temple.</p>
-          </div>
-        </div>
-
-        <div class="page page--band">
-          <div class="page__inner">
-            <div class="band"><img class="span span--r" src="assets/images/sting-rays-render-hero.webp" alt="" draggable="false"></div>
-            <div class="cols cols--stack-sm">
-              <div>
-                <h3 class="label">Tone</h3>
-                <p class="body">Cobalt and amber. A saturated blue body reads fast and technical, while the warm amber lens adds depth and glows where light passes through.</p>
-              </div>
-              <div>
-                <h3 class="label">Range</h3>
-                <p class="body">Hero colourway: gloss cobalt frame, amber lens and gold hinge hardware. Embossed branding runs along each temple.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 13–14 · STING RAYS — details (Frame 39) ═══════════ -->
-        <div class="page page--band page--band-tall">
-          <div class="page__inner">
-            <div class="band"><img class="fill" src="assets/images/sting-rays-render-left.webp" alt="Close-up of the temple joint and lens chassis" draggable="false"></div>
-            <h3 class="label">Detail</h3>
-            <p class="body">The hinge sits exposed inside the lens chassis, turning a functional part into a visual signature. Its gold finish ties back to the amber lens.</p>
-          </div>
-        </div>
-
-        <div class="page page--band page--band-tall">
-          <div class="page__inner">
-            <div class="band"><img class="fill" src="assets/images/sting-rays-render-right.webp" alt="Close-up of the gold hinge inside the amber lens" draggable="false"></div>
-            <h3 class="label">Finish</h3>
-            <p class="body">Soft, sculpted surfaces catch long highlights along the temples, while sharp edges at the lens give the frame its attitude.</p>
-          </div>
-        </div>
-
-        <!-- ═══════════ 15–16 · 03 PROJECT (template: text left, image right) ═══════════ -->
-        <div class="page" data-section="Project 03" data-anchor="project-03">
-          <div class="page__inner">
-            <p class="kicker">03</p>
-            <h2 class="title">Project Title</h2>
-            <div class="prose">
-              <h3 class="label label--caps">Context</h3>
-              <p>A short introduction to the project: what it is, who it was for and the problem it set out to solve.</p>
-              <h3 class="label label--caps">Approach</h3>
-              <p>How you worked through it, from research and sketching to the final outcome. Replace this copy in index.html.</p>
-            </div>
-            <dl class="meta end">
-              <div><dt>Discipline</dt><dd>—</dd></div>
-              <div><dt>Client</dt><dd>—</dd></div>
-              <div><dt>Year</dt><dd>—</dd></div>
-            </dl>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <div class="ph grow"><span><b>Image</b>assets/images/project-03.webp</span></div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 17–18 · 04 PROJECT (template: full-bleed image left, text right) ═══════════ -->
-        <div class="page" data-section="Project 04" data-anchor="project-04">
-          <div class="page__inner">
-            <div class="ph ph--bleed"><span><b>Full-bleed image</b>assets/images/project-04.webp</span></div>
-          </div>
-        </div>
-
-        <div class="page">
-          <div class="page__inner">
-            <p class="kicker">04</p>
-            <h2 class="title">Project Title</h2>
-            <div class="prose">
-              <h3 class="label label--caps">Context</h3>
-              <p>A short introduction to the project: what it is, who it was for and the problem it set out to solve.</p>
-            </div>
-            <div class="cols end">
-              <div>
-                <h3 class="label">Process</h3>
-                <p class="body">Key steps, decisions and iterations.</p>
-              </div>
-              <div>
-                <h3 class="label">Outcome</h3>
-                <p class="body">What was made, and what it achieved.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════ 19–20 · CONTACT ═══════════ -->
-        <div class="page page--dark" data-section="Contact" data-anchor="contact">
-          <div class="page__inner">
-            <div class="end">
-              <h2 class="display">Thank you.</h2>
-              <p class="tagline">Get in touch to talk about a project.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="page page--dark" data-density="hard">
-          <div class="page__inner">
-            <div class="cols cols--stack-sm end">
-              <div>
-                <h3 class="label">Contact</h3>
-                <ul class="contact-list">
-                  <li><a href="mailto:obinna@example.com">obinna@example.com</a></li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="label">Elsewhere</h3>
-                <ul class="contact-list">
-                  <li><a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
-                  <li><a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></li>
-                  <li><a href="https://behance.net/" target="_blank" rel="noopener">Behance</a></li>
-                </ul>
-              </div>
-            </div>
-            <p class="fineprint">© 2025 Obinna Oti</p>
-          </div>
-        </div>
-
-        <!-- ═══════════ 21 · BACK COVER ═══════════ -->
-        <div class="page page--dark page--cover" data-density="hard">
-          <div class="page__inner backcover">
-            <p class="backcover__mark">Obinna Oti</p>
-            <p class="backcover__sub">Product Design — Portfolio 2020—2025</p>
-            <button class="pill" type="button" data-goto="cover">Back to start</button>
-          </div>
-        </div>
-
       </div>
     </div>
 
-    <div class="scroll-view" id="scrollView" hidden></div>
-    <p class="hint" id="hint" aria-hidden="true"></p>
-  </main>
+    <!-- Frame 14 · sketches (left) -->
+    <div class="page">
+      <div class="page__inner">
+        <div class="fig-row grow">
+          <figure class="fig">
+            <img src="assets/images/sting-rays-sketch-side.webp" alt="Side-view sketches of four frame concepts" draggable="false">
+          </figure>
+          <figure class="fig">
+            <figcaption class="note">Initial sketches to understand flow of concept</figcaption>
+            <img src="assets/images/sting-rays-sketch-perspective.webp" alt="Perspective sketches of the frame" draggable="false">
+          </figure>
+        </div>
+        <div class="cols end">
+          <div>
+            <p class="kicker">Projects</p>
+            <h3 class="title title--sentence">Sting rays</h3>
+          </div>
+          <div>
+            <h4 class="label">Construction process</h4>
+            <p class="body">Loose side and perspective sketches set the flow of the frame: one sweeping line from temple tip to lens. The strongest ideas were then built on standard head sizes to check fit, coverage and wrap.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <footer class="bar bar--bottom">
-    <span class="counter" id="counter" aria-live="polite"></span>
-    <div class="progress" aria-hidden="true"><div class="progress__fill" id="progressFill"></div></div>
-    <button class="nav-btn" id="prevBtn" type="button" aria-label="Previous page">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
-    </button>
-    <button class="nav-btn" id="nextBtn" type="button" aria-label="Next page">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-    </button>
-  </footer>
+    <!-- Frame 14 · sketches (right) -->
+    <div class="page">
+      <div class="page__inner">
+        <div class="fig-row fig-row--wide-first grow">
+          <figure class="fig">
+            <figcaption class="note">Constructions of standard ideas selected from initial sketches</figcaption>
+            <img src="assets/images/sting-rays-sketch-construction.webp" alt="Front and side constructions of the frame on standard head sizes" draggable="false">
+          </figure>
+          <figure class="fig">
+            <figcaption class="note note--plain">Final idea selected and constructed to scale</figcaption>
+            <img src="assets/images/sting-rays-sketch-final.webp" alt="Top view of the final frame, drawn to scale" draggable="false">
+          </figure>
+        </div>
+        <div class="cols end">
+          <div>
+            <h4 class="label">Process</h4>
+            <p class="body">The final idea was drawn to scale, then modelled in 3D as a sculpted temple and lens chassis joined by an exposed hinge.</p>
+          </div>
+          <dl class="meta">
+            <div><dt>Discipline</dt><dd>Product design</dd></div>
+            <div><dt>Category</dt><dd>Eyewear</dd></div>
+            <div><dt>Stages</dt><dd>Sketch, construction, 3D, render</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frame 38 · hero render (left): the .span image runs across both pages -->
+    <div class="page page--band">
+      <div class="page__inner">
+        <div class="band">
+          <img class="span span--l" src="assets/images/sting-rays-render-hero.webp" alt="Render of the Sting Rays frame in cobalt blue with an amber lens" draggable="false">
+          <span class="band__code">460D17</span>
+        </div>
+        <h3 class="title title--sentence title--sm">Moodboard</h3>
+        <p class="body">Named after the stingray: a flat, gliding body with a long, whip-like tail. Wide wings wrap the face and taper into one sweeping temple.</p>
+      </div>
+    </div>
+
+    <!-- Frame 38 · hero render (right) -->
+    <div class="page page--band">
+      <div class="page__inner">
+        <div class="band">
+          <img class="span span--r" src="assets/images/sting-rays-render-hero.webp" alt="" draggable="false">
+        </div>
+        <div class="cols">
+          <div>
+            <h4 class="label">Tone</h4>
+            <p class="body">Cobalt and amber. Fast and technical, with warmth where light passes through the lens.</p>
+          </div>
+          <div>
+            <h4 class="label">Range</h4>
+            <p class="body">Gloss cobalt frame, amber lens, gold hinge hardware and embossed temple branding.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back cover -->
+    <div class="page page--dark page--cover" data-density="hard">
+      <div class="page__inner backcover">
+        <p class="backcover__mark">Sting rays</p>
+        <p class="backcover__sub">Obinna Oti — Product Design</p>
+        <div class="backcover__actions">
+          <button class="pill" type="button" data-action="next">Next project</button>
+          <button class="pill" type="button" data-action="restart">Read again</button>
+          <button class="pill" type="button" data-action="close">All projects</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══════════ 02 · VIVONNE CABIN ═══════════ -->
+  <article class="book-src" data-slug="vivonne-cabin" data-number="02" data-title="Vivonne Cabin" data-meta="Architecture · Residential">
+
+    <!-- Front cover -->
+    <div class="page page--cover page--board" data-density="hard">
+      <div class="page__inner cover">
+        <img class="cover__img cover__img--drawing" src="assets/images/vivonne-axonometric.webp" alt="" draggable="false">
+        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
+        <div class="cover__foot">
+          <p class="cover__kicker">02 — Architecture, residential</p>
+          <h2 class="cover__title">Vivonne<br>cabin</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frame 26 · Vivonne Cabin (left) -->
+    <div class="page">
+      <div class="page__inner">
+        <p class="kicker">02</p>
+        <h3 class="title">Vivonne Cabin</h3>
+        <div class="prose">
+          <h4 class="label label--caps">Context</h4>
+          <p>A compact two-zone cabin set among trees. Sleeping and wet areas sit to the rear; the living space opens to the landscape through a full-height glazed wall.</p>
+          <h4 class="label label--caps">AS &amp; NCC Requirements</h4>
+          <p>Documented to the relevant Australian Standards and the National Construction Code, covering structure, weatherproofing, insulation and energy efficiency.</p>
+        </div>
+        <dl class="meta end">
+          <div><dt>Discipline</dt><dd>Architecture</dd></div>
+          <div><dt>Scope</dt><dd>Design &amp; documentation</dd></div>
+          <div><dt>Drawings</dt><dd>Axonometric, plan, details</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Frame 26 · Vivonne Cabin (right) -->
+    <div class="page">
+      <div class="page__inner">
+        <figure class="fig grow">
+          <img src="assets/images/vivonne-axonometric.webp" alt="Axonometric drawing of Vivonne Cabin with its glazed wall and surrounding trees" draggable="false">
+          <figcaption class="fig__cap--end">Axonometric</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Frame 25 · Roof detail (left) -->
+    <div class="page">
+      <div class="page__inner">
+        <div class="fig-row grow">
+          <figure class="fig">
+            <span class="tag">Plan</span>
+            <img src="assets/images/vivonne-floor-plan.webp" alt="Floor plan of the cabin" draggable="false">
+          </figure>
+          <figure class="fig">
+            <span class="tag">Detail 4</span>
+            <img src="assets/images/vivonne-roof-section.webp" alt="Section through the roof and wall junction" draggable="false">
+          </figure>
+        </div>
+        <div class="end">
+          <p class="kicker">Task</p>
+          <h3 class="title">Roof Detail</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frame 25 · Roof detail (right) -->
+    <div class="page">
+      <div class="page__inner">
+        <figure class="fig grow">
+          <span class="tag">3D Detail</span>
+          <img src="assets/images/vivonne-roof-3d.webp" alt="3D cutaway of the roof edge" draggable="false">
+        </figure>
+        <div class="cols end">
+          <div>
+            <h4 class="label">Detail 4</h4>
+            <p class="body">Resolves the eaves: trusses at 1200 centres, corrugated Colorbond roofing over an R6 Earthwool ceiling, and a 125 D gutter with flashing that sheds water clear of the wall.</p>
+          </div>
+          <div>
+            <h4 class="label">3D detail</h4>
+            <p class="body">The same junction modelled in 3D to check build sequence and how sheeting, fascia and lining meet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back cover -->
+    <div class="page page--cover page--board" data-density="hard">
+      <div class="page__inner backcover">
+        <p class="backcover__mark">Vivonne cabin</p>
+        <p class="backcover__sub">Obinna Oti — Product Design</p>
+        <div class="backcover__actions">
+          <button class="pill" type="button" data-action="next">Next project</button>
+          <button class="pill" type="button" data-action="restart">Read again</button>
+          <button class="pill" type="button" data-action="close">All projects</button>
+        </div>
+      </div>
+    </div>
+  </article>
 
 </div>
 

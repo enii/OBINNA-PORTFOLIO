@@ -1,7 +1,8 @@
-/* Obinna Oti — flip book portfolio
+/* Obinna Oti — portfolio
+ * A carousel of projects; choosing one opens that project's flip book.
  * Page turning is handled by StPageFlip (assets/js/vendor/page-flip.browser.js, MIT).
- * This file sizes the book to the screen, switches between two-page spreads and
- * single pages, and wires up navigation, the index, deep links and sound. */
+ * This file builds the carousel, sizes each book to the screen, switches between
+ * two-page spreads and single pages, and wires up navigation, links and sound. */
 (() => {
   'use strict';
 
@@ -14,77 +15,218 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
+  const shelf = $('#shelf');
+  const reader = $('#reader');
+  const carousel = $('#carousel');
+  const track = $('#track');
   const stage = $('#stage');
   const wrap = $('#bookWrap');
-  const scrollView = $('#scrollView');
   const counter = $('#counter');
-  const sectionLabel = $('#sectionLabel');
   const progressFill = $('#progressFill');
+  const readerTitle = $('#readerTitle');
   const prevBtn = $('#prevBtn');
   const nextBtn = $('#nextBtn');
-  const indexBtn = $('#indexBtn');
-  const indexPanel = $('#indexPanel');
-  const indexList = $('#indexList');
-  const viewBtn = $('#viewBtn');
   const soundBtn = $('#soundBtn');
   const fsBtn = $('#fsBtn');
   const hint = $('#hint');
 
-  /* ---------- 1. Prepare the pages once ---------- */
-  const source = $('#book');
-  const pageEls = $$('.page', source);
-  const total = pageEls.length;
-  const headLeft = source.dataset.headLeft || '';
-  const headRight = source.dataset.headRight || '';
-  const sections = [];
-
-  pageEls.forEach((page, i) => {
-    page.dataset.index = i;
-    // With the cover shown alone, odd pages sit on the left of a spread
-    page.classList.add(i % 2 ? 'page--l' : 'page--r');
-    if (page.dataset.section) {
-      sections.push({ name: page.dataset.section, anchor: page.dataset.anchor || `page-${i}`, index: i });
-    }
-    const isCover = i === 0 || i === total - 1;
-    const inner = $('.page__inner', page);
-    if (!isCover && inner) {
-      inner.insertAdjacentHTML('afterbegin',
-        `<div class="page__head" aria-hidden="true"><span>${headLeft}</span><span>${headRight}</span></div>`);
-      inner.insertAdjacentHTML('beforeend', `<div class="page__folio" aria-hidden="true">${pad(i)}</div>`);
-    }
+  /* ---------- 1. Read the books ---------- */
+  const books = $$('.book-src').map((src) => {
+    const pages = $$(':scope > .page', src);
+    const total = pages.length;
+    pages.forEach((page, i) => {
+      page.dataset.index = i;
+      // With the cover shown alone, odd pages sit on the left of a spread
+      page.classList.add(i % 2 ? 'page--l' : 'page--r');
+      const inner = $('.page__inner', page);
+      if (i > 0 && i < total - 1 && inner) {
+        inner.insertAdjacentHTML('afterbegin',
+          '<div class="page__head" aria-hidden="true"><span>Obinna Oti</span><span>2020—2025</span></div>');
+        inner.insertAdjacentHTML('beforeend', `<div class="page__folio" aria-hidden="true">${pad(i)}</div>`);
+      }
+    });
+    return {
+      el: src,
+      slug: src.dataset.slug,
+      number: src.dataset.number || '',
+      title: src.dataset.title || '',
+      meta: src.dataset.meta || '',
+      total,
+    };
+  });
+  books.forEach((b, i) => {
+    const nextBook = books[(i + 1) % books.length];
+    $$('[data-action="next"]', b.el).forEach((btn) => {
+      if (books.length < 2) btn.remove();
+      else btn.textContent = `Next: ${nextBook.title}`;
+    });
+    b.cover = $('.page', b.el).outerHTML;
+    b.html = b.el.innerHTML;
   });
 
-  // "p. 05" references on the contents pages
-  $$('[data-page-of]', source).forEach((el) => {
-    const s = sections.find((x) => x.anchor === el.dataset.pageOf);
-    if (s) el.textContent = `p. ${pad(s.index)}`;
-  });
-
-  const sectionAt = (i) => sections.reduce((found, s) => (s.index <= i ? s : found), sections[0]);
-  const sectionByAnchor = (a) => sections.find((s) => s.anchor === a);
-  const pristine = source.innerHTML;
-
-  if (!window.St || !window.St.PageFlip) { // library missing: fall back to a plain scrolling document
+  if (!books.length || !window.St || !window.St.PageFlip) { // fall back to plain stacked pages
     document.documentElement.classList.replace('js', 'no-js');
     return;
   }
-  source.remove();
-
-  /* ---------- 2. State ---------- */
-  let pf = null;          // StPageFlip instance
-  let layout = null;      // current book geometry
-  let view = 'book';      // 'book' | 'scroll'
-  let current = 0;        // current page index
-  let lastState = 'read';
-  let turned = false;     // has the reader turned a page yet?
+  $('#library').remove();
 
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } },
   };
-  let soundOn = store.get('oo-sound') !== 'off';
 
-  /* ---------- 3. Geometry ---------- */
+  /* ---------- 2. Carousel ---------- */
+  track.innerHTML = books.map((b, i) => `
+    <div class="card" role="listitem" data-i="${i}">
+      <button class="card__btn" type="button" aria-label="${b.number} ${b.title}, ${b.meta}. Open the book">
+        <span class="card__cover" aria-hidden="true">${b.cover}</span>
+      </button>
+    </div>`).join('');
+  const cards = $$('.card', track);
+  const capNum = $('#capNum');
+  const capTitle = $('#capTitle');
+  const capMeta = $('#capMeta');
+  const capPager = $('#capPager');
+  const carPrev = $('#carPrev');
+  const carNext = $('#carNext');
+  let active = -1;
+
+  function sizeCards() {
+    const h = carousel.clientHeight - 48;
+    const w = carousel.clientWidth;
+    const cw = Math.max(140, Math.min(h * 0.889, w * (w < 600 ? 0.72 : 0.42), 600));
+    track.style.setProperty('--cw', `${cw}px`);
+    track.style.setProperty('--gap', `${Math.round(clamp(cw * 0.22, 28, 96))}px`);
+    cards.forEach((c) => $('.card__cover', c).style.setProperty('--s', (cw / 800).toFixed(4)));
+  }
+
+  function updateCarousel() {
+    const mid = track.getBoundingClientRect().left + track.clientWidth / 2;
+    let best = 0;
+    let bestD = Infinity;
+    cards.forEach((c, i) => {
+      const r = c.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - mid) / (c.offsetWidth || 1);
+      c.style.setProperty('--d', Math.min(d, 1.5).toFixed(3));
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    if (best !== active) setActive(best);
+  }
+
+  function setActive(i) {
+    const first = active < 0;
+    active = i;
+    const b = books[i];
+    capNum.textContent = b.number;
+    capTitle.textContent = b.title;
+    capMeta.textContent = b.meta;
+    capPager.innerHTML = `${pad(i + 1)} <span>/ ${pad(books.length)}</span>`;
+    cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
+    carPrev.disabled = i === 0;
+    carNext.disabled = i === books.length - 1;
+    if (!first && !reduceMotion && capTitle.animate) {
+      [capNum, capTitle, capMeta].forEach((el, k) => el.animate(
+        [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 380, delay: k * 40, easing: 'cubic-bezier(.2,.75,.2,1)', fill: 'backwards' },
+      ));
+    }
+  }
+
+  function goCard(i, smooth = true) {
+    const c = cards[clamp(i, 0, cards.length - 1)];
+    track.scrollTo({
+      left: c.offsetLeft + c.offsetWidth / 2 - track.clientWidth / 2,
+      behavior: smooth && !reduceMotion ? 'smooth' : 'auto',
+    });
+  }
+
+  let carTick = false;
+  track.addEventListener('scroll', () => {
+    if (carTick) return;
+    carTick = true;
+    requestAnimationFrame(() => { carTick = false; updateCarousel(); });
+  }, { passive: true });
+
+  // A vertical mouse wheel moves one project at a time
+  let wheelLock = 0;
+  track.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // trackpads scroll sideways natively
+    e.preventDefault();
+    const now = Date.now();
+    if (now < wheelLock || Math.abs(e.deltaY) < 4) return;
+    wheelLock = now + 500;
+    goCard(active + Math.sign(e.deltaY));
+  }, { passive: false });
+
+  track.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const i = Number(card.dataset.i);
+    if (i === active) openBook(books[i].slug);
+    else goCard(i);
+  });
+  carPrev.addEventListener('click', () => goCard(active - 1));
+  carNext.addEventListener('click', () => goCard(active + 1));
+  $('#openBtn').addEventListener('click', () => openBook(books[active].slug));
+
+  /* ---------- 3. Views + links ---------- */
+  let book = null; // the open book
+  let pf = null; // its StPageFlip instance
+  let layout = null;
+  let current = 0;
+  let lastState = 'read';
+  let turned = false;
+  let autoOpen = false;
+  let hintTimer;
+
+  // Each book has its own link: …/#sting-rays
+  function openBook(slug) {
+    if (location.hash.slice(1) === slug) route();
+    else location.hash = slug;
+  }
+  function closeBook() {
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* sandboxed */ }
+    route();
+  }
+  function route() {
+    const b = books.find((x) => x.slug === location.hash.slice(1));
+    if (b) showReader(b);
+    else showShelf();
+  }
+  window.addEventListener('hashchange', route);
+
+  function showShelf() {
+    const from = book;
+    destroyBook();
+    book = null;
+    reader.hidden = true;
+    shelf.hidden = false;
+    document.title = 'Obinna Oti — Product Design Portfolio';
+    sizeCards();
+    const i = from ? books.indexOf(from) : Math.max(active, 0);
+    goCard(i, false);
+    updateCarousel();
+    if (from) $('.card__btn', cards[i]).focus({ preventScroll: true });
+  }
+
+  function showReader(b) {
+    if (book === b && pf) return;
+    book = b;
+    shelf.hidden = true;
+    reader.hidden = false;
+    readerTitle.textContent = `${b.number} — ${b.title}`;
+    document.title = `${b.title} — Obinna Oti`;
+    current = 0;
+    autoOpen = true;
+    if (!turned) {
+      hint.classList.remove('is-hidden');
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(hideHint, 8000);
+    }
+    build(computeLayout(), 0);
+  }
+
+  /* ---------- 4. Book geometry ---------- */
   function stageBox() {
     const r = stage.getBoundingClientRect();
     const gx = clamp(r.width * 0.04, 16, 56);
@@ -110,7 +252,7 @@
   function computeFits(L) {
     const m = document.createElement('div');
     m.className = `measure ${L.single ? 'is-single' : 'is-spread'}`;
-    m.innerHTML = pristine;
+    m.innerHTML = book.html;
     document.body.appendChild(m);
     const fits = $$('.page', m).map((page) => {
       page.style.width = `${L.pageW}px`;
@@ -127,29 +269,32 @@
     return fits;
   }
 
-  function applyFits(root, fits) {
-    $$('.page__inner', root).forEach((inner, i) => {
-      if (fits[i] < 1) inner.style.setProperty('--fit', fits[i].toFixed(2));
-    });
+  /* ---------- 5. Build a book ---------- */
+  function destroyBook() {
+    if (pf) { try { pf.destroy(); } catch (e) { /* already gone */ } }
+    pf = null;
+    $$('.book', wrap).forEach((el) => el.remove());
+    wrap.classList.remove('is-ready');
   }
 
-  /* ---------- 4. Build the book ---------- */
   function build(L, startPage) {
-    if (pf) { try { pf.destroy(); } catch (e) { /* already gone */ } pf = null; }
-    $$('.book', wrap).forEach((el) => el.remove());
-
+    destroyBook();
     layout = { ...L, builtW: L.W };
+    wrap.classList.add('no-anim');
     wrap.classList.toggle('is-single', L.single);
     wrap.classList.toggle('is-spread', !L.single);
     wrap.style.width = `${L.W}px`;
 
     const el = document.createElement('div');
     el.className = 'book';
-    el.innerHTML = pristine;
-    applyFits(el, computeFits(L));
+    el.innerHTML = book.html;
+    const fits = computeFits(L);
+    $$('.page__inner', el).forEach((inner, i) => {
+      if (fits[i] < 1) inner.style.setProperty('--fit', fits[i].toFixed(2));
+    });
     wrap.appendChild(el);
 
-    pf = new window.St.PageFlip(el, {
+    const instance = new window.St.PageFlip(el, {
       width: 800,
       height: Math.round(800 * L.ratio),
       size: 'stretch',
@@ -161,7 +306,7 @@
       showCover: true,
       usePortrait: L.single,
       autoSize: true,
-      startPage: clamp(startPage, 0, total - 1),
+      startPage: clamp(startPage, 0, book.total - 1),
       flippingTime: reduceMotion ? 450 : 900,
       drawShadow: true,
       maxShadowOpacity: 0.45,
@@ -169,33 +314,42 @@
       mobileScrollSupport: false,
       swipeDistance: 24,
     });
+    pf = instance;
 
-    pf.on('init', (e) => {
+    instance.on('init', (e) => {
       current = e.data.page;
       sync();
-      requestAnimationFrame(() => wrap.classList.add('is-ready'));
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        wrap.classList.remove('no-anim');
+        wrap.classList.add('is-ready');
+      }));
+      if (autoOpen) {
+        autoOpen = false;
+        // The book arrives closed, then its cover swings open
+        setTimeout(() => { if (pf === instance && current === 0) instance.flipNext(); }, reduceMotion ? 100 : 650);
+      }
     });
-    pf.on('flip', (e) => {
+    instance.on('flip', (e) => {
       current = e.data;
-      if (!turned) { turned = true; hideHint(); }
+      if (!turned && current > 1) { turned = true; hideHint(); }
       sync();
     });
-    pf.on('changeState', (e) => {
+    instance.on('changeState', (e) => {
       const state = e.data;
       if (state === 'flipping' && lastState !== 'flipping') {
-        playFlip(current === 0 || current >= total - 2);
+        playFlip(current === 0 || current >= book.total - 2);
         // Start sliding a closed book back to the middle as soon as it opens
         wrap.classList.remove('is-shift-front', 'is-shift-back');
       }
       if (state === 'read') sync();
       lastState = state;
     });
-    pf.on('changeOrientation', updateBase);
+    instance.on('changeOrientation', updateBase);
 
-    pf.loadFromHTML($$('.page', el));
+    instance.loadFromHTML($$('.page', el));
   }
 
-  /* ---------- 5. Keep the UI in step with the book ---------- */
+  /* ---------- 6. Keep the UI in step with the book ---------- */
   function updateBase() {
     if (!pf || !layout) return;
     const r = pf.getBoundsRect();
@@ -207,17 +361,16 @@
     s.setProperty('--bh', `${r.height}px`);
     s.setProperty('--pw', `${r.pageWidth}px`);
     // Stack of page edges: grows on the left as you read, shrinks on the right
-    const thick = clamp(r.pageWidth * 0.012, 2, 7);
-    const done = current / (total - 1);
+    const thick = clamp(r.pageWidth * 0.008, 2, 5);
+    const done = current / (book.total - 1);
     s.setProperty('--lt', `${(thick * done).toFixed(1)}px`);
     s.setProperty('--rt', `${(thick * (1 - done)).toFixed(1)}px`);
   }
 
   function sync() {
-    if (view !== 'book') { syncScroll(); return; }
-    const last = total - 1;
+    if (!book) return;
+    const last = book.total - 1;
     const single = layout && layout.single;
-
     ['front', 'back'].forEach((side) => {
       const closed = !single && current === (side === 'front' ? 0 : last);
       wrap.classList.toggle(`is-closed-${side}`, closed); // shadow + page edges
@@ -227,163 +380,67 @@
     let label;
     if (current === 0) label = 'Cover';
     else if (current === last) label = 'Back cover';
-    else if (single || current + 1 >= last) label = `${pad(current)} <span>/ ${pad(total - 2)}</span>`;
-    else label = `${pad(current)}–${pad(current + 1)} <span>/ ${pad(total - 2)}</span>`;
+    else if (single || current + 1 >= last) label = `${pad(current)} <span>/ ${pad(last - 1)}</span>`;
+    else label = `${pad(current)}–${pad(current + 1)} <span>/ ${pad(last - 1)}</span>`;
     counter.innerHTML = label;
 
     prevBtn.disabled = current === 0;
     nextBtn.disabled = current === last;
     progressFill.style.transform = `scaleX(${current / last})`;
-    updateSection(current);
     updateBase();
   }
 
-  function updateSection(i) {
-    const s = sectionAt(i);
-    sectionLabel.textContent = i === 0 ? 'Portfolio 2020—2025' : s.name;
-    $$('button', indexList).forEach((b) => b.setAttribute('aria-current', String(b.dataset.goto === s.anchor)));
-    const url = s.anchor === 'cover' ? location.pathname + location.search : `#${s.anchor}`;
-    if (url !== location.hash && !(s.anchor === 'cover' && !location.hash)) {
-      try { history.replaceState(null, '', url); } catch (e) { /* sandboxed frame */ }
-    }
-  }
-
-  /* ---------- 6. Navigation ---------- */
-  function next() {
-    if (view === 'scroll') return scrollToPage(Math.min(current + 1, total - 1));
-    if (pf) pf.flipNext(isTouch ? 'bottom' : 'top');
-  }
-  function prev() {
-    if (view === 'scroll') return scrollToPage(Math.max(current - 1, 0));
-    if (pf) pf.flipPrev(isTouch ? 'bottom' : 'top');
-  }
-  function goTo(i) {
-    if (view === 'scroll') return scrollToPage(i);
-    if (!pf || i === current) return;
-    pf.flip(i);
-  }
-
+  /* ---------- 7. Navigation ---------- */
+  const next = () => pf && pf.flipNext(isTouch ? 'bottom' : 'top');
+  const prev = () => pf && pf.flipPrev(isTouch ? 'bottom' : 'top');
   prevBtn.addEventListener('click', prev);
   nextBtn.addEventListener('click', next);
+  $('#closeBtn').addEventListener('click', closeBook);
 
-  document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-goto]');
-    if (!t) return;
-    e.preventDefault();
-    const s = sectionByAnchor(t.dataset.goto);
-    if (s) goTo(s.index);
-    closeIndex();
+  // Buttons on the back covers
+  wrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn || !book) return;
+    const action = btn.dataset.action;
+    if (action === 'close') closeBook();
+    if (action === 'restart' && pf) pf.flip(0);
+    if (action === 'next') {
+      const nextBook = books[(books.indexOf(book) + 1) % books.length];
+      try { history.replaceState(null, '', `#${nextBook.slug}`); } catch (err) { /* sandboxed */ }
+      showReader(nextBook);
+    }
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === 'Escape') { closeIndex(); return; }
-    if (view !== 'book') return;
-    const keys = {
-      ArrowRight: next, ArrowDown: next, PageDown: next,
-      ArrowLeft: prev, ArrowUp: prev, PageUp: prev,
-      Home: () => goTo(0), End: () => goTo(total - 1),
-    };
-    if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
-  });
-
-  window.addEventListener('hashchange', () => {
-    const s = sectionByAnchor(location.hash.slice(1));
-    if (s) goTo(s.index);
-  });
-
-  /* ---------- 7. Index menu ---------- */
-  indexList.innerHTML = sections
-    .map((s) => `<li><button type="button" data-goto="${s.anchor}"><span>${s.index ? pad(s.index) : '—'}</span>${s.name}</button></li>`)
-    .join('');
-
-  function closeIndex() {
-    indexPanel.hidden = true;
-    indexBtn.setAttribute('aria-expanded', 'false');
-  }
-  indexBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const open = indexPanel.hidden;
-    indexPanel.hidden = !open;
-    indexBtn.setAttribute('aria-expanded', String(open));
-    if (open) { const b = $('[aria-current="true"]', indexList) || $('button', indexList); b && b.focus(); }
-  });
-  document.addEventListener('pointerdown', (e) => {
-    if (!indexPanel.hidden && !indexPanel.contains(e.target) && e.target !== indexBtn) closeIndex();
-  });
-
-  /* ---------- 8. Scroll view ---------- */
-  function buildScroll() {
-    const { aw } = stageBox();
-    const twoUp = aw >= 720;
-    const pageW = Math.floor(twoUp ? Math.min(620, aw / 2) : Math.min(560, aw));
-    const L = { single: !twoUp, ratio: twoUp ? SPREAD_RATIO : 1.45, pageW, pageH: pageW * (twoUp ? SPREAD_RATIO : 1.45) };
-    scrollView.className = `scroll-view ${L.single ? 'is-single' : 'is-spread'}`;
-    scrollView.style.setProperty('--sw', `${pageW}px`);
-    scrollView.style.setProperty('--sr', String(L.ratio));
-    scrollView.innerHTML = `<div class="scroll-book">${pristine}</div>`;
-    applyFits(scrollView, computeFits(L));
-  }
-
-  function scrollToPage(i, instant) {
-    const el = $(`.page[data-index="${i}"]`, scrollView);
-    if (el) el.scrollIntoView({ block: 'center', behavior: instant || reduceMotion ? 'auto' : 'smooth' });
-  }
-
-  let scrollTick = false;
-  scrollView.addEventListener('scroll', () => {
-    if (scrollTick) return;
-    scrollTick = true;
-    requestAnimationFrame(() => { scrollTick = false; syncScroll(); });
-  }, { passive: true });
-
-  function syncScroll() {
-    const mid = scrollView.getBoundingClientRect().top + scrollView.clientHeight / 2;
-    const pages = $$('.page', scrollView);
-    const hit = pages.find((p) => p.getBoundingClientRect().bottom >= mid) || pages[pages.length - 1];
-    if (!hit) return;
-    current = Number(hit.dataset.index);
-    counter.innerHTML = current === 0 ? 'Cover' : current === total - 1 ? 'Back cover' : `${pad(current)} <span>/ ${pad(total - 2)}</span>`;
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
-    progressFill.style.transform = `scaleX(${current / (total - 1)})`;
-    updateSection(current);
-  }
-
-  function setView(v) {
-    view = v;
-    const scroll = v === 'scroll';
-    viewBtn.setAttribute('aria-pressed', String(scroll));
-    viewBtn.setAttribute('aria-label', scroll ? 'Switch to book view' : 'Switch to scroll view');
-    viewBtn.title = scroll ? 'Book view' : 'Scroll view';
-    wrap.hidden = scroll;
-    scrollView.hidden = !scroll;
-    hideHint();
-    if (scroll) {
-      if (pf) { try { pf.destroy(); } catch (e) { /* noop */ } pf = null; }
-      wrap.classList.remove('is-ready');
-      buildScroll();
-      scrollToPage(current, true);
-      syncScroll();
-    } else {
-      scrollView.innerHTML = '';
-      build(computeLayout(), current);
+    if (!reader.hidden) {
+      const keys = {
+        ArrowRight: next, ArrowDown: next, PageDown: next,
+        ArrowLeft: prev, ArrowUp: prev, PageUp: prev,
+        Home: () => pf && pf.flip(0),
+        End: () => pf && pf.flip(book.total - 1),
+        Escape: closeBook,
+      };
+      if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
+      return;
     }
-    store.set('oo-view', v);
-  }
-  viewBtn.addEventListener('click', () => setView(view === 'book' ? 'scroll' : 'book'));
+    if (e.key === 'ArrowRight') { e.preventDefault(); goCard(active + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goCard(active - 1); }
+  });
 
-  /* ---------- 9. Resize ---------- */
+  /* ---------- 8. Resize ---------- */
   let resizeTimer;
   window.addEventListener('resize', () => {
-    if (view === 'book' && layout) {
+    if (!reader.hidden && layout) {
       const L = computeLayout();
       if (L.single === layout.single) wrap.style.width = `${L.W}px`; // StPageFlip re-fits itself right after this
       requestAnimationFrame(updateBase);
     }
+    if (!shelf.hidden) { sizeCards(); updateCarousel(); }
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (view === 'scroll') { buildScroll(); scrollToPage(current, true); return; }
+      if (!shelf.hidden) { goCard(active, false); return; }
+      if (!book) return;
       const L = computeLayout();
       const changed = !layout
         || L.single !== layout.single
@@ -394,8 +451,9 @@
     }, 200);
   });
 
-  /* ---------- 10. Sound: a soft paper swish, synthesised (no audio files) ---------- */
+  /* ---------- 9. Sound: a soft paper swish, synthesised (no audio files) ---------- */
   let audio = null;
+  let soundOn = store.get('oo-sound') !== 'off';
   function playFlip(hard) {
     if (!soundOn) return;
     try {
@@ -433,7 +491,7 @@
   setSound(soundOn);
   soundBtn.addEventListener('click', () => setSound(!soundOn));
 
-  /* ---------- 11. Full screen ---------- */
+  /* ---------- 10. Full screen ---------- */
   const root = document.documentElement;
   if (!(root.requestFullscreen || root.webkitRequestFullscreen)) fsBtn.hidden = true;
   fsBtn.addEventListener('click', () => {
@@ -444,26 +502,22 @@
     if (req && req.catch) req.catch(() => { /* not allowed here */ });
   });
 
-  /* ---------- 12. Hint ---------- */
+  /* ---------- 11. Hint ---------- */
   hint.textContent = isTouch
     ? 'Swipe or tap the page edges to turn'
-    : 'Click a page or drag its corner to turn  ·  ← → keys';
+    : 'Click a page or drag its corner to turn  ·  ← → keys  ·  Esc to close';
   function hideHint() { hint.classList.add('is-hidden'); }
-  setTimeout(hideHint, 7000);
+  hideHint();
 
-  /* ---------- 13. Go ---------- */
-  const startSection = sectionByAnchor(location.hash.slice(1));
-  current = startSection ? startSection.index : 0;
+  /* ---------- 12. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
-    ? Promise.all([
-      document.fonts.load('800 1em "Tomato Grotesk"'),
-      document.fonts.load('italic 600 1em "Tomato Grotesk"'),
-      document.fonts.load('italic 200 1em "Tomato Grotesk"'),
-      document.fonts.load('italic 100 1em "Tomato Grotesk"'),
-    ]).catch(() => {})
+    ? Promise.all(['800 1em', 'italic 100 1em']
+      .map((f) => document.fonts.load(`${f} "Tomato Grotesk"`))).catch(() => {})
     : Promise.resolve();
+  if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) { sizeCards(); updateCarousel(); } }).observe(carousel);
   fontsReady.then(() => {
-    if (store.get('oo-view') === 'scroll') setView('scroll');
-    else build(computeLayout(), current);
+    sizeCards();
+    setActive(0);
+    route();
   });
 })();

@@ -1,13 +1,13 @@
 # Obinna Oti — Portfolio
 
-A product design portfolio presented as an interactive flip book, set in Tomato Grotesk.
+A product design portfolio set in Tomato Grotesk. It opens on a carousel of projects; choosing one opens that project's flip book.
 
-- **Desktop:** two-page spreads (16:9, matching the Figma frames). Click a page, drag a corner, or use ← → keys.
-- **Phone / tablet portrait:** one page at a time, with taller pages and larger type. Swipe or tap the page edges.
-- **Index** menu, clickable contents page, and links to each project (`/#vivonne-cabin`, `/#sting-rays`, …).
-- **Scroll view** toggle for anyone who prefers to scroll through every page.
-- Optional page-turn sound (made in the browser, no audio files) and full screen.
-- Without JavaScript the pages simply stack as a scrolling document.
+- **Carousel:** each project appears as a closed book. Swipe, scroll, use the arrows or ← → keys, then click the book or **Open the book**.
+- **Flip book:** the cover swings open, then readers click a page, drag a corner, swipe, or use ← → keys. **Esc** or **All projects** goes back.
+- **Desktop:** each Figma frame is split across a two-page spread (16:9, like the frames).
+- **Phone / tablet held upright:** one taller page at a time, with larger type.
+- Each project has its own link, such as `/#sting-rays` or `/#vivonne-cabin`.
+- There's an optional page-turn sound (made in the browser, no audio files) and full screen.
 
 No build step: it's plain HTML, CSS and JavaScript.
 
@@ -21,37 +21,39 @@ Then open the printed URL.
 
 ## Editing
 
-Everything lives in `index.html`. Each `<div class="page">` is one page; comments mark every spread.
+Everything lives in `index.html`. Each project is one `<article class="book-src">` in the library at the bottom of the file:
 
-| Pages | Content |
+```html
+<article class="book-src" data-slug="sting-rays" data-number="01"
+         data-title="Sting Rays" data-meta="Product design · Eyewear">
+  <div class="page …">front cover (also the carousel card)</div>
+  <div class="page">frame, left half</div>
+  <div class="page">frame, right half</div>
+  …
+  <div class="page …">back cover</div>
+</article>
+```
+
+- **Carousel order** follows the order of the articles. To change it, move an article and update its `data-number`.
+- **Add a project:** copy an article, give it a new `data-slug`, and swap in its pages.
+- **Pages:** odd pages sit on the left and even pages on the right. Keep each book's page count **even**.
+- **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically.
+- **Back cover buttons:** the "Next project" button finds the next book by itself.
+- **Sizing:** everything on a page is sized in `cqw` (percent of the page width), so it scales like print. If text would overflow on a small screen, `main.js` shrinks that page's type a little.
+
+Current books:
+
+| Book | Pages |
 |---|---|
-| 0 | Front cover |
-| 1–2 | Introduction (Frame 3) |
-| 3–4 | Contents (Frame 29) |
-| 5–6 | 01 Vivonne Cabin (Frame 26) |
-| 7–8 | Roof Detail (Frame 25) |
-| 9–10 | 02 Sting Rays: sketches (Frame 14) |
-| 11–12 | Sting Rays: hero render (Frame 38) |
-| 13–14 | Sting Rays: details (Frame 39) |
-| 15–18 | 03 and 04: template spreads to fill in |
-| 19–20 | Contact |
-| 21 | Back cover |
-
-Rules of thumb:
-
-- With the cover on its own, odd pages sit on the **left** and even pages on the **right**. Keep the total **even**.
-- Add `data-section="Name" data-anchor="slug"` to the first page of a chapter to list it in the Index and give it a link.
-- Running heads ("Obinna Oti · 2020—2025") and page numbers are added automatically. Change them with the `data-head-left` and `data-head-right` attributes on `#book`.
-- Sizes inside pages use `cqw` (percent of the page width), so the layout scales like a printed spread. If text would overflow on a small screen, `main.js` shrinks that page's type a little.
+| 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · back cover |
+| 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
 
 ### Images
 
-The images in `assets/images/` were cropped from low-resolution screenshots, so they're **placeholders**. Export full-resolution versions from Figma and overwrite them using the same file names:
+The images in `assets/images/` are cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
 
 ```
-sting-rays-render-hero.webp      (drawn across both pages of the spread, ~3200px wide)
-sting-rays-render-left.webp
-sting-rays-render-right.webp
+sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
 sting-rays-sketch-side.webp
 sting-rays-sketch-perspective.webp
 sting-rays-sketch-construction.webp
@@ -62,20 +64,17 @@ vivonne-roof-section.webp
 vivonne-roof-3d.webp
 ```
 
-Roughly 1600 px on the long edge works for single-page images; WebP or JPG keeps them light.
-
 ### Copy
 
-The "Work Done" text comes from your Frame 3. All other body copy is placeholder written to match each project, and the contact links are placeholders too. Edit them in `index.html`.
+Body copy is short placeholder text written for each project. The intro line is from your Frame 3. The contact email in the top bar is a placeholder. Edit all of these in `index.html`.
 
 ## Fonts
 
 `assets/fonts/` contains the Tomato Grotesk files supplied:
 
 - ExtraBold: names, titles and labels
-- SemiBold Slanted: taglines
-- ExtraLight Slanted and Thin Slanted: the large numerals
-- ExtraBold Slanted: declared but not used yet
+- Thin Slanted: the large project numbers
+- SemiBold Slanted, ExtraLight Slanted and ExtraBold Slanted: declared and ready to use
 
 Only one **upright** weight (ExtraBold) was supplied, so body text uses Helvetica Neue / Arial for now. To set body copy in Tomato Grotesk, add an upright Regular or Light file and a matching `@font-face` at the top of `assets/css/style.css`, then point `--font-text` at it.
 
