@@ -243,7 +243,9 @@
     sectionLabel.textContent = i === 0 ? 'Portfolio 2020—2025' : s.name;
     $$('button', indexList).forEach((b) => b.setAttribute('aria-current', String(b.dataset.goto === s.anchor)));
     const url = s.anchor === 'cover' ? location.pathname + location.search : `#${s.anchor}`;
-    if (url !== location.hash && !(s.anchor === 'cover' && !location.hash)) history.replaceState(null, '', url);
+    if (url !== location.hash && !(s.anchor === 'cover' && !location.hash)) {
+      try { history.replaceState(null, '', url); } catch (e) { /* sandboxed frame */ }
+    }
   }
 
   /* ---------- 6. Navigation ---------- */
@@ -436,8 +438,10 @@
   if (!(root.requestFullscreen || root.webkitRequestFullscreen)) fsBtn.hidden = true;
   fsBtn.addEventListener('click', () => {
     const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
-    if (fsEl) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-    else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+    const req = fsEl
+      ? (document.exitFullscreen || document.webkitExitFullscreen).call(document)
+      : (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+    if (req && req.catch) req.catch(() => { /* not allowed here */ });
   });
 
   /* ---------- 12. Hint ---------- */
