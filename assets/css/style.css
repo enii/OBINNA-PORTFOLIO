@@ -691,6 +691,30 @@ img { -webkit-user-drag: none; }
 }
 .pill:hover { background: rgba(128, 128, 128, .15); }
 
+/* ---------- Studio projects: each Figma frame runs across a spread ---------- */
+.page__inner--frame { padding: 0; background: var(--tone, #fff); }
+.frame {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+}
+.frame--r { left: -100%; }
+
+/* Cover style "image": a photo fills the whole cover */
+.cover__img--full { top: 0; height: 100%; object-position: center; mix-blend-mode: normal; }
+.page--cover-image .cover::after {
+  content: "";
+  position: absolute;
+  inset: 35% 0 0;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .7));
+  pointer-events: none;
+}
+.page--cover-image .cover__top, .page--cover-image .cover__foot { z-index: 1; color: #fff; }
+.page--cover-image .cover__top, .page--cover-image .cover__kicker { color: rgba(255, 255, 255, .78); }
+
 /* ---------- Narrow pages (phones) ---------- */
 @container page (max-width: 440px) {
   .cols { grid-template-columns: 1fr; row-gap: 1.6em; }

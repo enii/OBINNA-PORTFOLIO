@@ -30,6 +30,71 @@
   const fsBtn = $('#fsBtn');
   const hint = $('#hint');
 
+  /* ---------- 0. Projects added with the Studio (projects/projects.js) ----------
+     Each project is a list of Figma frames. Every frame becomes a two-page spread:
+     the left half on the left page, the right half on the right page. */
+  const params = new URLSearchParams(location.search);
+  const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const assetUrl = (u) => esc(/^(blob:|data:|https?:)/.test(u) ? u : String(u || '').replace(/^\/+/, ''));
+
+  function projectBook(p, number) {
+    const style = ['dark', 'light', 'image'].includes(p.coverStyle) ? p.coverStyle : 'dark';
+    const light = style === 'light';
+    const coverImg = p.cover; // without a cover image the cover is set in type only
+    const kicker = `${number} — ${(p.discipline || '').replace(/\s*·\s*/g, ', ')}`;
+    const longest = Math.max(1, ...String(p.title).split(/\s+/).map((w) => w.length));
+    const titleScale = Math.min(1, 7.5 / longest).toFixed(3); // long words get a smaller title
+    const coverClass = light ? 'page page--cover page--board' : 'page page--dark page--cover';
+    const imgClass = { dark: 'cover__img', light: 'cover__img cover__img--drawing', image: 'cover__img cover__img--full' }[style];
+    const frames = p.frames.map((src, k) => ['l', 'r'].map((side) => `
+      <div class="page page--frame" data-bare>
+        <div class="page__inner page__inner--frame">
+          <img class="frame frame--${side}" src="${assetUrl(src)}" alt="${side === 'l' ? `${esc(p.title)}, frame ${k + 1}` : ''}" draggable="false">
+        </div>
+      </div>`).join('')).join('');
+    return `
+      <article class="book-src" data-slug="${esc(p.slug)}" data-number="${number}" data-title="${esc(p.title)}" data-meta="${esc(p.discipline)}">
+        <div class="${coverClass}${style === 'image' ? ' page--cover-image' : ''}" data-density="hard">
+          <div class="page__inner cover">
+            ${coverImg ? `<img class="${imgClass}" src="${assetUrl(coverImg)}" alt="" draggable="false">` : ''}
+            <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
+            <div class="cover__foot">
+              <p class="cover__kicker">${esc(kicker)}</p>
+              <h2 class="cover__title" style="font-size: calc(var(--fit) * ${titleScale} * 15cqw)">${esc(p.title)}</h2>
+            </div>
+          </div>
+        </div>
+        ${frames}
+        <div class="${coverClass}" data-density="hard">
+          <div class="page__inner backcover">
+            <p class="backcover__mark">${esc(p.title)}</p>
+            <p class="backcover__sub">Obinna Oti — Product Design</p>
+            <div class="backcover__actions">
+              <button class="pill" type="button" data-action="next">Next project</button>
+              <button class="pill" type="button" data-action="restart">Read again</button>
+              <button class="pill" type="button" data-action="close">All projects</button>
+            </div>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  (function addStudioProjects() {
+    let list = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
+    if (!params.has('drafts')) list = list.filter((p) => p && !p.draft);
+    if (params.has('preview')) { // a project being prepared in the Studio
+      try {
+        const draft = JSON.parse(sessionStorage.getItem('oo-preview'));
+        if (draft) list = list.filter((p) => p.slug !== draft.slug).concat(draft);
+      } catch (e) { /* no preview */ }
+    }
+    const library = $('#library');
+    const builtIn = $$('.book-src', library).length;
+    list.filter((p) => p && p.slug && p.title && Array.isArray(p.frames) && p.frames.length)
+      .forEach((p, i) => library.insertAdjacentHTML('beforeend', projectBook(p, pad(builtIn + i + 1))));
+  }());
+
   /* ---------- 1. Read the books ---------- */
   const books = $$('.book-src').map((src) => {
     const pages = $$(':scope > .page', src);
@@ -39,7 +104,7 @@
       // With the cover shown alone, odd pages sit on the left of a spread
       page.classList.add(i % 2 ? 'page--l' : 'page--r');
       const inner = $('.page__inner', page);
-      if (i > 0 && i < total - 1 && inner) {
+      if (i > 0 && i < total - 1 && inner && !page.hasAttribute('data-bare')) {
         inner.insertAdjacentHTML('afterbegin',
           '<div class="page__head" aria-hidden="true"><span>Obinna Oti</span><span>2020—2025</span></div>');
         inner.insertAdjacentHTML('beforeend', `<div class="page__folio" aria-hidden="true">${pad(i)}</div>`);
@@ -453,6 +518,33 @@
     instance.on('changeOrientation', updateBase);
 
     instance.loadFromHTML($$('.page', el));
+    toneFrames(el);
+  }
+
+  // Frame pages fill any space around the frame with the colour of its edge
+  const tones = new Map();
+  function frameTone(img) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 8; c.height = 8;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, 8, 8);
+      const d = ctx.getImageData(0, 0, 8, 8).data;
+      const px = [0, 7, 56, 63].map((k) => [d[k * 4], d[k * 4 + 1], d[k * 4 + 2]]); // the four corners
+      const avg = [0, 1, 2].map((ch) => Math.round(px.reduce((sum, q) => sum + q[ch], 0) / px.length));
+      return `rgb(${avg.join(',')})`;
+    } catch (e) { return ''; }
+  }
+  function toneFrames(root) {
+    $$('img.frame', root).forEach((img) => {
+      const apply = () => {
+        if (!tones.has(img.src)) tones.set(img.src, frameTone(img));
+        const tone = tones.get(img.src);
+        if (tone) img.parentElement.style.setProperty('--tone', tone);
+      };
+      if (img.complete && img.naturalWidth) apply();
+      else img.addEventListener('load', apply, { once: true });
+    });
   }
 
   /* ---------- 6. Keep the UI in step with the book ---------- */

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Studio — Obinna Oti</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Cpath d='M7 9.5h8v13H7zM17 9.5h8v13h-8z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/studio.css">
+</head>
+<body class="studio">
+
+  <header class="bar st-bar">
+    <a class="brand" href="./"><b>Obinna Oti</b><span>Studio</span></a>
+    <span class="st-conn" id="connStatus">Not connected</span>
+    <a class="btn" href="./" target="_blank" rel="noopener">View site</a>
+  </header>
+
+  <main class="st-main">
+    <aside class="st-side">
+
+      <!-- Connect to GitHub (once per device) -->
+      <section class="st-card" id="connectCard">
+        <h2 class="st-h">Connect to GitHub</h2>
+        <p class="st-note">Publishing saves projects straight to the website’s GitHub repository. You only need to do this once on each device.</p>
+        <details class="st-help">
+          <summary>How to get an access token</summary>
+          <ol>
+            <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → New fine-grained token</a>.</li>
+            <li>Name it “Portfolio Studio” and pick an expiry date.</li>
+            <li>Under <b>Repository access</b> choose <b>Only select repositories</b> and pick your portfolio repository.</li>
+            <li>Under <b>Permissions → Repository permissions</b> set <b>Contents</b> to <b>Read and write</b>.</li>
+            <li>Generate the token and paste it below. It stays on this device and is only sent to GitHub.</li>
+          </ol>
+        </details>
+        <label class="st-field"><span>Access token</span>
+          <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        </label>
+        <div class="st-row">
+          <label class="st-field"><span>Repository</span><input id="repo" spellcheck="false" value="enii/OBINNA-PORTFOLIO"></label>
+          <label class="st-field st-field--sm"><span>Branch</span><input id="branch" spellcheck="false" value="main"></label>
+        </div>
+        <p class="st-note st-note--sm">Use the branch your website is published from.</p>
+        <label class="st-check"><input type="checkbox" id="remember" checked> Remember on this device</label>
+        <div class="st-actions">
+          <button class="btn btn--solid" type="button" id="connectBtn">Connect</button>
+        </div>
+        <p class="st-msg" id="connectMsg" role="status"></p>
+      </section>
+
+      <section class="st-card" id="connectedCard" hidden>
+        <p class="st-note">Publishing to <b id="connRepo"></b> on <b id="connBranch"></b>.</p>
+        <div class="st-actions"><button class="btn" type="button" id="disconnectBtn">Disconnect</button></div>
+      </section>
+
+      <!-- The projects -->
+      <section class="st-card">
+        <div class="st-card__head">
+          <h2 class="st-h">Projects</h2>
+          <button class="btn btn--solid" type="button" id="newBtn">New project</button>
+        </div>
+        <ol class="st-list" id="projectList"></ol>
+        <div class="st-savebar" id="saveBar" hidden>
+          <span>You’ve changed the order or drafts.</span>
+          <button class="btn btn--solid" type="button" id="saveListBtn">Save</button>
+        </div>
+        <p class="st-msg" id="listMsg" role="status"></p>
+      </section>
+    </aside>
+
+    <!-- Editor -->
+    <section class="st-editor">
+      <div class="st-empty" id="emptyState">
+        <p class="st-kicker">Add a project</p>
+        <h1 class="st-title">From Figma to flip book</h1>
+        <ol class="st-how">
+          <li><b>01</b><span><strong>Export</strong>Export each Figma frame as PNG or JPG at 2×. Each frame becomes a two-page spread.</span></li>
+          <li><b>02</b><span><strong>Drop</strong>Start a new project, add a title, a cover image and your frames.</span></li>
+          <li><b>03</b><span><strong>Publish</strong>Preview the book, then publish. The site updates in about a minute.</span></li>
+        </ol>
+        <button class="btn btn--solid" type="button" id="emptyNewBtn">New project</button>
+      </div>
+
+      <form id="form" hidden novalidate>
+        <div class="st-editor__head">
+          <p class="st-kicker" id="formKicker">New project</p>
+          <h1 class="st-title" id="formTitle">Untitled</h1>
+        </div>
+
+        <div class="st-row">
+          <label class="st-field"><span>Title</span><input id="fTitle" maxlength="60" placeholder="e.g. Field Stool" autocomplete="off"></label>
+          <label class="st-field"><span>Discipline</span><input id="fDiscipline" maxlength="60" placeholder="e.g. Product design · Furniture" autocomplete="off"></label>
+        </div>
+
+        <fieldset class="st-field st-cover">
+          <legend>Cover</legend>
+          <div class="st-styles" role="radiogroup" aria-label="Cover style">
+            <label class="st-style"><input type="radio" name="coverStyle" value="dark" checked><span class="st-style__swatch st-style__swatch--dark"></span><span><b>Dark</b>Renders on black</span></label>
+            <label class="st-style"><input type="radio" name="coverStyle" value="light"><span class="st-style__swatch st-style__swatch--light"></span><span><b>Light</b>Drawings on white</span></label>
+            <label class="st-style"><input type="radio" name="coverStyle" value="image"><span class="st-style__swatch st-style__swatch--image"></span><span><b>Photo</b>Image fills the cover</span></label>
+          </div>
+          <div class="st-cover__row">
+            <div class="st-drop st-drop--cover" id="coverDrop" tabindex="0" role="button" aria-label="Add a cover image">
+              <input type="file" id="coverInput" accept="image/*" hidden>
+              <span>Drop a cover image or <u>browse</u></span>
+            </div>
+            <figure class="st-cover__thumb" id="coverThumb" hidden>
+              <img alt="Cover image">
+              <button class="st-x" type="button" id="coverRemove" aria-label="Remove cover image">×</button>
+            </figure>
+          </div>
+          <p class="st-note st-note--sm">Optional. Without one, the cover is set in type only.</p>
+        </fieldset>
+
+        <div class="st-field">
+          <span>Frames</span>
+          <div class="st-drop" id="framesDrop" tabindex="0" role="button" aria-label="Add frames">
+            <input type="file" id="framesInput" accept="image/*" multiple hidden>
+            <span>Drop Figma frames here or <u>browse</u><small>16:9 frames fit a spread exactly. Large files are resized for the web.</small></span>
+          </div>
+          <ol class="st-thumbs" id="frameThumbs"></ol>
+        </div>
+
+        <label class="st-check"><input type="checkbox" id="fDraft"> Draft: hide from visitors (preview it at <code>/?drafts</code>)</label>
+
+        <div class="st-actions st-actions--main">
+          <button class="btn" type="button" id="previewBtn">Preview book</button>
+          <button class="btn btn--solid" type="submit" id="publishBtn">Publish</button>
+          <span class="st-spacer"></span>
+          <button class="btn st-danger" type="button" id="deleteBtn" hidden>Delete project</button>
+          <button class="btn" type="button" id="cancelBtn">Close</button>
+        </div>
+        <div class="st-log" id="log" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <div class="st-preview" id="preview" hidden>
+    <div class="st-preview__bar">
+      <span>Preview: this is how the book will look on the site</span>
+      <button class="btn" type="button" id="closePreview">Close preview</button>
+    </div>
+    <iframe id="previewFrame" title="Book preview"></iframe>
+  </div>
+
+  <script src="projects/projects.js"></script>
+  <script src="assets/js/studio.js"></script>
+</body>
+</html>
