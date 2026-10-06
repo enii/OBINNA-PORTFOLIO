@@ -75,42 +75,81 @@
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } },
   };
 
-  /* ---------- 2. Carousel ---------- */
-  track.innerHTML = books.map((b, i) => `
-    <div class="card" role="listitem" data-i="${i}">
-      <button class="card__btn" type="button" aria-label="${b.number} ${b.title}, ${b.meta}. Open the book">
-        <span class="card__cover" aria-hidden="true">${b.cover}</span>
-      </button>
-    </div>`).join('');
-  const cards = $$('.card', track);
+  /* ---------- 2. Carousel: the books drift slowly across in an endless loop ---------- */
+  const n = books.length;
   const capNum = $('#capNum');
   const capTitle = $('#capTitle');
   const capMeta = $('#capMeta');
   const capPager = $('#capPager');
-  const carPrev = $('#carPrev');
-  const carNext = $('#carNext');
-  let active = -1;
+  const caption = $('.shelf__caption');
+  let cards = []; // the books, repeated enough times to fill the width
+  let cw = 300; // card width
+  let step = 360; // card width + gap
+  let setW = 720; // width of one full run of books
+  let offset = 0; // how far the strip has travelled (px)
+  let vel = 0; // current speed (px/s)
+  let active = -1; // book named in the caption
+  let hoverBook = -1; // book under the mouse (pauses the drift)
+  let held = false; // keyboard focus is on the caption controls (pauses the drift)
+  let pauseUntil = 0; // a short pause after the arrows or the wheel are used
+  let glide = null; // eased move to a given offset (arrow buttons)
+  let drag = null; // pointer drag in progress
+  let suppressClick = false;
+  let raf = 0;
+  let lastT = 0;
+  let lastW = 0; // carousel width at the last layout
+
+  const cruise = () => (reduceMotion ? 0 : step / 11); // one book passes the centre about every 11 s
+  const stripX = () => -(((offset % setW) + setW) % setW); // always in (-setW, 0]
+
+  function renderCards(sets) {
+    track.innerHTML = Array.from({ length: sets * n }, (_, k) => `
+      <div class="card" data-book="${k % n}">
+        <span class="card__btn"><span class="card__cover">${books[k % n].cover}</span></span>
+      </div>`).join('');
+    cards = $$('.card', track).map((el) => ({ el, cover: $('.card__cover', el), book: Number(el.dataset.book) }));
+  }
 
   function sizeCards() {
     const h = carousel.clientHeight - 48;
     const w = carousel.clientWidth;
-    const cw = Math.max(140, Math.min(h * 0.889, w * (w < 600 ? 0.72 : 0.42), 600));
+    if (!w || !h) return;
+    // which point of the strip sits in the centre now, measured in books
+    const centre = cards.length && lastW ? (lastW / 2 - cw / 2 - stripX()) / step : null;
+    cw = Math.max(140, Math.min(h * 0.889, w * (w < 600 ? 0.62 : 0.34), 560));
+    const gap = Math.round(clamp(cw * 0.2, 24, 88));
+    step = cw + gap;
+    setW = n * step;
+    lastW = w;
+    if (centre !== null) { // keep that same point in the centre at the new size
+      let x = w / 2 - cw / 2 - centre * step;
+      while (x > 0) x -= setW;
+      while (x <= -setW) x += setW;
+      offset = -x;
+    }
     track.style.setProperty('--cw', `${cw}px`);
-    track.style.setProperty('--gap', `${Math.round(clamp(cw * 0.22, 28, 96))}px`);
-    cards.forEach((c) => $('.card__cover', c).style.setProperty('--s', (cw / 800).toFixed(4)));
+    track.style.setProperty('--gap', `${gap}px`);
+    const sets = Math.max(2, Math.ceil(w / setW) + 2);
+    if (cards.length !== sets * n) renderCards(sets);
+    cards.forEach((c) => c.cover.style.setProperty('--s', (cw / 800).toFixed(4)));
+    paint();
   }
 
-  function updateCarousel() {
-    const mid = track.getBoundingClientRect().left + track.clientWidth / 2;
+  // Position the strip, scale books by their distance from the centre, update the caption
+  function paint() {
+    const W = carousel.clientWidth;
+    const x = stripX();
+    track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
     let best = 0;
     let bestD = Infinity;
-    cards.forEach((c, i) => {
-      const r = c.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - mid) / (c.offsetWidth || 1);
-      c.style.setProperty('--d', Math.min(d, 1.5).toFixed(3));
-      if (d < bestD) { bestD = d; best = i; }
+    cards.forEach((c, k) => {
+      const d = Math.abs(x + k * step + cw / 2 - W / 2) / step;
+      c.el.style.transform = `scale(${(1 - 0.14 * Math.min(d, 1)).toFixed(4)})`;
+      c.el.style.opacity = (1 - 0.3 * Math.min(d, 1)).toFixed(3);
+      if (d < bestD) { bestD = d; best = c.book; }
     });
-    if (best !== active) setActive(best);
+    const show = hoverBook >= 0 ? hoverBook : best;
+    if (show !== active) setActive(show);
   }
 
   function setActive(i) {
@@ -120,10 +159,7 @@
     capNum.textContent = b.number;
     capTitle.textContent = b.title;
     capMeta.textContent = b.meta;
-    capPager.innerHTML = `${pad(i + 1)} <span>/ ${pad(books.length)}</span>`;
-    cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
-    carPrev.disabled = i === 0;
-    carNext.disabled = i === books.length - 1;
+    capPager.innerHTML = `${pad(i + 1)} <span>/ ${pad(n)}</span>`;
     if (!first && !reduceMotion && capTitle.animate) {
       [capNum, capTitle, capMeta].forEach((el, k) => el.animate(
         [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }],
@@ -132,41 +168,110 @@
     }
   }
 
-  function goCard(i, smooth = true) {
-    const c = cards[clamp(i, 0, cards.length - 1)];
-    track.scrollTo({
-      left: c.offsetLeft + c.offsetWidth / 2 - track.clientWidth / 2,
-      behavior: smooth && !reduceMotion ? 'smooth' : 'auto',
-    });
+  function tick(t) {
+    raf = requestAnimationFrame(tick);
+    const dt = lastT ? Math.min(0.05, (t - lastT) / 1000) : 0;
+    lastT = t;
+    if (glide) {
+      const p = Math.min(1, (t - glide.t0) / glide.dur);
+      offset = glide.from + (glide.to - glide.from) * (1 - Math.pow(1 - p, 3));
+      if (p >= 1) { glide = null; vel = 0; }
+    } else if (!drag) {
+      const target = hoverBook >= 0 || held || t < pauseUntil ? 0 : cruise();
+      vel += (target - vel) * (1 - Math.exp(-dt * (target ? 1.5 : 6))); // glide into the drift, settle quickly on hover
+      if (!target && Math.abs(vel) < 0.5) vel = 0;
+      offset += vel * dt;
+    }
+    paint();
+  }
+  function startDrift() { if (!raf) { lastT = 0; raf = requestAnimationFrame(tick); } }
+  function stopDrift() { cancelAnimationFrame(raf); raf = 0; }
+
+  // Bring the next (dir 1) or previous (dir -1) book to the centre; dir 0 centres the nearest
+  function stepBy(dir) {
+    const W = carousel.clientWidth;
+    const x = stripX();
+    const k = Math.round((W / 2 - cw / 2 - x) / step);
+    const target = x + (k + dir) * step + cw / 2;
+    const now = performance.now();
+    glide = { from: offset, to: offset + target - W / 2, t0: now, dur: reduceMotion ? 1 : 750 };
+    pauseUntil = now + 3500;
   }
 
-  let carTick = false;
-  track.addEventListener('scroll', () => {
-    if (carTick) return;
-    carTick = true;
-    requestAnimationFrame(() => { carTick = false; updateCarousel(); });
-  }, { passive: true });
+  // Jump (no animation) so that a given book sits in the centre
+  function centreBook(i) {
+    const W = carousel.clientWidth;
+    let x = W / 2 - cw / 2 - i * step;
+    while (x > 0) x -= setW;
+    while (x <= -setW) x += setW;
+    offset = -x;
+    vel = 0;
+    paint();
+  }
 
-  // A vertical mouse wheel moves one project at a time
-  let wheelLock = 0;
-  track.addEventListener('wheel', (e) => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // trackpads scroll sideways natively
+  // Mouse over a book pauses the drift
+  track.addEventListener('pointerover', (e) => {
+    if (e.pointerType !== 'mouse' || drag) return;
+    const c = e.target.closest('.card');
+    hoverBook = c ? Number(c.dataset.book) : -1;
+  });
+  carousel.addEventListener('pointerleave', () => { hoverBook = -1; });
+
+  // Drag or swipe the strip; a quick fling carries on and eases back into the drift
+  track.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    glide = null;
+    drag = { id: e.pointerId, x: e.clientX, offset, lastX: e.clientX, lastT: performance.now(), v: 0, moved: false };
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) > 6) {
+      drag.moved = true;
+      carousel.classList.add('is-dragging');
+      try { track.setPointerCapture(e.pointerId); } catch (err) { /* not needed */ }
+    }
+    if (!drag.moved) return;
+    offset = drag.offset - dx;
+    const now = performance.now();
+    drag.v = 0.75 * drag.v + 0.25 * ((drag.lastX - e.clientX) / Math.max(1, now - drag.lastT)) * 1000;
+    drag.lastX = e.clientX;
+    drag.lastT = now;
+  });
+  const endDrag = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.moved) {
+      vel = clamp(drag.v, -2500, 2500);
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 0);
+      carousel.classList.remove('is-dragging');
+    }
+    drag = null;
+  };
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+
+  // Mouse wheel or trackpad scrubs the strip
+  carousel.addEventListener('wheel', (e) => {
     e.preventDefault();
-    const now = Date.now();
-    if (now < wheelLock || Math.abs(e.deltaY) < 4) return;
-    wheelLock = now + 500;
-    goCard(active + Math.sign(e.deltaY));
+    glide = null;
+    vel = 0;
+    offset += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    pauseUntil = performance.now() + 1200;
   }, { passive: false });
 
+  // Clicking any book opens it
   track.addEventListener('click', (e) => {
-    const card = e.target.closest('.card');
-    if (!card) return;
-    const i = Number(card.dataset.i);
-    if (i === active) openBook(books[i].slug);
-    else goCard(i);
+    if (suppressClick) return;
+    const c = e.target.closest('.card');
+    if (c) openBook(books[Number(c.dataset.book)].slug);
   });
-  carPrev.addEventListener('click', () => goCard(active - 1));
-  carNext.addEventListener('click', () => goCard(active + 1));
+
+  // Keyboard users: hold the drift while they're on the caption controls
+  caption.addEventListener('focusin', (e) => { held = e.target.matches(':focus-visible'); });
+  caption.addEventListener('focusout', () => { held = false; });
+  $('#carPrev').addEventListener('click', () => stepBy(-1));
+  $('#carNext').addEventListener('click', () => stepBy(1));
   $('#openBtn').addEventListener('click', () => openBook(books[active].slug));
 
   /* ---------- 3. Views + links ---------- */
@@ -202,16 +307,17 @@
     reader.hidden = true;
     shelf.hidden = false;
     document.title = 'Obinna Oti — Product Design Portfolio';
+    held = false;
+    hoverBook = -1;
     sizeCards();
-    const i = from ? books.indexOf(from) : Math.max(active, 0);
-    goCard(i, false);
-    updateCarousel();
-    if (from) $('.card__btn', cards[i]).focus({ preventScroll: true });
+    centreBook(from ? books.indexOf(from) : 0);
+    startDrift();
   }
 
   function showReader(b) {
     if (book === b && pf) return;
     book = b;
+    stopDrift();
     shelf.hidden = true;
     reader.hidden = false;
     readerTitle.textContent = `${b.number} — ${b.title}`;
@@ -424,8 +530,8 @@
       if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
       return;
     }
-    if (e.key === 'ArrowRight') { e.preventDefault(); goCard(active + 1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); goCard(active - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); stepBy(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); stepBy(-1); }
   });
 
   /* ---------- 8. Resize ---------- */
@@ -436,10 +542,10 @@
       if (L.single === layout.single) wrap.style.width = `${L.W}px`; // StPageFlip re-fits itself right after this
       requestAnimationFrame(updateBase);
     }
-    if (!shelf.hidden) { sizeCards(); updateCarousel(); }
+    if (!shelf.hidden) sizeCards();
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (!shelf.hidden) { goCard(active, false); return; }
+      if (!shelf.hidden) return;
       if (!book) return;
       const L = computeLayout();
       const changed = !layout
@@ -514,10 +620,8 @@
     ? Promise.all(['800 1em', 'italic 100 1em']
       .map((f) => document.fonts.load(`${f} "Tomato Grotesk"`))).catch(() => {})
     : Promise.resolve();
-  if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) { sizeCards(); updateCarousel(); } }).observe(carousel);
+  if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) sizeCards(); }).observe(carousel);
   fontsReady.then(() => {
-    sizeCards();
-    setActive(0);
     route();
   });
 })();

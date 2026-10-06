@@ -199,29 +199,34 @@ img { -webkit-user-drag: none; }
   line-height: 1.55;
   color: var(--desk-muted);
 }
-.carousel { position: relative; min-width: 0; min-height: 0; }
-.carousel__track {
+.carousel {
   position: relative;
-  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: pan-y; /* horizontal swipes move the strip */
+  -webkit-user-select: none;
+  user-select: none;
+  /* books fade in and out at the edges as they drift across */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.carousel.is-dragging { cursor: grabbing; }
+.carousel__track {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
   display: flex;
   align-items: center;
   gap: var(--gap, 56px);
-  padding: 0 calc(50% - var(--cw, 300px) / 2);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
+  will-change: transform;
 }
-.carousel__track::-webkit-scrollbar { display: none; }
 
+/* transform and opacity are set every frame from main.js */
 .card {
   position: relative;
   flex: 0 0 var(--cw, 300px);
   aspect-ratio: 8 / 9;
-  scroll-snap-align: center;
-  transform: scale(calc(1 - min(var(--d, 0), 1) * .16));
-  opacity: calc(1 - min(var(--d, 0), 1) * .5);
+  cursor: pointer;
 }
 /* page edges of the closed book */
 .card::after {
@@ -262,7 +267,9 @@ img { -webkit-user-drag: none; }
   transform: scale(var(--s, .4));
   transform-origin: 0 0;
 }
-.card.is-active .card__btn:hover { transform: translateY(-8px) rotate(-.6deg); }
+@media (hover: hover) {
+  .carousel:not(.is-dragging) .card:hover .card__btn { transform: translateY(-10px) rotate(-.6deg); }
+}
 
 .shelf__caption {
   display: flex;

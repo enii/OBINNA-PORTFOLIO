@@ -2,7 +2,7 @@
 
 A product design portfolio set in Tomato Grotesk. It opens on a carousel of projects; choosing one opens that project's flip book.
 
-- **Carousel:** each project appears as a closed book. Swipe, scroll, use the arrows or ← → keys, then click the book or **Open the book**.
+- **Carousel:** the projects drift slowly across the screen as closed books in an endless loop. Hovering a book pauses it. Visitors can drag, swipe, scroll or use the arrows and ← → keys, and clicking any book opens it.
 - **Flip book:** the cover swings open, then readers click a page, drag a corner, swipe, or use ← → keys. **Esc** or **All projects** goes back.
 - **Desktop:** each Figma frame is split across a two-page spread (16:9, like the frames).
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
