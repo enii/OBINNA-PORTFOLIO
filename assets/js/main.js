@@ -317,13 +317,26 @@
   window.addEventListener('pointercancel', endDrag);
 
   // Mouse wheel or trackpad scrubs the strip
+  // Sideways trackpad swipes (or Shift + wheel) scrub the strip; vertical scrolling moves the page
   carousel.addEventListener('wheel', (e) => {
+    const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+    if (!dx) return;
     e.preventDefault();
     glide = null;
     vel = 0;
-    offset += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    offset += dx;
     pauseUntil = performance.now() + 1200;
   }, { passive: false });
+
+  // Only drift while the carousel is on screen
+  let carouselInView = true;
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(([entry]) => {
+      carouselInView = entry.isIntersecting;
+      if (carouselInView && !shelf.hidden) startDrift();
+      else stopDrift();
+    }).observe(carousel);
+  }
 
   // Clicking any book opens it
   track.addEventListener('click', (e) => {
@@ -358,10 +371,12 @@
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* sandboxed */ }
     route();
   }
+  let shelfShown = false;
+  let shelfScroll = 0; // where the landing was scrolled to when a book opened
   function route() {
     const b = books.find((x) => x.slug === location.hash.slice(1));
     if (b) showReader(b);
-    else showShelf();
+    else if (!shelfShown) showShelf();
   }
   window.addEventListener('hashchange', route);
 
@@ -372,17 +387,24 @@
     reader.hidden = true;
     shelf.hidden = false;
     document.title = 'Obinna Oti — Product Design Portfolio';
+    shelfShown = true;
+    document.body.classList.add('is-shelf');
     held = false;
     hoverBook = -1;
     sizeCards();
     centreBook(from ? books.indexOf(from) : 0);
-    startDrift();
+    if (from) window.scrollTo(0, shelfScroll);
+    if (carouselInView) startDrift();
   }
 
   function showReader(b) {
     if (book === b && pf) return;
     book = b;
     stopDrift();
+    reels.forEach((v) => v.pause());
+    if (shelfShown) shelfScroll = window.scrollY;
+    shelfShown = false;
+    document.body.classList.remove('is-shelf');
     shelf.hidden = true;
     reader.hidden = false;
     readerTitle.textContent = `${b.number} — ${b.title}`;
@@ -707,7 +729,83 @@
   function hideHint() { hint.classList.add('is-hidden'); }
   hideHint();
 
-  /* ---------- 12. Go ---------- */
+  /* ---------- 12. Motion: animation players under the carousel ---------- */
+  const reels = [];
+  const clock = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  $$('.reel').forEach((reel) => {
+    const video = $('.reel__video', reel);
+    const frame = $('.reel__frame', reel);
+    const big = $('.reel__big', reel);
+    const toggle = $('.reel__toggle', reel);
+    const seek = $('.reel__seek', reel);
+    const time = $('.reel__time', reel);
+    const loop = $('.reel__loop', reel);
+    const fs = $('.reel__fs', reel);
+    if (!video) return;
+    reels.push(video);
+
+    const play = () => { const r = video.play(); if (r && r.catch) r.catch(() => { /* blocked or interrupted */ }); };
+    const togglePlay = () => ((video.paused || video.ended) ? play() : video.pause());
+    const showTime = () => {
+      const d = video.duration || 0;
+      const t = video.currentTime || 0;
+      const p = d ? t / d : 0;
+      seek.value = String(Math.round(p * 1000));
+      seek.style.setProperty('--p', `${(p * 100).toFixed(2)}%`);
+      time.textContent = `${clock(t)} / ${clock(d)}`;
+    };
+    const showState = () => {
+      const playing = !video.paused && !video.ended;
+      reel.classList.toggle('is-playing', playing);
+      reel.classList.toggle('is-ended', video.ended);
+      const label = playing ? 'Pause animation' : (video.ended ? 'Play the animation again' : 'Play animation');
+      toggle.setAttribute('aria-label', label);
+      big.setAttribute('aria-label', label);
+    };
+    ['play', 'pause', 'ended'].forEach((ev) => video.addEventListener(ev, showState));
+    ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked'].forEach((ev) => video.addEventListener(ev, showTime));
+    video.addEventListener('play', () => { // keep the progress line smooth while playing
+      const step = () => { showTime(); if (!video.paused && !video.ended) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+
+    big.addEventListener('click', (e) => { e.stopPropagation(); play(); });
+    frame.addEventListener('click', togglePlay);
+    toggle.addEventListener('click', togglePlay);
+    seek.addEventListener('input', () => {
+      if (video.duration) video.currentTime = (Number(seek.value) / 1000) * video.duration;
+      showTime();
+      showState();
+    });
+    loop.addEventListener('click', () => {
+      video.loop = !video.loop;
+      loop.setAttribute('aria-pressed', String(video.loop));
+      if (video.loop && video.ended) play();
+    });
+    fs.addEventListener('click', () => {
+      const enter = frame.requestFullscreen || frame.webkitRequestFullscreen;
+      if (enter) { const r = enter.call(frame); if (r && r.catch) r.catch(() => {}); } else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    });
+    if (!(frame.requestFullscreen || frame.webkitRequestFullscreen || video.webkitEnterFullscreen)) fs.hidden = true;
+
+    // Pause when scrolled out of view
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(([entry]) => { if (!entry.isIntersecting && !video.paused) video.pause(); }, { threshold: 0.15 }).observe(frame);
+    }
+    showTime();
+  });
+
+  // "Motion" link in the top bar scrolls down to the animations
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-scroll]');
+    if (!link) return;
+    const target = document.getElementById(link.dataset.scroll);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
+
+  /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all(['800 1em', 'italic 100 1em']
       .map((f) => document.fonts.load(`${f} "Tomato Grotesk"`))).catch(() => {})

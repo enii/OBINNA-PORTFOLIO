@@ -19,6 +19,24 @@ npx serve .          # or: python3 -m http.server
 
 Then open the printed URL.
 
+## Motion (animations under the carousel)
+
+Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one has a play button, a scrubber, loop and full screen. Animations pause when scrolled off screen, and the carousel stops drifting while you're down there.
+
+To replace the Sting Rays animation, overwrite the files in `assets/media/`:
+
+```
+sting-rays-animation.mp4          the video (H.264 MP4)
+sting-rays-animation.webm         the same video as WebM, a fallback for the few browsers without MP4
+sting-rays-animation-poster.jpg   the still shown before it plays
+```
+
+To add another animation, copy the `<article class="motion__item">` block in `index.html` and point it at the new files. Tips:
+
+- **Format:** export MP4 (H.264), 1920px wide, without sound, ideally under about 10 MB.
+- **Poster:** use a strong frame as the poster image; the last frame often works well.
+- **Fallback:** a WebM copy is optional. I can make one for you.
+
 ## Adding new projects (the Studio)
 
 New projects are added in the **Studio**, a private page on the site at `…/studio.html` (it isn't linked anywhere and search engines are told to skip it). No code needed.
