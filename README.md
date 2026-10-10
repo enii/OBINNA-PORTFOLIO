@@ -129,13 +129,14 @@ Body copy is short placeholder text written for each project. The intro line is 
 
 ## Fonts
 
-`assets/fonts/` contains the Tomato Grotesk files supplied:
+All text on the site, including the Studio, is set in Tomato Grotesk, from the files in `assets/fonts/`:
 
-- ExtraBold: names, titles and labels
-- Thin Slanted: the large project numbers
-- SemiBold Slanted, ExtraLight Slanted and ExtraBold Slanted: declared and ready to use
+- **ExtraBold:** names, titles, labels and buttons
+- **ExtraLight Slanted:** running text, captions and small labels
+- **Thin Slanted:** the large project numbers
+- **SemiBold Slanted:** medium emphasis
 
-Only one **upright** weight (ExtraBold) was supplied, so body text uses Helvetica Neue / Arial for now. To set body copy in Tomato Grotesk, add an upright Regular or Light file and a matching `@font-face` at the top of `assets/css/style.css`, then point `--font-text` at it.
+Only one upright weight (ExtraBold) was supplied, so running text is slanted for now. To set it upright, add `TomatoGrotesk-Light.otf` or `-Regular.otf` to `assets/fonts/`. Then change the first `"Tomato Grotesk Text"` `@font-face` at the top of `assets/css/style.css` to use it. Nothing else needs to change.
 
 This repository is public, so anyone can download the font files from it. Make sure your Tomato Grotesk licence covers web use.
 

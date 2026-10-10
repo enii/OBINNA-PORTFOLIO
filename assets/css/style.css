@@ -2,9 +2,12 @@
    Obinna Oti — Portfolio: project carousel + flip books
    ========================================================================== */
 
-/* ---------- Tomato Grotesk ----------------------------------------------
-   Only the weights in /assets/fonts are declared. Drop more weights in
-   (e.g. TomatoGrotesk-Regular.otf) and add a matching @font-face to use them. */
+/* ---------- Tomato Grotesk: every piece of text on the site ------------
+   "Tomato Grotesk" is used for display type (titles, names, numbers).
+   "Tomato Grotesk Text" is used for running text, captions and labels. Only one upright
+   weight was supplied (ExtraBold), so running text uses ExtraLight Slanted for now.
+   To set it upright, add TomatoGrotesk-Light.otf (or -Regular.otf) to /assets/fonts and
+   point the first "Tomato Grotesk Text" face below at it. */
 @font-face {
   font-family: "Tomato Grotesk";
   src: url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
@@ -31,28 +34,44 @@
   font-weight: 100; font-style: italic; font-display: swap;
 }
 
+@font-face { /* running text */
+  font-family: "Tomato Grotesk Text";
+  src: url("../fonts/TomatoGrotesk-ExtraLightSlanted.otf") format("opentype");
+  font-weight: 100 400; font-style: normal; font-display: swap;
+}
+@font-face { /* medium emphasis */
+  font-family: "Tomato Grotesk Text";
+  src: url("../fonts/TomatoGrotesk-SemiBoldSlanted.otf") format("opentype");
+  font-weight: 500 600; font-style: normal; font-display: swap;
+}
+@font-face { /* bold */
+  font-family: "Tomato Grotesk Text";
+  src: url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
+  font-weight: 700 900; font-style: normal; font-display: swap;
+}
+
 /* ---------- Tokens ---------- */
 :root {
   --font-display: "Tomato Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-text: "Helvetica Neue", Helvetica, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-text: "Tomato Grotesk Text", "Tomato Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* the desk the books sit on */
   --desk: #e8e8e6;
   --desk-ink: #121212;
-  --desk-muted: #7f7f7c;
+  --desk-muted: #6b6b68;
   --desk-line: rgba(0, 0, 0, .14);
   --desk-hover: rgba(0, 0, 0, .05);
 
   /* the books themselves (the same in dark mode) */
   --paper: #ffffff;
   --ink: #0d0d0d;
-  --muted: #8e8e8b;
-  --faint: #bdbdba;
+  --muted: #73736f;
+  --faint: #a2a29e;
   --rule: #e5e5e2;
   --night: #070707;
   --night-ink: #f1f1f1;
-  --night-body: #b9b9b9;
-  --night-muted: #5f5f5f;
+  --night-body: #d0d0d0;
+  --night-muted: #7a7a7a;
   --accent: #2f45d8;
 
   --gutter: max(16px, min(3vw, 36px));
@@ -62,7 +81,7 @@
   :root:not([data-theme="light"]) {
     --desk: #151515;
     --desk-ink: #ececec;
-    --desk-muted: #8b8b8b;
+    --desk-muted: #9c9c9c;
     --desk-line: rgba(255, 255, 255, .15);
     --desk-hover: rgba(255, 255, 255, .06);
     --accent: #7d8cff;
@@ -72,7 +91,7 @@
 :root[data-theme="dark"] {
   --desk: #151515;
   --desk-ink: #ececec;
-  --desk-muted: #8b8b8b;
+  --desk-muted: #9c9c9c;
   --desk-line: rgba(255, 255, 255, .15);
   --desk-hover: rgba(255, 255, 255, .06);
   --accent: #7d8cff;
@@ -82,10 +101,11 @@
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+html { font-synthesis: none; } /* never fake a bold or slanted version */
 body {
   background: var(--desk);
   color: var(--desk-ink);
-  font: 13px/1.4 var(--font-text);
+  font: 14px/1.45 var(--font-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -138,11 +158,11 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   white-space: nowrap;
 }
 .brand b { font: 800 16px/1 var(--font-display); letter-spacing: -.01em; }
-.brand span { font-size: 11px; color: var(--desk-muted); }
+.brand span { font-size: 12px; color: var(--desk-muted); }
 .bar__nav { display: flex; align-items: center; gap: 20px; margin-left: auto; }
 .bar__link {
   color: inherit;
-  font-size: 12px;
+  font-size: 13px;
   text-decoration: none;
   border-bottom: 1px solid var(--desk-line);
   transition: border-color .2s;
@@ -152,7 +172,7 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   flex: 1;
   min-width: 0;
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--desk-muted);
@@ -182,6 +202,7 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   white-space: nowrap;
 }
 a.btn { color: inherit; text-decoration: none; }
+.btn { font-family: var(--font-display); font-weight: 800; }
 .btn--solid { background: var(--desk-ink); border-color: var(--desk-ink); color: var(--desk); }
 .round-btn {
   flex: none;
@@ -204,7 +225,7 @@ a.btn { color: inherit; text-decoration: none; }
   max-width: 58ch;
   margin: 0;
   padding: 0 var(--gutter);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.55;
   color: var(--desk-muted);
 }
@@ -297,7 +318,7 @@ a.btn { color: inherit; text-decoration: none; }
   font: 800 clamp(22px, 2.6vw, 34px)/1 var(--font-display);
   letter-spacing: -.02em;
 }
-.shelf__meta { margin: 6px 0 0; font-size: 12px; letter-spacing: .04em; color: var(--desk-muted); }
+.shelf__meta { margin: 6px 0 0; font-size: 13px; letter-spacing: .04em; color: var(--desk-muted); }
 .shelf__controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .shelf__pager {
   margin-right: 8px;
@@ -309,7 +330,7 @@ a.btn { color: inherit; text-decoration: none; }
 
 @media (max-width: 600px) {
   .brand span { display: none; }
-  .shelf__intro { font-size: 12px; }
+  .shelf__intro { font-size: 13px; }
   .shelf__controls { width: 100%; margin-left: 0; }
   .shelf__controls .btn { flex: 1; }
 }
@@ -330,7 +351,7 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .motion__label {
   margin: 0;
-  font: 400 11px/1 var(--font-text);
+  font: 400 12px/1 var(--font-text);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--desk-muted);
@@ -345,13 +366,13 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .motion__item + .motion__item { margin-top: clamp(56px, 8vw, 112px); }
 .motion__text { display: grid; gap: 14px; justify-items: start; max-width: 40ch; }
-.motion__kicker { margin: 0; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--desk-muted); }
+.motion__kicker { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--desk-muted); }
 .motion__title {
   margin: 0;
   font: 800 clamp(40px, 6vw, 84px)/.86 var(--font-display);
   letter-spacing: -.04em;
 }
-.motion__body { margin: 6px 0 10px; font-size: 14px; line-height: 1.6; color: var(--desk-muted); }
+.motion__body { margin: 6px 0 10px; font-size: 16px; line-height: 1.6; color: var(--desk-muted); }
 @media (max-width: 760px) {
   .motion__item { grid-template-columns: minmax(0, 1fr); align-items: start; }
 }
@@ -446,7 +467,7 @@ a.btn { color: inherit; text-decoration: none; }
   gap: 8px 24px;
   padding: 22px var(--gutter) max(24px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--desk-line);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--desk-muted);
 }
 .site-foot a { color: inherit; }
@@ -513,7 +534,7 @@ a.btn { color: inherit; text-decoration: none; }
   border-radius: 99px;
   background: var(--desk);
   color: var(--desk-muted);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: .03em;
   white-space: nowrap;
   pointer-events: none;
@@ -559,8 +580,8 @@ a.btn { color: inherit; text-decoration: none; }
   --px: 7.5cqw;
   --pt: 14cqw;
   --pb: 9.5cqw;
-  --fs-body: calc(var(--fit) * max(var(--floor, 8px), 1.8cqw));
-  --fs-small: calc(var(--fit) * max(var(--floor-sm, 7px), 1.45cqw));
+  --fs-body: calc(var(--fit) * max(var(--floor, 8.5px), 1.95cqw));
+  --fs-small: calc(var(--fit) * max(var(--floor-sm, 7.5px), 1.55cqw));
   --fs-label: calc(var(--fit) * max(var(--floor-sm, 7px), 1.6cqw));
   --fs-kicker: calc(var(--fit) * max(11px, 2.7cqw));
   --fs-title: calc(var(--fit) * max(18px, 6.2cqw));
@@ -574,7 +595,7 @@ a.btn { color: inherit; text-decoration: none; }
   font-size: var(--fs-body);
   line-height: 1.5;
 }
-.is-single { --floor: 10.5px; --floor-sm: 9px; }
+.is-single { --floor: 11px; --floor-sm: 9.5px; }
 
 /* Running head + folio */
 .page__head {

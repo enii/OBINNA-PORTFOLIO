@@ -15,7 +15,7 @@
 
 body.studio { overflow: auto; }
 .studio a { color: inherit; }
-.studio code { font-size: .92em; padding: .1em .35em; border-radius: 4px; background: var(--desk-hover); }
+.studio code { font-family: var(--font-text); font-size: .92em; padding: .1em .35em; border-radius: 4px; background: var(--desk-hover); }
 
 .st-bar {
   position: sticky;
@@ -55,7 +55,7 @@ body.studio { overflow: auto; }
 }
 .st-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .st-h { margin: 0; font: 800 16px/1.2 var(--font-display); letter-spacing: -.01em; }
-.st-note { margin: 0; font-size: 13px; line-height: 1.55; color: var(--desk-muted); }
+.st-note { margin: 0; font-size: 14px; line-height: 1.55; color: var(--desk-muted); }
 .st-note--sm { font-size: 12px; }
 .st-msg { margin: 0; font-size: 13px; line-height: 1.5; min-height: 0; }
 .st-msg:empty { display: none; }

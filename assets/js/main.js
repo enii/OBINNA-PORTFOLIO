@@ -807,8 +807,10 @@
 
   /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
-    ? Promise.all(['800 1em', 'italic 100 1em']
-      .map((f) => document.fonts.load(`${f} "Tomato Grotesk"`))).catch(() => {})
+    ? Promise.all([
+      ...['800 1em', 'italic 100 1em'].map((f) => document.fonts.load(`${f} "Tomato Grotesk"`)),
+      document.fonts.load('400 1em "Tomato Grotesk Text"'), // measured before laying out the books
+    ]).catch(() => {})
     : Promise.resolve();
   if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) sizeCards(); }).observe(carousel);
   fontsReady.then(() => {
