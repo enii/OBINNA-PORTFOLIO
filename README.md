@@ -132,7 +132,7 @@ The Super Slides renders are the ones you sent, as supplied (4:5, 1600 × 2000).
 
 ### Copy
 
-Body copy is short placeholder text written for each project. The intro line is from your Frame 3. The contact email in the top bar is a placeholder. Edit all of these in `index.html`.
+Body copy is short placeholder text written for each project. The intro line is from your Frame 3. The contact email (top right and in the footer) is otimarvelous@gmail.com. Edit all of these in `index.html`.
 
 ## Fonts
 
