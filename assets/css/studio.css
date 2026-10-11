@@ -112,7 +112,7 @@ body.studio { overflow: auto; }
 }
 .st-item:hover { background: var(--desk-hover); }
 .st-item.is-current { background: var(--desk-hover); box-shadow: inset 2px 0 0 var(--desk-ink); }
-.st-item__num { font: italic 100 26px/1 var(--font-display); letter-spacing: -.03em; }
+.st-item__num { font: 100 26px/1 var(--font-display); letter-spacing: -.03em; }
 .st-item__body { min-width: 0; display: grid; gap: 2px; }
 .st-item__body b { font: 800 14px/1.2 var(--font-display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .st-item__body small { font-size: 12px; color: var(--desk-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -180,7 +180,7 @@ body.studio { overflow: auto; }
 }
 .st-how { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; }
 .st-how li { display: grid; grid-template-columns: 2.6em 1fr; gap: 6px; font-size: 13px; line-height: 1.5; color: var(--desk-muted); }
-.st-how b { font: italic 100 32px/.9 var(--font-display); color: var(--desk-ink); }
+.st-how b { font: 100 32px/.9 var(--font-display); color: var(--desk-ink); }
 .st-how strong { display: block; margin-bottom: 4px; font: 800 14px/1.2 var(--font-display); color: var(--desk-ink); }
 .st-empty .btn { justify-self: start; }
 

@@ -106,11 +106,11 @@ Current books:
 |---|---|
 | 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
-| 03 Super Slides | cover · hero render, colourways and close-up · back cover |
+| 03 Super Slides | cover · bone slide, colourways and close-up · back cover |
 
 ### Images
 
-The images in `assets/images/` are cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
+The Sting Rays and Vivonne images in `assets/images/` are cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
 
 ```
 sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
@@ -122,12 +122,12 @@ vivonne-axonometric.webp
 vivonne-floor-plan.webp
 vivonne-roof-section.webp
 vivonne-roof-3d.webp
-super-slides-hero.webp           (stand-in: the bone slide on black, left page)
-super-slides-colourways.webp     (stand-in: the three colourways stacked, right page)
-super-slides-detail.webp         (stand-in: the close-up texture, right page)
+super-slides-hero.webp           (the bone slide: left page and cover, 1600 × 2000)
+super-slides-colourways.webp     (sage, olive and lavender stacked: right page, 1600 × 2000)
+super-slides-detail.webp         (the close-up: right page, 1600 × 2000)
 ```
 
-The three Super Slides images are labelled stand-ins until the real renders are exported.
+The Super Slides renders are the ones you sent, as supplied (4:5, 1600 × 2000). Each image is cropped to fit its spot on the page, so keep the product near the middle of the frame.
 
 ### Copy
 
@@ -135,16 +135,18 @@ Body copy is short placeholder text written for each project. The intro line is 
 
 ## Fonts
 
-All text on the site, including the Studio, is set in Tomato Grotesk, from the files in `assets/fonts/`:
+All text on the site, including the Studio, is set upright in Tomato Grotesk, from the files in `assets/fonts/`:
 
-- **ExtraBold:** names, titles, labels and buttons
-- **ExtraLight Slanted:** running text, captions and small labels
-- **Thin Slanted:** the large project numbers
-- **SemiBold Slanted:** medium emphasis
+- **ExtraBold:** names, titles, labels and buttons (`TomatoGrotesk-ExtraBold.otf`)
+- **ExtraLight:** running text, captions and small labels (`TomatoGrotesk-ExtraLightUpright.otf`)
+- **SemiBold:** medium emphasis (`TomatoGrotesk-SemiBoldUpright.otf`)
+- **Thin:** the large project numbers (`TomatoGrotesk-ThinUpright.otf`)
 
-Only one upright weight (ExtraBold) was supplied, so running text is slanted for now. To set it upright, add `TomatoGrotesk-Light.otf` or `-Regular.otf` to `assets/fonts/`. Then change the first `"Tomato Grotesk Text"` `@font-face` at the top of `assets/css/style.css` to use it. Nothing else needs to change.
+Only ExtraBold was supplied upright. The other weights came as Slanted files, so the `*Upright.otf` files were made from them with `tools/unslant.py`. The script straightens the 11.8° slant and was checked against the real upright ExtraBold, which it reproduces almost exactly. The original Slanted files stay in the folder as the source.
 
-This repository is public, so anyone can download the font files from it. Make sure your Tomato Grotesk licence covers web use.
+**For a true Regular weight,** or official upright files, add them to `assets/fonts/` (for example `TomatoGrotesk-Regular.otf`). Then point the `@font-face` rules at the top of `assets/css/style.css` at them. Nothing else needs to change.
+
+This repository is public, so anyone can download the font files from it. Make sure your Tomato Grotesk licence covers web use, and that it allows modified versions of the font (the upright files). If it doesn't, send the official upright files and I'll swap them in.
 
 ## Deploy (GitHub Pages)
 

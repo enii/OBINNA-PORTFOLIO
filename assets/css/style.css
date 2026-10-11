@@ -2,12 +2,12 @@
    Obinna Oti — Portfolio: project carousel + flip books
    ========================================================================== */
 
-/* ---------- Tomato Grotesk: every piece of text on the site ------------
+/* ---------- Tomato Grotesk: every piece of text on the site, all upright ------------
    "Tomato Grotesk" is used for display type (titles, names, numbers).
-   "Tomato Grotesk Text" is used for running text, captions and labels. Only one upright
-   weight was supplied (ExtraBold), so running text uses ExtraLight Slanted for now.
-   To set it upright, add TomatoGrotesk-Light.otf (or -Regular.otf) to /assets/fonts and
-   point the first "Tomato Grotesk Text" face below at it. */
+   "Tomato Grotesk Text" is used for running text, captions and labels.
+   Only ExtraBold was supplied upright; the other weights came as Slanted and were set
+   upright with tools/unslant.py (the *Upright.otf files). To use official upright files
+   instead, drop them into /assets/fonts and point the faces below at them. */
 @font-face {
   font-family: "Tomato Grotesk";
   src: url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
@@ -15,33 +15,28 @@
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ExtraBoldSlanted.otf") format("opentype");
-  font-weight: 800; font-style: italic; font-display: swap;
+  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-SemiBoldSlanted.otf") format("opentype");
-  font-weight: 600; font-style: italic; font-display: swap;
+  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
+  font-weight: 200; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ExtraLightSlanted.otf") format("opentype");
-  font-weight: 200; font-style: italic; font-display: swap;
-}
-@font-face {
-  font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ThinSlanted.otf") format("opentype");
-  font-weight: 100; font-style: italic; font-display: swap;
+  src: url("../fonts/TomatoGrotesk-ThinUpright.otf") format("opentype");
+  font-weight: 100; font-style: normal; font-display: swap;
 }
 
 @font-face { /* running text */
   font-family: "Tomato Grotesk Text";
-  src: url("../fonts/TomatoGrotesk-ExtraLightSlanted.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
   font-weight: 100 400; font-style: normal; font-display: swap;
 }
 @font-face { /* medium emphasis */
   font-family: "Tomato Grotesk Text";
-  src: url("../fonts/TomatoGrotesk-SemiBoldSlanted.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
   font-weight: 500 600; font-style: normal; font-display: swap;
 }
 @font-face { /* bold */
@@ -56,7 +51,7 @@
   --font-text: "Tomato Grotesk Text", "Tomato Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* the desk the books sit on */
-  --desk: #e8e8e6;
+  --desk: #f7f7f6;
   --desk-ink: #121212;
   --desk-muted: #6b6b68;
   --desk-line: rgba(0, 0, 0, .14);
@@ -309,7 +304,7 @@ a.btn { color: inherit; text-decoration: none; }
   padding: 6px var(--gutter) max(22px, env(safe-area-inset-bottom));
 }
 .shelf__num {
-  font: italic 100 clamp(40px, 4.4vw, 58px)/.8 var(--font-display);
+  font: 100 clamp(40px, 4.4vw, 58px)/.8 var(--font-display);
   letter-spacing: -.04em;
 }
 .shelf__text { min-width: 0; }
@@ -616,7 +611,7 @@ a.btn { color: inherit; text-decoration: none; }
   color: var(--muted);
 }
 .page--dark .page__head, .page--dark .page__folio { color: var(--night-muted); }
-.page--band .page__head { color: rgba(255, 255, 255, .55); }
+.page--band .page__head { color: rgba(255, 255, 255, .6); text-shadow: 0 0 .8em rgba(0, 0, 0, .7); } /* stays legible over light renders */
 .is-spread .page--l .page__head span:last-child,
 .is-spread .page--r .page__head span:first-child { visibility: hidden; }
 .is-spread .page--l .page__folio { right: auto; left: var(--px); }
@@ -868,6 +863,7 @@ a.btn { color: inherit; text-decoration: none; }
 .frame--r { left: -100%; }
 
 /* Cover style "image": a photo fills the whole cover */
+.cover__img--centred { object-position: 50% 53%; }
 .cover__img--full { top: 0; height: 100%; object-position: center; mix-blend-mode: normal; }
 .page--cover-image .cover::after {
   content: "";
