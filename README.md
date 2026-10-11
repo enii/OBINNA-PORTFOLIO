@@ -21,7 +21,7 @@ Then open the printed URL.
 
 ## Motion (animations under the carousel)
 
-Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one has a play button, a scrubber, loop and full screen. Animations pause when scrolled off screen, and the carousel stops drifting while you're down there.
+Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. Visitors can still pause it, scrub, turn the loop off or watch full screen; once they pause it, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get a play button instead of autoplay.
 
 To replace the Sting Rays animation, overwrite the files in `assets/media/`:
 
@@ -96,6 +96,7 @@ Sting Rays, Vivonne Cabin and Super Slides are built by hand with live text, and
 
 - **Carousel order** follows the order of the articles. To change it, move an article and update its `data-number`.
 - **Pages:** odd pages sit on the left and even pages on the right. Keep each book's page count **even**.
+- **Page turns:** give each book at least **two spreads**. The covers are hard boards, so turning onto or off a cover swings rigidly. Only a turn between two inner spreads peels like paper. The same goes for Studio projects: upload at least two frames.
 - **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically.
 - **Back cover buttons:** the "Next project" button finds the next book by itself.
 - **Sizing:** everything on a page is sized in `cqw` (percent of the page width), so it scales like print. If text would overflow on a small screen, `main.js` shrinks that page's type a little.
@@ -106,7 +107,7 @@ Current books:
 |---|---|
 | 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
-| 03 Super Slides | cover · bone slide, colourways and close-up · back cover |
+| 03 Super Slides | cover · bone slide, colourways and close-up · full-page plates of the colourways and close-up · back cover |
 
 ### Images
 

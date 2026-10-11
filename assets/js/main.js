@@ -744,8 +744,13 @@
     if (!video) return;
     reels.push(video);
 
+    let userPaused = false; // once a visitor pauses, scrolling doesn't restart it
     const play = () => { const r = video.play(); if (r && r.catch) r.catch(() => { /* blocked or interrupted */ }); };
-    const togglePlay = () => ((video.paused || video.ended) ? play() : video.pause());
+    const userPlay = () => { userPaused = false; play(); };
+    const togglePlay = () => {
+      if (video.paused || video.ended) userPlay();
+      else { userPaused = true; video.pause(); }
+    };
     const showTime = () => {
       const d = video.duration || 0;
       const t = video.currentTime || 0;
@@ -769,7 +774,7 @@
       requestAnimationFrame(step);
     });
 
-    big.addEventListener('click', (e) => { e.stopPropagation(); play(); });
+    big.addEventListener('click', (e) => { e.stopPropagation(); userPlay(); });
     frame.addEventListener('click', togglePlay);
     toggle.addEventListener('click', togglePlay);
     seek.addEventListener('input', () => {
@@ -788,9 +793,13 @@
     });
     if (!(frame.requestFullscreen || frame.webkitRequestFullscreen || video.webkitEnterFullscreen)) fs.hidden = true;
 
-    // Pause when scrolled out of view
+    // Plays on a loop while it's on screen, and pauses once it has scrolled away.
+    // With reduced motion turned on, it waits for the play button instead.
     if (window.IntersectionObserver) {
-      new IntersectionObserver(([entry]) => { if (!entry.isIntersecting && !video.paused) video.pause(); }, { threshold: 0.15 }).observe(frame);
+      new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) { if (!video.paused) video.pause(); }
+        else if (entry.intersectionRatio >= 0.2 && video.paused && !userPaused && !reduceMotion) play();
+      }, { threshold: [0, 0.2] }).observe(frame);
     }
     showTime();
   });
