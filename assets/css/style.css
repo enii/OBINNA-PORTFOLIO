@@ -340,14 +340,14 @@ a.btn { color: inherit; text-decoration: none; }
    Motion: animations under the carousel
    ========================================================================== */
 .motion {
-  padding: clamp(40px, 6vw, 88px) var(--gutter) clamp(48px, 7vw, 96px);
+  padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 96px);
   border-top: 1px solid var(--desk-line);
 }
 .motion__head {
   display: flex;
   justify-content: space-between;
-  max-width: 1320px;
-  margin: 0 auto clamp(24px, 3vw, 44px);
+  padding: 0 var(--gutter);
+  margin-bottom: clamp(20px, 3vw, 36px);
 }
 .motion__label {
   margin: 0;
@@ -356,48 +356,40 @@ a.btn { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   color: var(--desk-muted);
 }
-.motion__item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
-  gap: clamp(28px, 6vw, 96px);
-  align-items: end;
-  max-width: 1320px;
-  margin: 0 auto;
-}
 .motion__item + .motion__item { margin-top: clamp(56px, 8vw, 112px); }
-.motion__text { display: grid; gap: 14px; justify-items: start; max-width: 40ch; }
-.motion__kicker { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--desk-muted); }
+/* title, description and button sit under the video on the page grid */
+.motion__text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 20px clamp(24px, 6vw, 96px);
+  padding: clamp(28px, 4vw, 52px) var(--gutter) 0;
+}
+.motion__kicker { margin: 0 0 14px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--desk-muted); }
 .motion__title {
   margin: 0;
   font: 800 clamp(40px, 6vw, 84px)/.86 var(--font-display);
   letter-spacing: -.04em;
 }
-.motion__body { margin: 6px 0 10px; font-size: 16px; line-height: 1.6; color: var(--desk-muted); }
+.motion__body { margin: 0; max-width: 40ch; font-size: 16px; line-height: 1.6; color: var(--desk-muted); }
 @media (max-width: 760px) {
-  .motion__item { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .motion__text { grid-template-columns: minmax(0, 1fr); align-items: start; justify-items: start; }
 }
 
-/* Video player */
-.reel {
-  width: min(100%, (100svh - 250px) * 1.02); /* the video and its controls fit on one screen */
-  justify-self: center;
-  margin: 0;
-  min-width: 0;
-  display: grid;
-  gap: 14px;
-}
+/* Video player: landscape, edge to edge */
+.reel { margin: 0; min-width: 0; display: grid; gap: 14px; }
 .reel__frame {
   position: relative;
-  aspect-ratio: 1920 / 1878;
   width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 100svh;
   overflow: hidden;
   background: #000;
-  border-radius: 2px;
-  box-shadow: 0 2.6vmin 5vmin -2vmin rgba(0, 0, 0, .45), 0 .6vmin 1.4vmin -.6vmin rgba(0, 0, 0, .3);
   cursor: pointer;
 }
-.reel__video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
-.reel__frame:fullscreen { border-radius: 0; max-height: none; }
+/* the original render is almost square: crop it to landscape around the product */
+.reel__video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 48%; background: #000; }
+.reel__frame:fullscreen { aspect-ratio: auto; max-height: none; }
 .reel__big {
   position: absolute;
   left: 50%; top: 50%;
@@ -421,7 +413,7 @@ a.btn { color: inherit; text-decoration: none; }
 .reel.is-ended .reel__big .i-replay { display: block; fill: none; }
 .reel.is-playing .reel__big { opacity: 0; transform: translate(-50%, -50%) scale(.85); pointer-events: none; }
 
-.reel__bar { display: flex; align-items: center; gap: 12px; }
+.reel__bar { display: flex; align-items: center; gap: 12px; padding: 0 var(--gutter); }
 .reel__toggle svg { width: 14px; height: 14px; }
 .reel__toggle .i-pause, .reel.is-playing .reel__toggle .i-play { display: none; }
 .reel.is-playing .reel__toggle .i-pause { display: inline; }
@@ -767,6 +759,10 @@ a.btn { color: inherit; text-decoration: none; }
   height: 100%;
   object-fit: contain;
 }
+.band img.fill { object-fit: cover; }
+/* two images side by side in the band (Super Slides: colourways | close-up) */
+.band--split { display: grid; grid-template-columns: 40% 60%; }
+.band--split img { position: static; width: 100%; height: 100%; min-width: 0; }
 .band__code {
   position: absolute;
   left: var(--px);

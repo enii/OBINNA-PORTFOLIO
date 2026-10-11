@@ -6,7 +6,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - **Flip book:** the cover swings open, then readers click a page, drag a corner, swipe, or use ← → keys. **Esc** or **All projects** goes back.
 - **Desktop:** each Figma frame is split across a two-page spread (16:9, like the frames).
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
-- Each project has its own link, such as `/#sting-rays` or `/#vivonne-cabin`.
+- Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
 
 No build step: it's plain HTML, CSS and JavaScript.
@@ -69,7 +69,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 ### Managing projects
 
 - **Edit:** change the details, add, remove or reorder frames, swap the cover, then publish again. Images the project no longer uses are removed.
-- **Order:** use the ↑ ↓ arrows in the project list, then click **Save**. Studio projects appear after the two hand-built books.
+- **Order:** use the ↑ ↓ arrows in the project list, then click **Save**. Studio projects appear after the hand-built books.
 - **Drafts:** mark a project **Draft** to hide it from visitors. Drafts are still visible at `…/?drafts`.
 - **Delete:** click **Delete project** in the editor, then click again to confirm.
 
@@ -81,7 +81,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays and Vivonne Cabin are built by hand with live text, and live in `index.html`. Each is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin and Super Slides are built by hand with live text, and live in `index.html`. Each is one `<article class="book-src">` in the library at the bottom of the file:
 
 ```html
 <article class="book-src" data-slug="sting-rays" data-number="01"
@@ -106,6 +106,7 @@ Current books:
 |---|---|
 | 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
+| 03 Super Slides | cover · hero render, colourways and close-up · back cover |
 
 ### Images
 
@@ -121,7 +122,12 @@ vivonne-axonometric.webp
 vivonne-floor-plan.webp
 vivonne-roof-section.webp
 vivonne-roof-3d.webp
+super-slides-hero.webp           (stand-in: the bone slide on black, left page)
+super-slides-colourways.webp     (stand-in: the three colourways stacked, right page)
+super-slides-detail.webp         (stand-in: the close-up texture, right page)
 ```
+
+The three Super Slides images are labelled stand-ins until the real renders are exported.
 
 ### Copy
 

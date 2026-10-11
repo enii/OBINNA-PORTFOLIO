@@ -53,8 +53,8 @@
     </div>
 
     <!-- ═══════════ MOTION ═══════════
-         One <figure class="reel"> per animation. To add another, copy the whole
-         .motion__item block and change the video, poster and text. -->
+         One <article class="motion__item"> per animation, shown full width in landscape.
+         To add another, copy the whole block and change the video, poster and text. -->
     <section class="motion" id="motion" aria-labelledby="motionHeading">
       <div class="motion__head">
         <h2 class="motion__label" id="motionHeading">Motion</h2>
@@ -62,13 +62,6 @@
       </div>
 
       <article class="motion__item">
-        <div class="motion__text">
-          <p class="motion__kicker">01 — 3D animation</p>
-          <h3 class="motion__title">Sting rays</h3>
-          <p class="motion__body">The frame assembles itself: temples, hinges and lens chassis come together into the finished form.</p>
-          <a class="btn" href="#sting-rays">Open the book</a>
-        </div>
-
         <figure class="reel">
           <div class="reel__frame">
             <video class="reel__video" poster="assets/media/sting-rays-animation-poster.jpg"
@@ -94,6 +87,14 @@
             </button>
           </figcaption>
         </figure>
+        <div class="motion__text">
+          <div>
+            <p class="motion__kicker">01 — 3D animation</p>
+            <h3 class="motion__title">Sting rays</h3>
+          </div>
+          <p class="motion__body">The frame assembles itself: temples, hinges and lens chassis come together into the finished form.</p>
+          <a class="btn" href="#sting-rays">Open the book</a>
+        </div>
       </article>
     </section>
 
@@ -359,6 +360,65 @@
     <div class="page page--cover page--board" data-density="hard">
       <div class="page__inner backcover">
         <p class="backcover__mark">Vivonne cabin</p>
+        <p class="backcover__sub">Obinna Oti — Product Design</p>
+        <div class="backcover__actions">
+          <button class="pill" type="button" data-action="next">Next project</button>
+          <button class="pill" type="button" data-action="restart">Read again</button>
+          <button class="pill" type="button" data-action="close">All projects</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══════════ 03 · SUPER SLIDES ═══════════ -->
+  <article class="book-src" data-slug="super-slides" data-number="03" data-title="Super Slides" data-meta="Product design · Footwear">
+
+    <!-- Front cover (add <img class="cover__img" src="assets/images/super-slides-hero.webp" alt=""> once the render is in) -->
+    <div class="page page--dark page--cover" data-density="hard">
+      <div class="page__inner cover">
+        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
+        <div class="cover__foot">
+          <p class="cover__kicker">03 — Product design, footwear</p>
+          <h2 class="cover__title">Super<br>slides.</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Super Slides frame (left): hero render -->
+    <div class="page page--band">
+      <div class="page__inner">
+        <div class="band">
+          <img src="assets/images/super-slides-hero.webp" alt="Render of the Super Slides sandal in bone" draggable="false">
+        </div>
+        <p class="kicker">Projects</p>
+        <h3 class="title title--sentence">Super Slides.</h3>
+      </div>
+    </div>
+
+    <!-- Super Slides frame (right): colourways and close-up -->
+    <div class="page page--band">
+      <div class="page__inner">
+        <div class="band band--split">
+          <img src="assets/images/super-slides-colourways.webp" alt="The slide in sage, olive and lavender" draggable="false">
+          <img class="fill" src="assets/images/super-slides-detail.webp" alt="Close-up of the rippled midsole" draggable="false">
+        </div>
+        <div class="cols">
+          <div>
+            <h4 class="label">Process</h4>
+            <p class="body">A one-piece slide with a sculpted, rippling midsole, modelled in 3D and rendered in close-up to show how light moves across the surface.</p>
+          </div>
+          <div>
+            <h4 class="label">Colourways</h4>
+            <p class="body">Bone, sage, olive and lavender, each with a contrasting footbed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back cover -->
+    <div class="page page--dark page--cover" data-density="hard">
+      <div class="page__inner backcover">
+        <p class="backcover__mark">Super slides.</p>
         <p class="backcover__sub">Obinna Oti — Product Design</p>
         <div class="backcover__actions">
           <button class="pill" type="button" data-action="next">Next project</button>
