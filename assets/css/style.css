@@ -336,7 +336,6 @@ a.btn { color: inherit; text-decoration: none; }
    ========================================================================== */
 .motion {
   padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 96px);
-  border-top: 1px solid var(--desk-line);
 }
 .motion__head {
   display: flex;
@@ -454,7 +453,6 @@ a.btn { color: inherit; text-decoration: none; }
   justify-content: space-between;
   gap: 8px 24px;
   padding: 22px var(--gutter) max(24px, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--desk-line);
   font-size: 13px;
   color: var(--desk-muted);
 }
