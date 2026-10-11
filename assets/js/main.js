@@ -730,68 +730,28 @@
   hideHint();
 
   /* ---------- 12. Motion: animation players under the carousel ---------- */
+  // No control bar: the video loops on its own; clicking it (or its button) pauses and plays.
   const reels = [];
-  const clock = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
   $$('.reel').forEach((reel) => {
     const video = $('.reel__video', reel);
     const frame = $('.reel__frame', reel);
     const big = $('.reel__big', reel);
-    const toggle = $('.reel__toggle', reel);
-    const seek = $('.reel__seek', reel);
-    const time = $('.reel__time', reel);
-    const loop = $('.reel__loop', reel);
-    const fs = $('.reel__fs', reel);
     if (!video) return;
     reels.push(video);
 
     let userPaused = false; // once a visitor pauses, scrolling doesn't restart it
     const play = () => { const r = video.play(); if (r && r.catch) r.catch(() => { /* blocked or interrupted */ }); };
-    const userPlay = () => { userPaused = false; play(); };
     const togglePlay = () => {
-      if (video.paused || video.ended) userPlay();
-      else { userPaused = true; video.pause(); }
-    };
-    const showTime = () => {
-      const d = video.duration || 0;
-      const t = video.currentTime || 0;
-      const p = d ? t / d : 0;
-      seek.value = String(Math.round(p * 1000));
-      seek.style.setProperty('--p', `${(p * 100).toFixed(2)}%`);
-      time.textContent = `${clock(t)} / ${clock(d)}`;
+      if (video.paused) { userPaused = false; play(); } else { userPaused = true; video.pause(); }
     };
     const showState = () => {
-      const playing = !video.paused && !video.ended;
+      const playing = !video.paused;
       reel.classList.toggle('is-playing', playing);
-      reel.classList.toggle('is-ended', video.ended);
-      const label = playing ? 'Pause animation' : (video.ended ? 'Play the animation again' : 'Play animation');
-      toggle.setAttribute('aria-label', label);
-      big.setAttribute('aria-label', label);
+      big.setAttribute('aria-label', playing ? 'Pause animation' : 'Play animation');
     };
-    ['play', 'pause', 'ended'].forEach((ev) => video.addEventListener(ev, showState));
-    ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked'].forEach((ev) => video.addEventListener(ev, showTime));
-    video.addEventListener('play', () => { // keep the progress line smooth while playing
-      const step = () => { showTime(); if (!video.paused && !video.ended) requestAnimationFrame(step); };
-      requestAnimationFrame(step);
-    });
-
-    big.addEventListener('click', (e) => { e.stopPropagation(); userPlay(); });
+    ['play', 'pause'].forEach((ev) => video.addEventListener(ev, showState));
+    big.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
     frame.addEventListener('click', togglePlay);
-    toggle.addEventListener('click', togglePlay);
-    seek.addEventListener('input', () => {
-      if (video.duration) video.currentTime = (Number(seek.value) / 1000) * video.duration;
-      showTime();
-      showState();
-    });
-    loop.addEventListener('click', () => {
-      video.loop = !video.loop;
-      loop.setAttribute('aria-pressed', String(video.loop));
-      if (video.loop && video.ended) play();
-    });
-    fs.addEventListener('click', () => {
-      const enter = frame.requestFullscreen || frame.webkitRequestFullscreen;
-      if (enter) { const r = enter.call(frame); if (r && r.catch) r.catch(() => {}); } else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
-    });
-    if (!(frame.requestFullscreen || frame.webkitRequestFullscreen || video.webkitEnterFullscreen)) fs.hidden = true;
 
     // Plays on a loop while it's on screen, and pauses once it has scrolled away.
     // With reduced motion turned on, it waits for the play button instead.
@@ -801,7 +761,6 @@
         else if (entry.intersectionRatio >= 0.2 && video.paused && !userPaused && !reduceMotion) play();
       }, { threshold: [0, 0.2] }).observe(frame);
     }
-    showTime();
   });
 
   // "Motion" link in the top bar scrolls down to the animations

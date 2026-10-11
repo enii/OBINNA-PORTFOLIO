@@ -21,7 +21,7 @@ Then open the printed URL.
 
 ## Motion (animations under the carousel)
 
-Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. Visitors can still pause it, scrub, turn the loop off or watch full screen; once they pause it, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get a play button instead of autoplay.
+Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
 To replace the Sting Rays animation, overwrite the files in `assets/media/`:
 
