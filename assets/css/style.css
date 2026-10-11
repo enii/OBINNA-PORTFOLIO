@@ -51,7 +51,7 @@
   --font-text: "Tomato Grotesk Text", "Tomato Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* the desk the books sit on */
-  --desk: #f7f7f6;
+  --desk: #ffffff;
   --desk-ink: #121212;
   --desk-muted: #6b6b68;
   --desk-line: rgba(0, 0, 0, .14);
