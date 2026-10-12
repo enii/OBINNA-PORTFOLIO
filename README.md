@@ -8,6 +8,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
 - Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
+- Text on the landing page rises into view as it scrolls in: the intro and caption on arrival, the Motion text and footer as you reach them. To add it to another element, give it the class `reveal`. Visitors with reduced motion turned on see the text straight away.
 
 No build step: it's plain HTML, CSS and JavaScript.
 

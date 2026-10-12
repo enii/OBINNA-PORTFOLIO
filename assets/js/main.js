@@ -773,6 +773,28 @@
     target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   });
 
+  /* ---------- 12b. Landing text rises into view as it scrolls in ---------- */
+  function watchReveals() {
+    const els = $$('.reveal');
+    const done = (el) => { el.classList.remove('reveal', 'is-in'); el.style.removeProperty('--d'); };
+    if (!window.IntersectionObserver || reduceMotion) { els.forEach(done); return; }
+    const io = new IntersectionObserver((entries) => {
+      // whatever arrives together comes in one after another
+      entries.filter((e) => e.isIntersecting).forEach((e, i) => {
+        const el = e.target;
+        io.unobserve(el);
+        el.style.setProperty('--d', `${i * 90}ms`);
+        el.addEventListener('animationend', function end(ev) {
+          if (ev.target !== el) return;
+          el.removeEventListener('animationend', end);
+          done(el);
+        });
+        el.classList.add('is-in');
+      });
+    }, { threshold: 0.4 }); // a margin here would keep the footer, at the very bottom, from ever counting
+    els.forEach((el) => io.observe(el));
+  }
+
   /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all([
@@ -783,5 +805,6 @@
   if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) sizeCards(); }).observe(carousel);
   fontsReady.then(() => {
     route();
+    watchReveals(); // after the fonts, so text doesn't rise in a fallback face
   });
 })();

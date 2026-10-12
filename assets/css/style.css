@@ -402,10 +402,19 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .reel__big svg { width: 38%; height: 38%; fill: currentColor; }
 .reel__big:hover { transform: translate(-50%, -50%) scale(1.06); }
-.reel__big .i-pause, .reel.is-playing .reel__big .i-play { display: none; }
-.reel.is-playing .reel__big .i-pause { display: block; }
+.reel__big .i-pause, .reel.is-playing .reel__big:focus-visible .i-play { display: none; }
+.reel.is-playing .reel__big:focus-visible .i-pause { display: block; }
 .reel.is-playing .reel__big { opacity: 0; transform: translate(-50%, -50%) scale(.85); pointer-events: none; }
 .reel.is-playing .reel__big:focus-visible { opacity: 1; transform: translate(-50%, -50%); } /* keyboard users can still find the pause button */
+
+/* ---------- Text rising into view on scroll (main.js adds .is-in, then drops both classes) ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+.js .reveal { opacity: 0; }
+.js .reveal.is-in { animation: rise .9s var(--ease) var(--d, 0s) both; }
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; }
+  .js .reveal.is-in { animation: none; }
+}
 
 .site-foot {
   display: flex;
@@ -734,7 +743,7 @@ a.btn { color: inherit; text-decoration: none; }
 
 /* ---------- Covers ---------- */
 .page--cover { background: radial-gradient(130% 100% at 15% 0%, #1e1e1e 0%, #0b0b0b 55%, #050505 100%); }
-.page--board { background: linear-gradient(160deg, #f7f7f4 0%, #ebebe7 100%); color: var(--ink); }
+.page--board { background: #fff; color: var(--ink); }
 .page--cover::after { display: none; }
 .page--cover::before { /* the hinge groove of a hardback */
   content: "";
