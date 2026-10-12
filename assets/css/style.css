@@ -846,7 +846,15 @@ a.btn { color: inherit; text-decoration: none; }
 .page--cover-image .cover__top, .page--cover-image .cover__kicker { color: rgba(255, 255, 255, .78); }
 
 /* ---------- Full-page plates (Super Slides) ---------- */
-.plate__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.page--plate { background: #000; } /* the renders' own black, so a contained image sits seamlessly */
+.plate__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+/* a plate image that runs across both pages of a spread (as .band .span does) */
+.is-spread .plate__img.span { width: 200%; }
+.is-spread .plate__img.span--r { left: -100%; }
+.is-single .plate__img.span--l { object-position: 0% 50%; }
+.is-single .plate__img.span--r { object-position: 100% 50%; }
+/* wide side views show whole, with room around them, rather than cropped to the page */
+.plate__img--whole { object-fit: contain; }
 .page--plate .page__inner::after { /* a soft fade so the caption and page number read over light renders */
   content: "";
   position: absolute;
@@ -869,6 +877,7 @@ a.btn { color: inherit; text-decoration: none; }
   text-shadow: 0 0 .8em rgba(0, 0, 0, .7);
 }
 .plate__caption b { margin-right: .6em; font-family: var(--font-display); font-weight: 800; color: #fff; }
+.is-spread .page--l .plate__caption { left: auto; right: var(--px); } /* the left page's number sits bottom-left */
 
 /* ---------- Narrow pages (phones) ---------- */
 @container page (max-width: 440px) {

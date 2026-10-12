@@ -106,13 +106,13 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · back cover |
+| 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · the frame, across both pages · two side views · colourways · two close-ups · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
 | 03 Super Slides | cover · bone slide, colourways and close-up · full-page plates of the colourways and close-up · back cover |
 
 ### Images
 
-The Sting Rays and Vivonne images in `assets/images/` are cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
+The Sting Rays sketches and renders are the files you sent. The Sting Rays hero render and the Vivonne images in `assets/images/` are still cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
 
 ```
 sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
@@ -120,6 +120,12 @@ sting-rays-sketch-side.webp
 sting-rays-sketch-perspective.webp
 sting-rays-sketch-construction.webp
 sting-rays-sketch-final.webp
+sting-rays-render-front.webp        (the frame, drawn across both pages of its spread)
+sting-rays-render-side-light.webp   (side, pale blue)
+sting-rays-render-side-cobalt.webp  (side, cobalt)
+sting-rays-render-colourways.webp   (bone, cobalt and mint, stacked)
+sting-rays-render-detail-joint.webp (close-up, temple joint)
+sting-rays-render-detail-hinge.webp (close-up, hinge)
 vivonne-axonometric.webp
 vivonne-floor-plan.webp
 vivonne-roof-section.webp
