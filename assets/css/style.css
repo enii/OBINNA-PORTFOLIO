@@ -362,14 +362,14 @@ a.btn { color: inherit; text-decoration: none; }
 .reel__frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 21 / 9; /* full width but short: a wide, cinema-like strip */
   max-height: 100svh;
   overflow: hidden;
   background: #000;
   cursor: pointer;
 }
-/* the original render is almost square: crop it to landscape around the product */
-.reel__video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 48%; background: #000; }
+/* each render is cropped to the strip around its product; --pos sets where the crop sits */
+.reel__video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 48%); background: #000; }
 .reel__big {
   position: absolute;
   left: 50%; top: 50%;

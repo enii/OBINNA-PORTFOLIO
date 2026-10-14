@@ -33,7 +33,7 @@ sting-rays-animation-poster.jpg     the still shown before it plays
 super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for Super Slides)
 ```
 
-The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080.
+The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`).
 
 To add another animation, copy the `<article class="motion__item">` block in `index.html` and point it at the new files. Tips:
 
