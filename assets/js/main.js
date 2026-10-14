@@ -543,26 +543,33 @@
     toneFrames(el);
   }
 
-  // Frame pages fill any space around the frame with the colour of its edge
+  // Frame pages fill any space above and below the frame with the colour of its top and bottom edges
   const tones = new Map();
   function frameTone(img) {
     try {
+      const N = 64;
       const c = document.createElement('canvas');
-      c.width = 8; c.height = 8;
+      c.width = N; c.height = N;
       const ctx = c.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(img, 0, 0, 8, 8);
-      const d = ctx.getImageData(0, 0, 8, 8).data;
-      const px = [0, 7, 56, 63].map((k) => [d[k * 4], d[k * 4 + 1], d[k * 4 + 2]]); // the four corners
-      const avg = [0, 1, 2].map((ch) => Math.round(px.reduce((sum, q) => sum + q[ch], 0) / px.length));
-      return `rgb(${avg.join(',')})`;
-    } catch (e) { return ''; }
+      ctx.drawImage(img, 0, 0, N, N);
+      // the median colour along the top and bottom rows, so artwork touching a corner doesn't tint it
+      const row = (y) => {
+        const d = ctx.getImageData(0, y, N, 1).data;
+        const mid = (ch) => Array.from({ length: N }, (_, x) => d[x * 4 + ch]).sort((a, b) => a - b)[N >> 1];
+        return `rgb(${mid(0)},${mid(1)},${mid(2)})`;
+      };
+      return { top: row(0), bottom: row(N - 1) };
+    } catch (e) { return null; }
   }
   function toneFrames(root) {
     $$('img.frame', root).forEach((img) => {
       const apply = () => {
         if (!tones.has(img.src)) tones.set(img.src, frameTone(img));
         const tone = tones.get(img.src);
-        if (tone) img.parentElement.style.setProperty('--tone', tone);
+        if (tone) {
+          img.parentElement.style.setProperty('--tone-top', tone.top);
+          img.parentElement.style.setProperty('--tone-bottom', tone.bottom);
+        }
       };
       if (img.complete && img.naturalWidth) apply();
       else img.addEventListener('load', apply, { once: true });

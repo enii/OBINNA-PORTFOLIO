@@ -825,8 +825,8 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .pill:hover { background: rgba(128, 128, 128, .15); }
 
-/* ---------- Studio projects: each Figma frame runs across a spread ---------- */
-.page__inner--frame { padding: 0; background: var(--tone, #fff); }
+/* ---------- Figma frames (Studio projects, and Sting Rays): each frame runs across a spread ---------- */
+.page__inner--frame { padding: 0; background: linear-gradient(var(--tone-top, #fff) 50%, var(--tone-bottom, #fff) 50%); }
 .frame {
   position: absolute;
   top: 0; left: 0;
