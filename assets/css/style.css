@@ -671,6 +671,11 @@ a.btn { color: inherit; text-decoration: none; }
   gap: 5cqw;
 }
 .fig-row--wide-first { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+/* a tall figure beside a column holding another figure over the text (Sting Rays, Frame 14 right) */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); column-gap: 6cqw; }
+.split__col { display: flex; flex-direction: column; min-height: 0; }
+.split__col > .end { margin-top: 5cqw; }
+.split__col > .end > :last-child { margin-bottom: 0; }
 
 .tag {
   align-self: flex-start;
@@ -882,6 +887,10 @@ a.btn { color: inherit; text-decoration: none; }
 /* ---------- Narrow pages (phones) ---------- */
 @container page (max-width: 440px) {
   .cols { grid-template-columns: 1fr; row-gap: 1.6em; }
+  .cols > :empty { display: none; } /* a spacer column only matters side by side */
+  .split { display: flex; flex-direction: column; row-gap: 5cqw; }
+  .split > .fig { flex: 1 1 0; }
+  .split__col { flex: 1.5 1 0; }
   .prose { max-width: none; }
   .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

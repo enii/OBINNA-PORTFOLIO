@@ -106,7 +106,7 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Sting Rays | cover · sketches (Frame 14) · hero render (Frame 38) · the frame, across both pages · two side views · colourways · two close-ups · back cover |
+| 01 Sting Rays | cover · concept sketches · technical sketches (Frame 14) · hero render (Frame 38) · the frame, across both pages · two side views · colourways · two close-ups · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
 | 03 Super Slides | cover · bone slide, colourways and close-up · full-page plates of the colourways and close-up · back cover |
 
@@ -116,6 +116,7 @@ The Sting Rays sketches and renders are the files you sent. The Sting Rays hero 
 
 ```
 sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
+sting-rays-sketch-concept.webp   (stingray line studies and construction; cut from a screenshot of the frame for now)
 sting-rays-sketch-side.webp
 sting-rays-sketch-perspective.webp
 sting-rays-sketch-construction.webp
