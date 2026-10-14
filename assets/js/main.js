@@ -545,17 +545,19 @@
 
   // Frame pages fill any space above and below the frame with the colour of its top and bottom edges
   const tones = new Map();
-  function frameTone(img) {
+  function frameTone(img, side) {
     try {
       const N = 64;
       const c = document.createElement('canvas');
       c.width = N; c.height = N;
       const ctx = c.getContext('2d', { willReadFrequently: true });
       ctx.drawImage(img, 0, 0, N, N);
-      // the median colour along the top and bottom rows, so artwork touching a corner doesn't tint it
+      // the median colour along the top and bottom rows of this page's half of the frame,
+      // so artwork touching a corner doesn't tint it
+      const x0 = side === 'r' ? N / 2 : 0;
       const row = (y) => {
-        const d = ctx.getImageData(0, y, N, 1).data;
-        const mid = (ch) => Array.from({ length: N }, (_, x) => d[x * 4 + ch]).sort((a, b) => a - b)[N >> 1];
+        const d = ctx.getImageData(x0, y, N / 2, 1).data;
+        const mid = (ch) => Array.from({ length: N / 2 }, (_, x) => d[x * 4 + ch]).sort((a, b) => a - b)[N >> 2];
         return `rgb(${mid(0)},${mid(1)},${mid(2)})`;
       };
       return { top: row(0), bottom: row(N - 1) };
@@ -563,9 +565,11 @@
   }
   function toneFrames(root) {
     $$('img.frame', root).forEach((img) => {
+      const side = img.classList.contains('frame--r') ? 'r' : 'l';
+      const key = `${img.src}#${side}`;
       const apply = () => {
-        if (!tones.has(img.src)) tones.set(img.src, frameTone(img));
-        const tone = tones.get(img.src);
+        if (!tones.has(key)) tones.set(key, frameTone(img, side));
+        const tone = tones.get(key);
         if (tone) {
           img.parentElement.style.setProperty('--tone-top', tone.top);
           img.parentElement.style.setProperty('--tone-bottom', tone.bottom);

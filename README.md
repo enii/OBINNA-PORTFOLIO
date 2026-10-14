@@ -106,18 +106,20 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Sting Rays | cover · concept sketches · **Frame 14** (technical sketching) · **Frame 38** and **Frame 39** (3D visualisation) · the frame, across both pages · two side views · two close-ups · back cover |
+| 01 Sting Rays | cover · **concept frame** (concept sketching) · **Frame 14** (technical sketching) · **Frames 38 and 39** (3D visualisation) · the frame, across both pages · two side views · two close-ups · back cover |
 | 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
-| 03 Super Slides | cover · bone slide, colourways and close-up · full-page plates of the colourways and close-up · back cover |
+| 03 Super Slides | cover · **Super Slides frame** · full-page plates of the colourways and close-up · back cover |
 
 ### Spreads made from your Figma frames
 
-Some spreads are your Figma frames themselves: the frame (1920 × 1080) is rendered at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays uses Frames 14, 38 and 39:
+Some spreads are your Figma frames themselves: the frame (1920 × 1080) is rendered at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included:
 
 ```
+sting-rays-frame-concept.webp   (concept sketching)
 sting-rays-frame-14.webp   (technical sketching)
 sting-rays-frame-38.webp   (3D visualisation: hero render and colourways)
 sting-rays-frame-39.webp   (3D visualisation: close-ups)
+super-slides-frame.webp    (the Super Slides frame)
 ```
 
 To update one, export the frame from Figma as PNG at 2× (or send the PDF), convert it to WebP and overwrite the file. To add one, copy a `<!-- Frame … -->` pair of pages in `index.html` and point both at the new file. The words are part of the image, so they're also written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
@@ -128,7 +130,6 @@ The Sting Rays renders are the files you sent. The Sting Rays hero render (on th
 
 ```
 sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
-sting-rays-sketch-concept.webp   (stingray line studies and construction; cut from a screenshot of the frame for now)
 sting-rays-render-front.webp        (the frame, drawn across both pages of its spread)
 sting-rays-render-side-light.webp   (side, pale blue)
 sting-rays-render-side-cobalt.webp  (side, cobalt)
@@ -138,9 +139,9 @@ vivonne-axonometric.webp
 vivonne-floor-plan.webp
 vivonne-roof-section.webp
 vivonne-roof-3d.webp
-super-slides-hero.webp           (the bone slide: left page and cover, 1600 × 2000)
-super-slides-colourways.webp     (sage, olive and lavender stacked: right page, 1600 × 2000)
-super-slides-detail.webp         (the close-up: right page, 1600 × 2000)
+super-slides-hero.webp           (the bone slide, on the cover, 1600 × 2000)
+super-slides-colourways.webp     (sage, olive and lavender stacked: the left plate, 1600 × 2000)
+super-slides-detail.webp         (the close-up: the right plate, 1600 × 2000)
 ```
 
 The Super Slides renders are the ones you sent, as supplied (4:5, 1600 × 2000). Each image is cropped to fit its spot on the page, so keep the product near the middle of the frame.

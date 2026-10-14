@@ -337,19 +337,6 @@ a.btn { color: inherit; text-decoration: none; }
 .motion {
   padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 96px);
 }
-.motion__head {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 var(--gutter);
-  margin-bottom: clamp(20px, 3vw, 36px);
-}
-.motion__label {
-  margin: 0;
-  font: 400 12px/1 var(--font-text);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--desk-muted);
-}
 .motion__item + .motion__item { margin-top: clamp(56px, 8vw, 112px); }
 /* title, description and button sit under the video on the page grid */
 .motion__text {
