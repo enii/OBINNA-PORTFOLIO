@@ -82,7 +82,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin and Super Slides are built by hand with live text, and live in `index.html`. Each is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin and Super Slides live in `index.html`. Most of their spreads are your Figma frames (see below); the covers, back covers and a few image spreads are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
 
 ```html
 <article class="book-src" data-slug="sting-rays" data-number="01"
@@ -107,7 +107,7 @@ Current books:
 | Book | Pages |
 |---|---|
 | 01 Sting Rays | cover · **concept frame** (concept sketching) · **Frame 14** (technical sketching) · **Frames 38 and 39** (3D visualisation) · the frame, across both pages · two side views · two close-ups · back cover |
-| 02 Vivonne Cabin | cover · cabin (Frame 26) · roof detail (Frame 25) · back cover |
+| 02 Vivonne Cabin | cover · **Frame 26** (the cabin) · **Frame 30** (the structure) · **Frame 25** (roof detail) · back cover |
 | 03 Super Slides | cover · **Super Slides frame** · full-page plates of the colourways and close-up · back cover |
 
 ### Spreads made from your Figma frames
@@ -120,25 +120,25 @@ sting-rays-frame-14.webp   (technical sketching)
 sting-rays-frame-38.webp   (3D visualisation: hero render and colourways)
 sting-rays-frame-39.webp   (3D visualisation: close-ups)
 super-slides-frame.webp    (the Super Slides frame)
+vivonne-frame-26.webp      (the cabin)
+vivonne-frame-30.webp      (the structure)
+vivonne-frame-25.webp      (roof detail)
 ```
 
 To update one, export the frame from Figma as PNG at 2× (or send the PDF), convert it to WebP and overwrite the file. To add one, copy a `<!-- Frame … -->` pair of pages in `index.html` and point both at the new file. The words are part of the image, so they're also written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
 ### Images
 
-The Sting Rays renders are the files you sent. The Sting Rays hero render (on the cover) and the Vivonne images in `assets/images/` are still cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
+The Sting Rays renders are the files you sent. The Sting Rays hero render and the Vivonne axonometric, both on covers, are still cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
 
 ```
-sting-rays-render-hero.webp      (drawn across both pages of the spread, ~2500px wide)
+sting-rays-render-hero.webp      (on the cover)
 sting-rays-render-front.webp        (the frame, drawn across both pages of its spread)
 sting-rays-render-side-light.webp   (side, pale blue)
 sting-rays-render-side-cobalt.webp  (side, cobalt)
 sting-rays-render-detail-joint.webp (close-up, temple joint)
 sting-rays-render-detail-hinge.webp (close-up, hinge)
-vivonne-axonometric.webp
-vivonne-floor-plan.webp
-vivonne-roof-section.webp
-vivonne-roof-3d.webp
+vivonne-axonometric.webp         (on the cover)
 super-slides-hero.webp           (the bone slide, on the cover, 1600 × 2000)
 super-slides-colourways.webp     (sage, olive and lavender stacked: the left plate, 1600 × 2000)
 super-slides-detail.webp         (the close-up: the right plate, 1600 × 2000)
