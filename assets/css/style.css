@@ -884,6 +884,20 @@ a.btn { color: inherit; text-decoration: none; }
 .plate__caption b { margin-right: .6em; font-family: var(--font-display); font-weight: 800; color: #fff; }
 .is-spread .page--l .plate__caption { left: auto; right: var(--px); } /* the left page's number sits bottom-left */
 
+/* ---------- Images only, for now ----------
+   While the text presentation is being reworked, <html class="book-text-off"> hides every piece of text
+   inside the books except the cover titles and the back-cover buttons. Remove the class to bring it back. */
+.book-text-off .page :is(.page__head, .page__folio, .cover__top, .cover__kicker, .backcover__sub,
+  .kicker, .title, .label, .body, .prose, .meta, .tag, .cols, .note, .fig figcaption, .plate__caption, .band__code) { display: none; }
+.book-text-off .page--plate .page__inner::after { display: none; }
+.book-text-off .cover__foot { margin-top: auto; } /* the title keeps to the foot of the cover */
+.book-text-off .backcover__mark { margin-bottom: 1.6em; } /* the gap the subtitle used to make */
+/* with no text under it, a black band sits centred on a black page */
+.book-text-off .page--band { background: #000; }
+.book-text-off .page--band .band { top: calc((100cqh - var(--band)) / 2); }
+/* a text-only page facing a dark plate turns dark too, so the spread reads as one */
+.book-text-off .page--off-dark { background: #000; }
+
 /* ---------- Narrow pages (phones) ---------- */
 @container page (max-width: 440px) {
   .cols { grid-template-columns: 1fr; row-gap: 1.6em; }

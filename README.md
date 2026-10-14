@@ -138,6 +138,10 @@ super-slides-detail.webp         (the close-up: right page, 1600 × 2000)
 
 The Super Slides renders are the ones you sent, as supplied (4:5, 1600 × 2000). Each image is cropped to fit its spot on the page, so keep the product near the middle of the frame.
 
+### Text inside the books (switched off for now)
+
+The books currently show images only: every piece of text inside them is hidden, apart from the cover titles and the back-cover buttons. The text is still in `index.html`. To show it again, remove `book-text-off` from the `<html>` tag at the top of `index.html`.
+
 ### Copy
 
 Body copy is short placeholder text written for each project. The intro line is from your Frame 3. The contact email (top right and in the footer) is otimarvelous@gmail.com. Edit all of these in `index.html`.
