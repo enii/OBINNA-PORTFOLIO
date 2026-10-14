@@ -711,6 +711,24 @@ a.btn { color: inherit; text-decoration: none; }
   border-top-left-radius: 100% 100%;
 }
 .fig .note--plain { align-self: center; width: 80%; text-align: center; }
+.note--up::before { /* leader rising to the drawing instead of falling to it */
+  top: auto;
+  bottom: calc(100% - .6em);
+  border-top: 0;
+  border-bottom: 1px solid #555;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 100% 100%;
+}
+
+/* Concept sheet (Sting Rays): a drawing with callouts beside it, as in the frame */
+.concept { margin: 2cqw 0 0; }
+.concept__art { position: relative; width: 74%; }
+.concept__art img { display: block; width: 100%; height: auto; }
+.concept__note, .concept__cap { margin: 0; font-size: var(--fs-small); line-height: 1.35; color: #4a4a4a; }
+.concept__note { position: absolute; left: 79.5%; width: 30cqw; }
+.concept__note--top { top: 13%; }
+.concept__note--bottom { top: 78%; }
+.concept__cap { margin-top: 5cqw; max-width: 30cqw; }
 .note--plain::before { display: none; }
 
 /* ---------- Black image band (Frame 38) ---------- */
@@ -888,6 +906,10 @@ a.btn { color: inherit; text-decoration: none; }
 @container page (max-width: 440px) {
   .cols { grid-template-columns: 1fr; row-gap: 1.6em; }
   .cols > :empty { display: none; } /* a spacer column only matters side by side */
+  .concept__art { width: 100%; }
+  .concept__note { position: static; width: auto; margin-top: 3cqw; } /* no room beside the drawing: callouts sit below it */
+  .concept__note::before { display: none; }
+  .concept__cap { max-width: none; margin-top: 3cqw; }
   .split { display: flex; flex-direction: column; row-gap: 5cqw; }
   .split > .fig { flex: 1 1 0; }
   .split__col { flex: 1.5 1 0; }
