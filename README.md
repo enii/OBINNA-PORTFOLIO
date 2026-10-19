@@ -87,7 +87,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin and Super Slides live in `index.html`. Most of their spreads are your Figma frames (see below); the covers, back covers and a few image spreads are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin and Super Slides live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
 
 ```html
 <article class="book-src" data-slug="sting-rays" data-number="01"
@@ -111,49 +111,40 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Sting Rays | cover · **concept frame** (concept sketching) · **Frame 14** (technical sketching) · **Frames 38 and 39** (3D visualisation) · the frame, across both pages · two side views · two close-ups · back cover |
-| 02 Vivonne Cabin | cover · **Frame 26** (the cabin) · **Frame 30** (the structure) · **Frame 25** (roof detail) · back cover |
-| 03 Super Slides | cover · **Super Slides frame** · full-page plates of the colourways and close-up · back cover |
+| 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
+| 02 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
+| 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
 
 ### Spreads made from your Figma frames
 
-Some spreads are your Figma frames themselves: the frame (1920 × 1080) is rendered at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included:
+Every spread inside the books is one of your Figma frames: the frame (1920 × 1080) is rendered from your PDF at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays and Super Slides follow your booklets page for page:
 
 ```
-sting-rays-frame-concept.webp   (concept sketching)
-sting-rays-frame-14.webp   (technical sketching)
-sting-rays-frame-38.webp   (3D visualisation: hero render and colourways)
-sting-rays-frame-39.webp   (3D visualisation: close-ups)
-super-slides-frame.webp    (the Super Slides frame)
-vivonne-frame-26.webp      (the cabin)
-vivonne-frame-30.webp      (the structure)
-vivonne-frame-25.webp      (roof detail)
+sting-rays-1-moodboard.webp        super-slides-1-moodboard.webp
+sting-rays-2-sketching.webp        super-slides-2-sketching.webp
+sting-rays-3-cad.webp              super-slides-3-cad.webp
+sting-rays-4-visualisation.webp    super-slides-4-render.webp
+sting-rays-5-detail.webp           super-slides-5-colourways.webp
+vivonne-frame-26.webp   (the cabin)
+vivonne-frame-30.webp   (the structure)
+vivonne-frame-25.webp   (roof detail)
 ```
 
-To update one, export the frame from Figma as PNG at 2× (or send the PDF), convert it to WebP and overwrite the file. To add one, copy a `<!-- Frame … -->` pair of pages in `index.html` and point both at the new file. The words are part of the image, so they're also written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
+To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, copy a `<!-- … -->` pair of frame pages in `index.html` and point both at the new file. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
-### Images
+### Cover images
 
-The Sting Rays renders are the files you sent. The Sting Rays hero render and the Vivonne axonometric, both on covers, are still cropped from screenshots of the Figma frames. For the sharpest result, export them from Figma and overwrite them using the same file names:
+The covers use one render or drawing each. The Sting Rays render and the Vivonne axonometric are still cropped from screenshots; for the sharpest result, export them from Figma and overwrite them using the same file names:
 
 ```
-sting-rays-render-hero.webp      (on the cover)
-sting-rays-render-front.webp        (the frame, drawn across both pages of its spread)
-sting-rays-render-side-light.webp   (side, pale blue)
-sting-rays-render-side-cobalt.webp  (side, cobalt)
-sting-rays-render-detail-joint.webp (close-up, temple joint)
-sting-rays-render-detail-hinge.webp (close-up, hinge)
-vivonne-axonometric.webp         (on the cover)
-super-slides-hero.webp           (the bone slide, on the cover, 1600 × 2000)
-super-slides-colourways.webp     (sage, olive and lavender stacked: the left plate, 1600 × 2000)
-super-slides-detail.webp         (the close-up: the right plate, 1600 × 2000)
+sting-rays-render-hero.webp    (Sting Rays cover)
+vivonne-axonometric.webp       (Vivonne Cabin cover)
+super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 ```
 
-The Super Slides renders are the ones you sent, as supplied (4:5, 1600 × 2000). Each image is cropped to fit its spot on the page, so keep the product near the middle of the frame.
+### Text on the covers
 
-### Text inside the books (switched off for now)
-
-The books currently show images only: every piece of text inside them is hidden, apart from the cover titles and the back-cover buttons. The text is still in `index.html`. To show it again, remove `book-text-off` from the `<html>` tag at the top of `index.html`.
+The covers show only their titles, and the back covers only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
 
 ### Copy
 
