@@ -70,30 +70,56 @@
   --accent: #2f45d8;
 
   --gutter: max(16px, min(3vw, 36px));
+  --desk-grid: none;
+  --cover-edge: 0 0 0 0 transparent;
 
   /* drafting cross cursor; the hot one (centre filled in) marks things you can click */
   --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='white' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3Cg stroke='black' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
   --cursor-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='white' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='white'/%3E%3C/g%3E%3Cg stroke='black' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='black'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
   --ease: cubic-bezier(.2, .75, .2, 1);
 }
+/* Dark mode: follows the device unless the visitor picks one with the switch in the top bar
+   (main.js stores it and sets data-theme on <html>) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --desk: #151515;
+    --desk: #121212;
     --desk-ink: #ececec;
     --desk-muted: #9c9c9c;
     --desk-line: rgba(255, 255, 255, .15);
     --desk-hover: rgba(255, 255, 255, .06);
     --accent: #7d8cff;
+    /* a fine drafting grid on the desk: 8px squares, a stronger line every 40px */
+    --grid-minor: rgba(255, 255, 255, .035);
+    --grid-major: rgba(255, 255, 255, .075);
+    --desk-grid:
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+    --cover-edge: 0 0 0 1px rgba(255, 255, 255, .1); /* black covers keep an edge on the dark desk */
+    --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='black' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3Cg stroke='white' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
+    --cursor-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='black' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='black'/%3E%3C/g%3E%3Cg stroke='white' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='white'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --desk: #151515;
+  --desk: #121212;
   --desk-ink: #ececec;
   --desk-muted: #9c9c9c;
   --desk-line: rgba(255, 255, 255, .15);
   --desk-hover: rgba(255, 255, 255, .06);
   --accent: #7d8cff;
+  /* a fine drafting grid on the desk: 8px squares, a stronger line every 40px */
+  --grid-minor: rgba(255, 255, 255, .035);
+  --grid-major: rgba(255, 255, 255, .075);
+  --desk-grid:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  --cover-edge: 0 0 0 1px rgba(255, 255, 255, .1); /* black covers keep an edge on the dark desk */
+  --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='black' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3Cg stroke='white' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
+  --cursor-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='black' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='black'/%3E%3C/g%3E%3Cg stroke='white' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='white'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
   color-scheme: dark;
 }
 
@@ -105,8 +131,14 @@ html { cursor: var(--cursor); }
 a, button, label, summary, select, [role="button"], input[type="checkbox"], input[type="radio"] { cursor: var(--cursor-hot); }
 input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"]),
 textarea, [contenteditable="true"] { cursor: text; }
+/* the desk the books sit on: plain in light mode, a drafting grid in dark mode */
+body, .reader {
+  background-color: var(--desk);
+  background-image: var(--desk-grid);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  background-position: -1px -1px;
+}
 body {
-  background: var(--desk);
   color: var(--desk-ink);
   font: 14px/1.45 var(--font-text);
   -webkit-font-smoothing: antialiased;
@@ -140,7 +172,6 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   inset: 0;
   z-index: 40;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  background: var(--desk);
 }
 @keyframes view-in { from { opacity: 0; transform: scale(.985); } }
 
@@ -163,6 +194,20 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
 .brand b { font: 800 16px/1 var(--font-display); letter-spacing: -.01em; }
 .brand span { font-size: 12px; color: var(--desk-muted); }
 .bar__nav { display: flex; align-items: center; gap: 20px; margin-left: auto; }
+.bar__theme { /* light / dark switch */
+  display: inline-grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  margin: -4px -4px -4px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+}
+.bar__theme svg { width: 15px; height: 15px; transition: transform .5s var(--ease); }
+.bar__theme[aria-pressed="true"] svg { transform: rotate(180deg); }
+.bar__theme:hover { background: var(--desk-hover); }
 .bar__link {
   color: inherit;
   font-size: 13px;
@@ -289,7 +334,7 @@ a.btn { color: inherit; text-decoration: none; }
   overflow: hidden;
   text-align: left;
   border-radius: 1px 3px 3px 1px;
-  box-shadow: 0 3vmin 8vmin -3vmin rgba(0, 0, 0, .13), 0 .3vmin 1.2vmin -.3vmin rgba(0, 0, 0, .06); /* as soft as it can be while white covers keep an edge */
+  box-shadow: 0 3vmin 8vmin -3vmin rgba(0, 0, 0, .13), 0 .3vmin 1.2vmin -.3vmin rgba(0, 0, 0, .06), var(--cover-edge); /* as soft as it can be while white covers keep an edge */
   pointer-events: none;
 }
 .card__cover .page {
@@ -434,6 +479,7 @@ a.btn { color: inherit; text-decoration: none; }
 .site-foot a { color: inherit; }
 
 /* the email always shows; on the narrowest phones the Motion link gives way (the animation is just below) */
+@media (max-width: 420px) { .bar__nav { gap: 14px; } }
 @media (max-width: 359px) { .bar__nav .bar__link[data-scroll] { display: none; } }
 
 /* ==========================================================================
@@ -467,7 +513,7 @@ a.btn { color: inherit; text-decoration: none; }
   left: var(--bx, 0); top: var(--by, 0);
   width: var(--bw, 0); height: var(--bh, 0);
   border-radius: 2px;
-  box-shadow: 0 3vmin 8vmin -3vmin rgba(0, 0, 0, .13), 0 .3vmin 1.2vmin -.3vmin rgba(0, 0, 0, .06);
+  box-shadow: 0 3vmin 8vmin -3vmin rgba(0, 0, 0, .13), 0 .3vmin 1.2vmin -.3vmin rgba(0, 0, 0, .06), var(--cover-edge);
   transition: left .9s var(--ease), width .9s var(--ease);
 }
 .book-base::before, .book-base::after {

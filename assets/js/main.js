@@ -806,6 +806,32 @@
     els.forEach((el) => io.observe(el));
   }
 
+  /* ---------- 12c. Light / dark switch ---------- */
+  // Follows the device until the visitor picks; the choice is remembered (and read before
+  // first paint by the small script in <head>)
+  const themeBtn = $('.bar__theme');
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => (document.documentElement.dataset.theme || (darkQuery.matches ? 'dark' : 'light')) === 'dark';
+  function showTheme() {
+    const dark = isDark();
+    if (themeBtn) {
+      themeBtn.setAttribute('aria-pressed', String(dark));
+      themeBtn.title = dark ? 'Light mode' : 'Dark mode';
+    }
+    const meta = $('meta[name="theme-color"]');
+    if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--desk').trim();
+  }
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const next = isDark() ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('oo-theme', next); } catch (e) { /* storage blocked: still switches for this visit */ }
+      showTheme();
+    });
+  }
+  if (darkQuery.addEventListener) darkQuery.addEventListener('change', showTheme);
+  showTheme();
+
   /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all([

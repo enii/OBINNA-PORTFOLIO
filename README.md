@@ -8,6 +8,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
 - Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
+- **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode puts a fine drafting grid on the background (8px squares with a stronger line every 40px). Until a visitor chooses, the site follows their device's setting; their choice is remembered. The colours and grid are the `--desk…` and `--grid…` values at the top of `assets/css/style.css`.
 - The mouse pointer is a drafting cross (CAD-style, with a small square at the centre); over anything clickable the square fills in. Both are inline SVGs in `--cursor` and `--cursor-hot` at the top of `assets/css/style.css`.
 - Text on the landing page rises into view as it scrolls in: the intro and caption on arrival, the Motion text and footer as you reach them. To add it to another element, give it the class `reveal`. Visitors with reduced motion turned on see the text straight away.
 
