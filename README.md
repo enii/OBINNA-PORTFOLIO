@@ -26,14 +26,13 @@ Then open the printed URL.
 
 Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are three animations: Sting Rays, Super Slides, and the Sting Rays colourways cut. To replace one, overwrite its files in `assets/media/`:
+There are two animations, Sting Rays and then Super Slides. To replace one, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
 sting-rays-animation.webm           the same video as WebM, a fallback for the few browsers without MP4
 sting-rays-animation-poster.jpg     the still shown before it plays
 super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for Super Slides)
-sting-rays-colourways-animation.mp4 (and .webm, -poster.jpg: the same three for Colourways)
 ```
 
 The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`).
