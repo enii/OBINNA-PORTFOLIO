@@ -70,6 +70,10 @@
   --accent: #2f45d8;
 
   --gutter: max(16px, min(3vw, 36px));
+
+  /* drafting cross cursor; the hot one (centre filled in) marks things you can click */
+  --cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='white' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3Cg stroke='black' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='none'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
+  --cursor-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='white' stroke-width='3' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='white'/%3E%3C/g%3E%3Cg stroke='black' stroke-width='1' fill='none'%3E%3Cpath d='M16.5 0.5v12M16.5 20.5v11M0.5 16.5h12M20.5 16.5h11'/%3E%3Crect x='12.5' y='12.5' width='8' height='8' fill='black'/%3E%3C/g%3E%3C/svg%3E") 16 16, pointer;
   --ease: cubic-bezier(.2, .75, .2, 1);
 }
 @media (prefers-color-scheme: dark) {
@@ -97,6 +101,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
 html { font-synthesis: none; } /* never fake a bold or slanted version */
+html { cursor: var(--cursor); }
+a, button, label, summary, select, [role="button"], input[type="checkbox"], input[type="radio"] { cursor: var(--cursor-hot); }
+input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"]),
+textarea, [contenteditable="true"] { cursor: text; }
 body {
   background: var(--desk);
   color: var(--desk-ink);
@@ -180,7 +188,7 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
 .btn, .round-btn {
   border: 1px solid var(--desk-line);
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   transition: background-color .2s, border-color .2s, color .2s, opacity .2s;
 }
 .btn {
@@ -209,7 +217,7 @@ a.btn { color: inherit; text-decoration: none; }
 .btn svg, .round-btn svg { width: 15px; height: 15px; }
 .btn:hover, .round-btn:hover:not(:disabled) { background: var(--desk-hover); }
 .btn--solid:hover { background: var(--desk-ink); opacity: .85; }
-.round-btn:disabled { opacity: .3; cursor: default; }
+.round-btn:disabled { opacity: .3; cursor: var(--cursor); }
 #soundBtn .i-mute, #soundBtn[aria-pressed="false"] .i-wave { display: none; }
 #soundBtn[aria-pressed="false"] .i-mute { display: inline; }
 
@@ -251,7 +259,7 @@ a.btn { color: inherit; text-decoration: none; }
   position: relative;
   flex: 0 0 var(--cw, 300px);
   aspect-ratio: 8 / 9;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
 }
 /* page edges of the closed book */
 .card::after {
@@ -271,7 +279,7 @@ a.btn { color: inherit; text-decoration: none; }
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   border-radius: 2px;
   transition: transform .45s var(--ease);
 }
@@ -366,7 +374,7 @@ a.btn { color: inherit; text-decoration: none; }
   max-height: 100svh;
   overflow: hidden;
   background: #000;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
 }
 /* each render is cropped to the strip around its product; --pos sets where the crop sits.
    It overhangs the strip by 1px top and bottom: the 21:9 height is fractional, and the
@@ -394,7 +402,7 @@ a.btn { color: inherit; text-decoration: none; }
   background: rgba(255, 255, 255, .92);
   color: #0d0d0d;
   transform: translate(-50%, -50%);
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6);
   transition: transform .35s var(--ease), opacity .3s ease;
 }
@@ -818,7 +826,7 @@ a.btn { color: inherit; text-decoration: none; }
   font: 800 var(--fs-small)/1 var(--font-display);
   letter-spacing: .08em;
   text-transform: uppercase;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   transition: background-color .2s;
 }
 .pill:hover { background: rgba(128, 128, 128, .15); }

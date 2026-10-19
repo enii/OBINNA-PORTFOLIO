@@ -63,7 +63,7 @@ body.studio { overflow: auto; }
 .st-msg.is-ok, .st-log .is-ok { color: var(--ok); }
 
 .st-help { font-size: 13px; line-height: 1.55; }
-.st-help summary { cursor: pointer; font-weight: 600; }
+.st-help summary { cursor: var(--cursor-hot); font-weight: 600; }
 .st-help ol { margin: 10px 0 0; padding-left: 20px; color: var(--desk-muted); }
 .st-help li { margin-bottom: 4px; }
 .st-help a { color: var(--desk-ink); }
@@ -90,7 +90,7 @@ body.studio { overflow: auto; }
   font: 14px/1 var(--font-text);
 }
 .st-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
-.st-check { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
+.st-check { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: var(--cursor-hot); }
 .st-check input { width: 16px; height: 16px; accent-color: var(--desk-ink); }
 
 .st-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -98,7 +98,7 @@ body.studio { overflow: auto; }
 .st-spacer { flex: 1; }
 .st-danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, transparent); }
 .st-danger.is-armed { background: var(--danger); border-color: var(--danger); color: #fff; }
-.btn:disabled { opacity: .45; cursor: default; }
+.btn:disabled { opacity: .45; cursor: var(--cursor); }
 
 /* Project list */
 .st-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
@@ -129,7 +129,7 @@ body.studio { overflow: auto; }
   border: 1px solid var(--desk-line);
   color: var(--desk-muted);
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
 }
 .st-badge.is-draft { border-color: var(--desk-ink); color: var(--desk-ink); }
 .st-icon {
@@ -138,11 +138,11 @@ body.studio { overflow: auto; }
   border: 0;
   border-radius: 8px;
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   color: var(--desk-muted);
 }
 .st-icon:hover:not(:disabled) { background: var(--desk-hover); color: var(--desk-ink); }
-.st-icon:disabled { opacity: .3; cursor: default; }
+.st-icon:disabled { opacity: .3; cursor: var(--cursor); }
 .st-icon svg { width: 14px; height: 14px; }
 .st-list:empty::before {
   content: "No projects yet. Start one with “New project”.";
@@ -194,7 +194,7 @@ body.studio { overflow: auto; }
   padding: 10px;
   border: 1px solid var(--desk-line);
   border-radius: 12px;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   font-size: 12px;
   line-height: 1.35;
   color: var(--desk-muted);
@@ -224,7 +224,7 @@ body.studio { overflow: auto; }
   text-align: center;
   font-size: 14px;
   line-height: 1.5;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
   transition: border-color .2s, background-color .2s;
 }
 .st-drop--cover { min-height: 100px; }
@@ -269,7 +269,7 @@ body.studio { overflow: auto; }
   color: #fff;
   font-size: 16px;
   line-height: 1;
-  cursor: pointer;
+  cursor: var(--cursor-hot);
 }
 
 /* Progress log */
