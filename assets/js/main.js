@@ -21,6 +21,7 @@
   const track = $('#track');
   const stage = $('#stage');
   const wrap = $('#bookWrap');
+  const base = $('.book-base', wrap);
   const counter = $('#counter');
   const progressFill = $('#progressFill');
   const readerTitle = $('#readerTitle');
@@ -547,6 +548,38 @@
       page.setDensity(density);
       page.setDrawingDensity(density);
     });
+    // Turning onto a cover there is no page to uncover beside it: StPageFlip uses the cover as both the
+    // turning sheet and the page underneath, so the page being lifted stayed whole under the turn.
+    // Cut the turned-away part out of that page instead, so the desk shows through as the book closes.
+    const render = instance.getRender();
+    const drawFrame = render.drawFrame;
+    render.drawFrame = function () {
+      drawFrame.call(this);
+      const sheet = this.flippingPage;
+      if (!sheet || sheet !== this.bottomPage || sheet.getDrawingDensity() !== 'soft' || this.getOrientation() !== 'landscape') return;
+      const back = this.getDirection() === 1;
+      const lifted = back ? this.leftPage : this.rightPage;
+      const calc = instance.getFlipController().calc;
+      if (!lifted || !calc) return;
+      const rect = this.getRect();
+      const left = rect.left + (back ? 0 : rect.pageWidth);
+      const w = rect.pageWidth;
+      const h = rect.height;
+      const hole = calc.getBottomClipArea().filter(Boolean)
+        .map((point) => this.convertToGlobal(point))
+        .map((g) => `${(g.x - left).toFixed(1)}px ${(g.y - rect.top).toFixed(1)}px`);
+      if (hole.length < 3) return;
+      const clip = `polygon(evenodd, 0 0, ${w}px 0, ${w}px ${h}px, 0 ${h}px, 0 0, ${hole.join(', ')}, ${hole[0]})`;
+      const style = lifted.getElement().style;
+      style.clipPath = clip;
+      style.webkitClipPath = clip;
+      if (this.outerShadow) this.outerShadow.style.display = 'none'; // it would fall on the empty desk
+      // and the shadow under the book shrinks with the turn, rather than outlining an empty page
+      const lift = w * Math.min(1, calc.getFlippingProgress() / 100);
+      base.style.transition = 'none';
+      base.style.left = `${rect.left + (back ? lift : 0)}px`;
+      base.style.width = `${rect.width - lift}px`;
+    };
     toneFrames(el);
   }
 
@@ -607,6 +640,9 @@
 
   function sync() {
     if (!book) return;
+    base.style.removeProperty('transition'); // hand the shadow back to the stylesheet after a turn onto a cover
+    base.style.removeProperty('left');
+    base.style.removeProperty('width');
     const last = book.total - 1;
     const single = layout && layout.single;
     ['front', 'back'].forEach((side) => {
