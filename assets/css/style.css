@@ -415,6 +415,7 @@ a.btn { color: inherit; text-decoration: none; }
   background:
     linear-gradient(var(--desk-ink), var(--desk-ink)) center / 100% 1px no-repeat,
     linear-gradient(var(--desk-ink), var(--desk-ink)) center / 1px 100% no-repeat;
+  opacity: .22; /* a pale grey in either theme */
 }
 @media (max-width: 760px) {
   .motion__text { grid-template-columns: minmax(0, 1fr); align-items: start; justify-items: start; }
