@@ -102,7 +102,7 @@ Sting Rays, Vivonne Cabin and Super Slides live in `index.html`. Every spread in
 
 - **Carousel order** follows the order of the articles. To change it, move an article and update its `data-number`.
 - **Pages:** odd pages sit on the left and even pages on the right. Keep each book's page count **even**.
-- **Page turns:** give each book at least **two spreads**. The covers are hard boards, so turning onto or off a cover swings rigidly. Only a turn between two inner spreads peels like paper. The same goes for Studio projects: upload at least two frames.
+- **Page turns:** every page peels like paper, covers included. To make a cover swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` on it in `index.html` (and in `projectBook` in `assets/js/main.js` for Studio projects).
 - **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically.
 - **Back cover buttons:** the "Next project" button finds the next book by itself.
 - **Sizing:** everything on a page is sized in `cqw` (percent of the page width), so it scales like print. If text would overflow on a small screen, `main.js` shrinks that page's type a little.

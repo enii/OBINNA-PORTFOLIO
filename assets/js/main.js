@@ -55,7 +55,7 @@
       </div>`).join('')).join('');
     return `
       <article class="book-src" data-slug="${esc(p.slug)}" data-number="${number}" data-title="${esc(p.title)}" data-meta="${esc(p.discipline)}">
-        <div class="${coverClass}${style === 'image' ? ' page--cover-image' : ''}" data-density="hard">
+        <div class="${coverClass}${style === 'image' ? ' page--cover-image' : ''}" data-density="soft">
           <div class="page__inner cover">
             ${coverImg ? `<img class="${imgClass}" src="${assetUrl(coverImg)}" alt="" draggable="false">` : ''}
             <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
@@ -66,7 +66,7 @@
           </div>
         </div>
         ${frames}
-        <div class="${coverClass}" data-density="hard">
+        <div class="${coverClass}" data-density="soft">
           <div class="page__inner backcover">
             <p class="backcover__mark">${esc(p.title)}</p>
             <p class="backcover__sub">Obinna Oti — Product Design</p>
@@ -540,6 +540,13 @@
     instance.on('changeOrientation', updateBase);
 
     instance.loadFromHTML($$('.page', el));
+    // With showCover, StPageFlip turns a lone first and last page (the covers) into hard boards.
+    // Give every page back the density its markup asks for, so the covers peel like paper.
+    instance.getPageCollection().getPages().forEach((page) => {
+      const density = page.getElement().dataset.density === 'hard' ? 'hard' : 'soft';
+      page.setDensity(density);
+      page.setDrawingDensity(density);
+    });
     toneFrames(el);
   }
 
