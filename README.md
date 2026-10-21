@@ -166,7 +166,7 @@ super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000
 tangerine-hero.webp            (Tangerine cover: the light in a hand, shot on white, 1151 × 1366)
 ```
 
-The Tangerine photo runs across the top of a white cover and fades out above the title (`cover__img--photo`); its own white backdrop blends into the cover.
+The Tangerine photo runs across the top of a white cover, above the title (`cover__img--photo`); its own white backdrop blends into the cover.
 
 ### Text on the covers
 
