@@ -817,8 +817,8 @@
     }
   });
 
-  // In-page links (Motion in the top bar, the words in the ethos) scroll to their section without changing
-  // the address. One whose section isn't on the page yet reads as plain text until it is.
+  // The links in the top bar scroll to their section without changing the address.
+  // One whose section isn't on the page yet shows as plain text until it is.
   $$('a[data-scroll]').forEach((link) => {
     if (!document.getElementById(link.dataset.scroll)) link.removeAttribute('href');
   });

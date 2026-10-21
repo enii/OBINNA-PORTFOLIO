@@ -47,7 +47,7 @@ To add another animation, copy the `<article class="motion__item">` block in `in
 
 The companies you've worked with drift slowly along a strip at the bottom of the landing page, in black (white in dark mode). It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-The word **clients** in the ethos at the top of the landing page jumps here. (In that text, **products** returns to the books, and **feedback** reads as plain text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
+**Clients** in the top bar jumps here. (Next to it, **Products** returns to the books, **Motion** goes to the animations, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 

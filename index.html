@@ -24,18 +24,21 @@
     <div class="shelf__screen">
       <header class="bar">
         <a class="brand reveal" href="#"><b>Obinna Oti</b></a>
-        <nav class="bar__nav reveal" aria-label="Sections">
+        <!-- The page's main points. Each scrolls to its section; one whose section isn't on the page yet
+             (Feedback, until there's a section with id="testimonials") shows as grey text until there is. -->
+        <nav class="bar__nav bar__sections reveal" aria-label="Sections">
+          <a class="bar__link" href="#shelf" data-scroll="shelf">Products</a>
           <a class="bar__link" href="#motion" data-scroll="motion">Motion</a>
+          <a class="bar__link" href="#clients" data-scroll="clients">Clients</a>
+          <a class="bar__link" href="#testimonials" data-scroll="testimonials">Feedback</a>
+        </nav>
+        <div class="bar__nav bar__end reveal">
           <a class="bar__link" href="mailto:otimarvelous@gmail.com">otimarvelous@gmail.com</a>
           <button class="bar__theme" type="button" aria-pressed="false" aria-label="Dark mode" title="Dark mode">
             <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.6a6.4 6.4 0 0 1 0 12.8z" fill="currentColor"/></svg>
           </button>
-        </nav>
+        </div>
       </header>
-
-      <!-- Ethos. The linked words scroll to their section; one whose section isn't on the page yet
-           (feedback, until there's a section with id="testimonials") reads as plain text. -->
-      <p class="shelf__ethos reveal">I create beautiful <a href="#shelf" data-scroll="shelf">products</a>, considered from the first sketch to the finished form. I&nbsp;take time to understand my <a href="#clients" data-scroll="clients">clients</a> and their needs, with one goal in mind: <a href="#testimonials" data-scroll="testimonials">feedback</a> from someone truly satisfied.</p>
 
       <div class="carousel" id="carousel">
         <div class="carousel__track" id="track" aria-hidden="true"></div>
