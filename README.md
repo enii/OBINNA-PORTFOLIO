@@ -156,11 +156,11 @@ To update a spread, send the new PDF (or export the frame from Figma as PNG at 2
 
 ### Cover images
 
-The covers use one render or drawing each. The Sting Rays render and the Vivonne axonometric are still cropped from screenshots; for the sharpest result, export them from Figma and overwrite them using the same file names:
+The covers use one render or drawing each. The Sting Rays render is still cropped from a screenshot; for the sharpest result, export it from Figma and overwrite it using the same file name:
 
 ```
 sting-rays-render-hero.webp    (Sting Rays cover)
-vivonne-axonometric.webp       (Vivonne Cabin cover)
+vivonne-axonometric.webp       (Vivonne Cabin cover: the axonometric, 1408 × 1022)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: two of the lamps, rendered on white, 1312 × 1199)
 ```
