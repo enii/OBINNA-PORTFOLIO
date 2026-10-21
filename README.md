@@ -162,10 +162,9 @@ The covers use one render or drawing each. The Sting Rays render and the Vivonne
 sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-axonometric.webp       (Vivonne Cabin cover)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
-tangerine-hero.webp            (Tangerine cover: two of the lamps, rendered on white, 1312 × 1199)
 ```
 
-The Tangerine render sits across the top of a white cover, above the title (`cover__img--photo`); its own white backdrop blends into the cover.
+The Tangerine cover has no picture: just its title on white.
 
 ### Text on the covers
 
