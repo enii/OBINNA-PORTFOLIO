@@ -817,16 +817,16 @@
     }
   });
 
-  // "Explore more motion" opens the rest of the animations below it (their videos only load once open)
+  // The down arrow under the animations opens the rest below it (their videos only load once open)
   const moreBtn = $('.motion__toggle');
   const more = $('#moreMotion');
   if (moreBtn && more) {
-    const label = $('.motion__toggle-label', moreBtn);
     moreBtn.addEventListener('click', () => {
       const open = !more.classList.contains('is-open');
       more.classList.toggle('is-open', open);
       moreBtn.setAttribute('aria-expanded', String(open));
-      label.textContent = open ? 'Show less motion' : 'Explore more motion';
+      moreBtn.title = open ? 'Show less motion' : 'Show more motion';
+      moreBtn.setAttribute('aria-label', moreBtn.title);
       if (open) requestAnimationFrame(() => more.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }));
       else $$('video', more).forEach((video) => video.pause());
     });

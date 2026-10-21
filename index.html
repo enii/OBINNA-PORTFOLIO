@@ -113,13 +113,12 @@
         </div>
       </article>
 
-      <!-- More motion: hidden until "Explore more motion" is clicked. Add animations inside
+      <!-- More motion: hidden until the down arrow under the animations is clicked. Add animations inside
            <div class="motion__more"> with the same <article> block as above; set preload="none" on
            their videos so nothing downloads until they're opened. -->
       <div class="motion__toggle-bar">
-        <button class="btn motion__toggle reveal" type="button" aria-expanded="false" aria-controls="moreMotion">
-          <span class="motion__toggle-icon" aria-hidden="true"></span>
-          <span class="motion__toggle-label">Explore more motion</span>
+        <button class="motion__toggle reveal" type="button" aria-expanded="false" aria-controls="moreMotion" aria-label="Show more motion" title="Show more motion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
       <div class="motion__more" id="moreMotion">
