@@ -894,8 +894,8 @@ html:not(.js) .motion__toggle-bar { display: none; }
 /* a photo shot on white (Tangerine): across the top of a white cover, above the title */
 .cover__img--photo {
   top: 0;
-  height: 76%;
-  object-position: 50% 26%;
+  height: 79%;
+  object-position: 50% 0%; /* from the very top of the photo, so there's white above the light */
   mix-blend-mode: multiply;
 }
 .cover__top, .cover__foot { position: relative; }
