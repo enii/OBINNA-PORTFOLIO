@@ -112,6 +112,40 @@
           <a class="btn reveal" href="#super-slides">Open the book</a>
         </div>
       </article>
+
+      <!-- More motion: hidden until "Explore more motion" is clicked. Add animations inside
+           <div class="motion__more"> with the same <article> block as above; set preload="none" on
+           their videos so nothing downloads until they're opened. -->
+      <div class="motion__toggle-bar">
+        <button class="btn motion__toggle reveal" type="button" aria-expanded="false" aria-controls="moreMotion">
+          <span class="motion__toggle-icon" aria-hidden="true"></span>
+          <span class="motion__toggle-label">Explore more motion</span>
+        </button>
+      </div>
+      <div class="motion__more" id="moreMotion">
+        <article class="motion__item">
+          <figure class="reel">
+            <div class="reel__frame">
+              <video class="reel__video" poster="assets/media/sting-rays-colourways-animation-poster.jpg"
+                     playsinline muted loop preload="none" aria-label="Animation of the Sting Rays frame coming apart and rebuilding, ending on three colourways">
+                <source src="assets/media/sting-rays-colourways-animation.mp4" type="video/mp4">
+                <source src="assets/media/sting-rays-colourways-animation.webm" type="video/webm">
+              </video>
+              <button class="reel__big" type="button" aria-label="Play animation">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </figure>
+          <div class="motion__text">
+            <div>
+              <p class="motion__kicker reveal">03 — Eyewear</p>
+              <h3 class="motion__title reveal">Colourways</h3>
+            </div>
+            <p class="motion__body reveal">Taken apart and made whole again, then cast three ways: bone and rose, deep cobalt, sea-glass green.</p>
+            <a class="btn reveal" href="#sting-rays">Open the book</a>
+          </div>
+        </article>
+      </div>
     </section>
 
     <!-- ═══════════ COMPANIES ═══════════

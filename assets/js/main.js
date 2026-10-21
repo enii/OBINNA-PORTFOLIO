@@ -817,6 +817,21 @@
     }
   });
 
+  // "Explore more motion" opens the rest of the animations below it (their videos only load once open)
+  const moreBtn = $('.motion__toggle');
+  const more = $('#moreMotion');
+  if (moreBtn && more) {
+    const label = $('.motion__toggle-label', moreBtn);
+    moreBtn.addEventListener('click', () => {
+      const open = !more.classList.contains('is-open');
+      more.classList.toggle('is-open', open);
+      moreBtn.setAttribute('aria-expanded', String(open));
+      label.textContent = open ? 'Show less motion' : 'Explore more motion';
+      if (open) requestAnimationFrame(() => more.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }));
+      else $$('video', more).forEach((video) => video.pause());
+    });
+  }
+
   // The links in the top bar scroll to their section without changing the address.
   // One whose section isn't on the page yet shows as plain text until it is.
   $$('a[data-scroll]').forEach((link) => {
