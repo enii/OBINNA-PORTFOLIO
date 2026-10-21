@@ -33,14 +33,9 @@
         </nav>
       </header>
 
-      <!-- Small menu under the top bar. Testimonials is plain text until it has a section to go to. -->
-      <nav class="shelf__menu reveal" aria-label="On this page">
-        <ul>
-          <li><a href="#shelf" data-scroll="shelf">Products</a></li>
-          <li><a href="#clients" data-scroll="clients">Clients</a></li>
-          <li><span>Testimonials</span></li>
-        </ul>
-      </nav>
+      <!-- Ethos. The linked words scroll to their section; one whose section isn't on the page yet
+           (feedback, until there's a section with id="testimonials") reads as plain text. -->
+      <p class="shelf__ethos reveal">I create beautiful <a href="#shelf" data-scroll="shelf">products</a>, considered from the first sketch to the finished form. I take time to understand my <a href="#clients" data-scroll="clients">clients</a> and their needs, with one goal in mind: <a href="#testimonials" data-scroll="testimonials">feedback</a> from someone truly satisfied.</p>
 
       <div class="carousel" id="carousel">
         <div class="carousel__track" id="track" aria-hidden="true"></div>

@@ -8,7 +8,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
 - Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
-- **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode puts a fine drafting grid on the background (8px squares with a stronger line every 40px). Until a visitor chooses, the site follows their device's setting; their choice is remembered. The colours and grid are the `--desk…` and `--grid…` values at the top of `assets/css/style.css`.
+- **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode turns the background pitch black. Until a visitor chooses, the site follows their device's setting; their choice is remembered. The colours are the `--desk…` values at the top of `assets/css/style.css`.
 - The mouse pointer is a drafting cross (CAD-style, with a small square at the centre); over anything clickable the square fills in. Both are inline SVGs in `--cursor` and `--cursor-hot` at the top of `assets/css/style.css`.
 - Text on the landing page rises into view as it scrolls in: the intro and caption on arrival, the Motion text and footer as you reach them. To add it to another element, give it the class `reveal`. Visitors with reduced motion turned on see the text straight away.
 
@@ -47,7 +47,7 @@ To add another animation, copy the `<article class="motion__item">` block in `in
 
 The companies you've worked with drift slowly along a strip at the bottom of the landing page, in black (white in dark mode). It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-**Clients** in the small menu at the top of the landing page jumps here. (In that menu, **Products** returns to the books; **Testimonials** is plain text until there's a testimonials section to link to.)
+The word **clients** in the ethos at the top of the landing page jumps here. (In that text, **products** returns to the books, and **feedback** reads as plain text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 

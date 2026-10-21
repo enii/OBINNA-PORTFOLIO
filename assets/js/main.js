@@ -817,9 +817,13 @@
     }
   });
 
-  // In-page links (Motion in the top bar, the menu under it) scroll to their section without changing the address
+  // In-page links (Motion in the top bar, the words in the ethos) scroll to their section without changing
+  // the address. One whose section isn't on the page yet reads as plain text until it is.
+  $$('a[data-scroll]').forEach((link) => {
+    if (!document.getElementById(link.dataset.scroll)) link.removeAttribute('href');
+  });
   document.addEventListener('click', (e) => {
-    const link = e.target.closest('[data-scroll]');
+    const link = e.target.closest('[data-scroll][href]');
     if (!link) return;
     const target = document.getElementById(link.dataset.scroll);
     if (!target) return;
