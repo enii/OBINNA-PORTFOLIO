@@ -63,6 +63,10 @@
       </div>
     </div>
 
+    <!-- Animations, then the companies banner. While the animations are on screen the banner sticks to the
+         bottom of the window and they scroll behind it, fading out just above it; after the last one it
+         settles into place above the footer. -->
+    <div class="motion-run">
     <!-- ═══════════ MOTION ═══════════
          One <article class="motion__item"> per animation, shown full width in landscape.
          To add another, copy the whole block and change the video, poster and text. -->
@@ -113,38 +117,28 @@
         </div>
       </article>
 
-      <!-- More motion: hidden until the down arrow under the animations is clicked. Add animations inside
-           <div class="motion__more"> with the same <article> block as above; set preload="none" on
-           their videos so nothing downloads until they're opened. -->
-      <div class="motion__toggle-bar">
-        <button class="motion__toggle reveal" type="button" aria-expanded="false" aria-controls="moreMotion" aria-label="Show more motion" title="Show more motion">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <div class="motion__more" id="moreMotion">
-        <article class="motion__item">
-          <figure class="reel">
-            <div class="reel__frame">
-              <video class="reel__video" poster="assets/media/sting-rays-colourways-animation-poster.jpg"
-                     playsinline muted loop preload="none" aria-label="Animation of the Sting Rays frame coming apart and rebuilding, ending on three colourways">
-                <source src="assets/media/sting-rays-colourways-animation.mp4" type="video/mp4">
-                <source src="assets/media/sting-rays-colourways-animation.webm" type="video/webm">
-              </video>
-              <button class="reel__big" type="button" aria-label="Play animation">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </figure>
-          <div class="motion__text">
-            <div>
-              <p class="motion__kicker reveal">03 — Eyewear</p>
-              <h3 class="motion__title reveal">Colourways</h3>
-            </div>
-            <p class="motion__body reveal">Taken apart and made whole again, then cast three ways: bone and rose, deep cobalt, sea-glass green.</p>
-            <a class="btn reveal" href="#sting-rays">Open the book</a>
+      <article class="motion__item">
+        <figure class="reel">
+          <div class="reel__frame">
+            <video class="reel__video" poster="assets/media/sting-rays-colourways-animation-poster.jpg"
+                   playsinline muted loop preload="auto" aria-label="Animation of the Sting Rays frame coming apart and rebuilding, ending on three colourways">
+              <source src="assets/media/sting-rays-colourways-animation.mp4" type="video/mp4">
+              <source src="assets/media/sting-rays-colourways-animation.webm" type="video/webm">
+            </video>
+            <button class="reel__big" type="button" aria-label="Play animation">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </button>
           </div>
-        </article>
-      </div>
+        </figure>
+        <div class="motion__text">
+          <div>
+            <p class="motion__kicker reveal">03 — Eyewear</p>
+            <h3 class="motion__title reveal">Colourways</h3>
+          </div>
+          <p class="motion__body reveal">Taken apart and made whole again, then cast three ways: bone and rose, deep cobalt, sea-glass green.</p>
+          <a class="btn reveal" href="#sting-rays">Open the book</a>
+        </div>
+      </article>
     </section>
 
     <!-- ═══════════ COMPANIES ═══════════
@@ -168,6 +162,7 @@
         </div>
       </div>
     </section>
+    </div>
 
     <footer class="site-foot">
       <span class="reveal">© 2025 Obinna Oti</span>

@@ -26,19 +26,19 @@ Then open the printed URL.
 
 Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-Two animations show straight away, Sting Rays and then Super Slides. Under them, a down arrow opens more (it then points up, to close them again); for now that holds the Sting Rays colourways cut. To replace an animation, overwrite its files in `assets/media/`:
+There are three animations, one after another: Sting Rays, Super Slides and the Sting Rays colourways cut. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it, fading out just above it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
 sting-rays-animation.webm           the same video as WebM, a fallback for the few browsers without MP4
 sting-rays-animation-poster.jpg     the still shown before it plays
 super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for Super Slides)
-sting-rays-colourways-animation.mp4 (and .webm, -poster.jpg: the same three for Colourways, behind the down arrow)
+sting-rays-colourways-animation.mp4 (and .webm, -poster.jpg: the same three for Colourways)
 ```
 
 The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`).
 
-To add another animation, copy an `<article class="motion__item">` block in `index.html` and point it at the new files. Put it inside `<div class="motion__more">` to keep it behind the down arrow (give its video `preload="none"` so it only downloads once opened), or next to the first two to show it straight away. Tips:
+To add another animation, copy an `<article class="motion__item">` block in `index.html` and point it at the new files. Tips:
 
 - **Format:** export MP4 (H.264), 1920px wide, without sound, ideally under about 10 MB.
 - **Poster:** use a strong frame as the poster image; the last frame often works well.
@@ -46,7 +46,7 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 
 ## Companies (the logo strip above the footer)
 
-The companies you've worked with drift slowly along a strip at the bottom of the landing page, in black (white in dark mode). It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
+The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it (they fade out just above it), and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
 **Clients** in the top bar jumps here. (Next to it, **Products** returns to the books, **Motion** goes to the animations, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 

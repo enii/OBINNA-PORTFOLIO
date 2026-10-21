@@ -363,29 +363,6 @@ a.btn { color: inherit; text-decoration: none; }
   padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 96px);
 }
 .motion__item + .motion__item { margin-top: clamp(56px, 8vw, 112px); }
-/* More motion: a down arrow under the animations opens more of them below it, then points up to close them */
-.motion__toggle-bar { display: flex; justify-content: center; margin-top: clamp(40px, 6vw, 80px); padding: 0 var(--gutter); }
-.motion__toggle {
-  display: grid;
-  place-items: center;
-  width: 44px; height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  color: var(--desk-ink);
-  transition: background-color .2s;
-}
-.motion__toggle:hover { background: var(--desk-hover); }
-.motion__toggle svg { width: 28px; height: 28px; transition: transform .5s var(--ease); }
-.motion__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
-/* hidden until opened; without script they simply show, and the button goes */
-.js .motion__more:not(.is-open) { display: none; }
-html:not(.js) .motion__toggle-bar { display: none; }
-.motion__more .motion__item { margin-top: clamp(56px, 8vw, 112px); }
-@keyframes fade-in { from { opacity: 0; } }
-.motion__more.is-open { animation: fade-in .9s var(--ease) both; } /* a fade only, so the scroll down to it lands exactly */
-@media (prefers-reduced-motion: reduce) { .motion__more.is-open { animation: none; } }
 /* title, description and button sit under the video on the page grid */
 .motion__text {
   display: grid;
@@ -476,7 +453,27 @@ html:not(.js) .motion__toggle-bar { display: none; }
 /* ==========================================================================
    Companies: a strip of logos drifting along above the footer
    ========================================================================== */
-.logos { padding: clamp(32px, 5vw, 72px) 0 clamp(24px, 4vw, 48px); }
+/* A banner: while the animations are on screen it sticks to the bottom of the window (inside .motion-run)
+   and they scroll behind it, fading out just above it; after the last one it settles above the footer */
+.logos {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: clamp(18px, 2.6vw, 34px) 0;
+  background: var(--desk);
+}
+.logos::before { /* the fade the animations go into */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 100%;
+  height: clamp(72px, 14vh, 150px);
+  background: linear-gradient(rgba(255, 255, 255, 0), var(--desk));
+  pointer-events: none;
+}
+:root[data-theme="dark"] .logos::before { background: linear-gradient(rgba(0, 0, 0, 0), var(--desk)); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logos::before { background: linear-gradient(rgba(0, 0, 0, 0), var(--desk)); }
+}
 .logos__viewport { overflow: hidden; }
 .logos__belt { display: flex; }
 .logos__track {

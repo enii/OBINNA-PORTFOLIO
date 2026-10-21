@@ -817,21 +817,6 @@
     }
   });
 
-  // The down arrow under the animations opens the rest below it (their videos only load once open)
-  const moreBtn = $('.motion__toggle');
-  const more = $('#moreMotion');
-  if (moreBtn && more) {
-    moreBtn.addEventListener('click', () => {
-      const open = !more.classList.contains('is-open');
-      more.classList.toggle('is-open', open);
-      moreBtn.setAttribute('aria-expanded', String(open));
-      moreBtn.title = open ? 'Show less motion' : 'Show more motion';
-      moreBtn.setAttribute('aria-label', moreBtn.title);
-      if (open) requestAnimationFrame(() => more.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }));
-      else $$('video', more).forEach((video) => video.pause());
-    });
-  }
-
   // The links in the top bar scroll to their section without changing the address.
   // One whose section isn't on the page yet shows as plain text until it is.
   $$('a[data-scroll]').forEach((link) => {
@@ -843,7 +828,14 @@
     const target = document.getElementById(link.dataset.scroll);
     if (!target) return;
     e.preventDefault();
-    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    const behavior = reduceMotion ? 'auto' : 'smooth';
+    if (getComputedStyle(target).position === 'sticky') {
+      // a banner that sticks while you scroll (Clients): go to where it comes to rest, at the end of its run
+      const end = target.parentElement.getBoundingClientRect().bottom + window.scrollY;
+      window.scrollTo({ top: end - window.innerHeight, behavior });
+    } else {
+      target.scrollIntoView({ behavior, block: 'start' });
+    }
   });
 
   /* ---------- 12b. Landing text rises into view as it scrolls in ---------- */
