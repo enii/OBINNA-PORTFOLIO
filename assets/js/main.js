@@ -817,7 +817,7 @@
     }
   });
 
-  // "Motion" link in the top bar scrolls down to the animations
+  // In-page links (Motion in the top bar, the menu under it) scroll to their section without changing the address
   document.addEventListener('click', (e) => {
     const link = e.target.closest('[data-scroll]');
     if (!link) return;

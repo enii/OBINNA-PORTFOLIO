@@ -269,14 +269,17 @@ a.btn { color: inherit; text-decoration: none; }
 /* ==========================================================================
    Projects carousel
    ========================================================================== */
-.shelf__intro {
-  max-width: 58ch;
-  margin: 0;
-  padding: 0 var(--gutter);
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--desk-muted);
+/* small menu under the top bar; each item gets the faded plus (see the Motion captions) */
+.shelf__menu { padding: 0 var(--gutter); }
+.shelf__menu ul { margin: 0; padding: 0; list-style: none; }
+.shelf__menu li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.6; color: var(--desk-ink); }
+.shelf__menu a {
+  color: inherit;
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color .2s;
 }
+.shelf__menu a:hover, .shelf__menu a:focus-visible { text-decoration-color: currentColor; }
 .carousel {
   position: relative;
   min-width: 0;
@@ -378,11 +381,11 @@ a.btn { color: inherit; text-decoration: none; }
 
 @media (max-width: 600px) {
   .brand span { display: none; }
-  .shelf__intro { font-size: 13px; }
+  .shelf__menu li { font-size: 13px; }
   .shelf__controls { width: 100%; margin-left: 0; }
   .shelf__controls .btn { flex: 1; }
 }
-@media (max-height: 560px) { .shelf__intro { display: none; } }
+@media (max-height: 560px) { .shelf__menu { display: none; } }
 
 /* ==========================================================================
    Motion: animations under the carousel
@@ -406,8 +409,9 @@ a.btn { color: inherit; text-decoration: none; }
   letter-spacing: -.04em;
 }
 .motion__body { position: relative; margin: 0; max-width: calc(40ch + 24px); padding-left: 24px; font-size: 16px; line-height: 1.6; color: var(--desk-muted); }
-/* a hairline plus marks the description, like a bullet, centred on its first line */
-.motion__body::before {
+/* a faded hairline plus marks the description (and the menu items at the top), like a bullet,
+   centred on the first line */
+.motion__body::before, .shelf__menu li::before {
   content: "";
   position: absolute;
   left: 0; top: calc(.8em - 5px);

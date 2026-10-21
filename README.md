@@ -47,6 +47,8 @@ To add another animation, copy the `<article class="motion__item">` block in `in
 
 The companies you've worked with drift slowly along a strip at the bottom of the landing page, in black (white in dark mode). It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
+**Clients** in the small menu at the top of the landing page jumps here. (In that menu, **Products** returns to the books; **Testimonials** is plain text until there's a testimonials section to link to.)
+
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 
 For now each company is its name set in type. To show the real logo instead:

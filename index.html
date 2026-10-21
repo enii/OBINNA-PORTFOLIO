@@ -33,7 +33,14 @@
         </nav>
       </header>
 
-      <p class="shelf__intro reveal">I’ve worked with a wide range of clients, from luxury apparel brands to independent labels, helping them shape products that feel elevated, purposeful and manufacturable.</p>
+      <!-- Small menu under the top bar. Testimonials is plain text until it has a section to go to. -->
+      <nav class="shelf__menu reveal" aria-label="On this page">
+        <ul>
+          <li><a href="#shelf" data-scroll="shelf">Products</a></li>
+          <li><a href="#clients" data-scroll="clients">Clients</a></li>
+          <li><span>Testimonials</span></li>
+        </ul>
+      </nav>
 
       <div class="carousel" id="carousel">
         <div class="carousel__track" id="track" aria-hidden="true"></div>
@@ -115,7 +122,7 @@
          assets/logos/ and replace the name with, for example:
            <li class="logos__item"><img src="assets/logos/paystack.svg" alt="Paystack"></li>
          Any colour of logo works: they all show in black (white in dark mode). -->
-    <section class="logos" aria-label="Companies I've worked with">
+    <section class="logos" id="clients" aria-label="Companies I've worked with">
       <div class="logos__viewport reveal">
         <div class="logos__belt">
           <ul class="logos__track">
