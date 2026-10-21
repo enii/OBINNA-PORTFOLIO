@@ -186,9 +186,11 @@ This repository is public, so anyone can download the font files from it. Make s
 
 ## Deploy (GitHub Pages)
 
-1. Merge into `main`.
-2. Go to **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
-3. The site appears at `https://<user>.github.io/OBINNA-PORTFOLIO/`.
+1. On GitHub, open the repository's **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**, pick the branch the site lives on (today that's `claude/portfolio-flipbook-design-fz5q29`, the repository's default branch) and `/ (root)`, then **Save**.
+3. After a minute or two the site is live at `https://enii.github.io/OBINNA-PORTFOLIO/`. Every push to that branch updates it.
+
+The empty `.nojekyll` file tells GitHub to serve the files exactly as they are. To use your own domain (say obinnaoti.com), enter it under **Custom domain** on the same page and follow GitHub's DNS instructions at your registrar.
 
 It also works as-is on Netlify, Vercel or any static host.
 
