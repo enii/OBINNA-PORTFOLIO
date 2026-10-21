@@ -454,25 +454,13 @@ a.btn { color: inherit; text-decoration: none; }
    Companies: a strip of logos drifting along above the footer
    ========================================================================== */
 /* A banner: while the animations are on screen it sticks to the bottom of the window (inside .motion-run)
-   and they scroll behind it, fading out just above it; after the last one it settles above the footer */
+   and they scroll behind it; after the last one it settles above the footer */
 .logos {
   position: sticky;
   bottom: 0;
   z-index: 2;
   padding: clamp(18px, 2.6vw, 34px) 0;
   background: var(--desk);
-}
-.logos::before { /* the fade the animations go into */
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 100%;
-  height: clamp(72px, 14vh, 150px);
-  background: linear-gradient(rgba(255, 255, 255, 0), var(--desk));
-  pointer-events: none;
-}
-:root[data-theme="dark"] .logos::before { background: linear-gradient(rgba(0, 0, 0, 0), var(--desk)); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logos::before { background: linear-gradient(rgba(0, 0, 0, 0), var(--desk)); }
 }
 .logos__viewport { overflow: hidden; }
 .logos__belt { display: flex; }

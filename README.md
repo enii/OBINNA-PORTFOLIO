@@ -26,7 +26,7 @@ Then open the printed URL.
 
 Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are three animations, one after another: Sting Rays, Super Slides and the Sting Rays colourways cut. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it, fading out just above it. To replace an animation, overwrite its files in `assets/media/`:
+There are three animations, one after another: Sting Rays, Super Slides and the Sting Rays colourways cut. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
@@ -46,7 +46,7 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 
 ## Companies (the logo strip above the footer)
 
-The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it (they fade out just above it), and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
+The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it, and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
 **Clients** in the top bar jumps here. (Next to it, **Products** returns to the books, **Motion** goes to the animations, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
