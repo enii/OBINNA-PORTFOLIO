@@ -876,11 +876,13 @@ a.btn { color: inherit; text-decoration: none; }
   object-position: center;
   mix-blend-mode: multiply;
 }
-/* a render on white (Tangerine): across the top of a white cover, above the title; its backdrop melts into the cover */
+/* a render on white (Tangerine): the whole picture above the title, with white above it; its backdrop
+   melts into the cover */
 .cover__img--photo {
-  top: 0;
-  height: 79%;
-  object-position: 50% 35%; /* the light floats with white above it and a little below */
+  top: 6%;
+  height: 72%;
+  object-fit: contain;
+  object-position: 50% 50%;
   mix-blend-mode: multiply;
 }
 .cover__top, .cover__foot { position: relative; }
