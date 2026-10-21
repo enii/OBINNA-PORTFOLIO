@@ -107,7 +107,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin and Super Slides live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin, Super Slides and Tangerine live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
 
 ```html
 <article class="book-src" data-slug="sting-rays" data-number="01"
@@ -134,6 +134,7 @@ Current books:
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 02 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
 | 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
+| 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · back cover |
 
 ### Spreads made from your Figma frames
 
@@ -148,6 +149,8 @@ sting-rays-5-detail.webp           super-slides-5-colourways.webp
 vivonne-frame-26.webp   (the cabin)
 vivonne-frame-30.webp   (the structure)
 vivonne-frame-25.webp   (roof detail)
+tangerine-1-moodboard.webp   (Frame 10)
+tangerine-2-sketching.webp   (Frame 12)
 ```
 
 To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, copy a `<!-- … -->` pair of frame pages in `index.html` and point both at the new file. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
@@ -160,7 +163,10 @@ The covers use one render or drawing each. The Sting Rays render and the Vivonne
 sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-axonometric.webp       (Vivonne Cabin cover)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
+tangerine-hero.webp            (Tangerine cover: the light in a hand, shot on white, 1151 × 1366)
 ```
+
+The Tangerine photo runs across the top of a white cover and fades out above the title (`cover__img--photo`); its own white backdrop blends into the cover.
 
 ### Text on the covers
 
