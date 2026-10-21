@@ -875,6 +875,33 @@
   if (darkQuery.addEventListener) darkQuery.addEventListener('change', showTheme);
   showTheme();
 
+  /* ---------- 12d. Companies: the logo strip drifts along in an endless loop ---------- */
+  const logos = $('.logos');
+  const logoBelt = logos && $('.logos__belt', logos);
+  function fillLogos() {
+    if (!logoBelt || reduceMotion) return;
+    const set = logoBelt.firstElementChild;
+    const w = set.offsetWidth; // layout width, unaffected by the page's entrance animation
+    if (!w) return;
+    // enough copies to cover the screen while one copy's width slides off it
+    const need = Math.ceil(logoBelt.parentElement.clientWidth / w) + 1;
+    while (logoBelt.children.length < need) {
+      const copy = set.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      logoBelt.appendChild(copy);
+    }
+    // the copies are identical, so sliding by 1/copies of the belt moves exactly one copy
+    logoBelt.style.setProperty('--copies', logoBelt.children.length);
+    logoBelt.style.setProperty('--dur', `${(w / 40).toFixed(1)}s`); // 40px a second, however many logos
+  }
+  function startLogos() {
+    if (!logoBelt || reduceMotion) return;
+    logos.classList.add('is-moving'); // the row stops wrapping, so measure after this
+    fillLogos();
+    $$('img', logoBelt.firstElementChild).forEach((img) => img.addEventListener('load', fillLogos));
+    if (window.ResizeObserver) new ResizeObserver(fillLogos).observe(logos);
+  }
+
   /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all([
@@ -886,5 +913,6 @@
   fontsReady.then(() => {
     route();
     watchReveals(); // after the fonts, so text doesn't rise in a fallback face
+    startLogos(); // measured in the real face too
   });
 })();

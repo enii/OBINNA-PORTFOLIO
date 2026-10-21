@@ -43,6 +43,23 @@ To add another animation, copy the `<article class="motion__item">` block in `in
 - **Poster:** use a strong frame as the poster image; the last frame often works well.
 - **Fallback:** a WebM copy is optional. I can make one for you.
 
+## Companies (the logo strip above the footer)
+
+The companies you've worked with drift slowly along a strip at the bottom of the landing page, in black (white in dark mode). It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
+
+The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
+
+For now each company is its name set in type. To show the real logo instead:
+
+1. Put the logo file in `assets/logos/`. SVG is best, but PNG works. Any colour is fine: the site turns every logo black (white in dark mode).
+2. Replace the name with the image, for example:
+
+```html
+<li class="logos__item"><img src="assets/logos/paystack.svg" alt="Paystack"></li>
+```
+
+Logos show about 34px tall on desktop; very wide ones are capped at 180px wide.
+
 ## Adding new projects (the Studio)
 
 New projects are added in the **Studio**, a private page on the site at `…/studio.html` (it isn't linked anywhere and search engines are told to skip it). No code needed.

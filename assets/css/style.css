@@ -478,6 +478,51 @@ a.btn { color: inherit; text-decoration: none; }
   .js .reveal.is-in { animation: none; }
 }
 
+/* ==========================================================================
+   Companies: a strip of logos drifting along above the footer
+   ========================================================================== */
+.logos { padding: clamp(32px, 5vw, 72px) 0 clamp(24px, 4vw, 48px); }
+.logos__viewport { overflow: hidden; }
+.logos__belt { display: flex; }
+.logos__track {
+  --logo-gap: clamp(48px, 7vw, 104px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 24px var(--logo-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+.logos__item {
+  flex: none;
+  font: 800 clamp(20px, 2.2vw, 28px)/1 var(--font-display);
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  color: var(--desk-ink);
+}
+.logos__item img {
+  display: block;
+  width: auto; height: clamp(22px, 2.6vw, 34px); max-width: 180px;
+  filter: brightness(0); /* any logo, in black */
+}
+:root[data-theme="dark"] .logos__item img { filter: brightness(0) invert(1); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logos__item img { filter: brightness(0) invert(1); }
+}
+/* Moving (main.js repeats the list to fill the screen; the belt slides along by one copy and loops).
+   Without script, or with reduced motion, the logos sit still in a centred row. */
+.logos.is-moving .logos__viewport {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); /* fade at the edges */
+}
+.logos.is-moving .logos__belt { width: max-content; animation: logos var(--dur, 40s) linear infinite; }
+.logos.is-moving .logos__track { flex-wrap: nowrap; width: auto; padding: 0 var(--logo-gap) 0 0; }
+.logos.is-moving:hover .logos__belt { animation-play-state: paused; }
+@keyframes logos { to { transform: translateX(calc(-100% / var(--copies, 1))); } }
+
 .site-foot {
   display: flex;
   flex-wrap: wrap;
