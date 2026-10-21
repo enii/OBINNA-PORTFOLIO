@@ -255,6 +255,7 @@ a.btn { color: inherit; text-decoration: none; }
   font-size: 15px;
   line-height: 1.6;
   color: var(--desk-muted);
+  text-align: justify;
   text-wrap: pretty; /* no word left alone at the end of a line */
 }
 /* its linked words are a shade darker and a touch heavier (the text face has nothing between
@@ -368,7 +369,8 @@ a.btn { color: inherit; text-decoration: none; }
 .shelf__pager span { font-family: var(--font-text); font-weight: 400; color: var(--desk-muted); }
 
 @media (max-width: 600px) {
-  .shelf__ethos { font-size: 13px; }
+  .shelf__ethos { font-size: 13px; hyphens: auto; } /* narrow justified lines: let long words break */
+  .shelf__ethos a { hyphens: none; }
   .shelf__controls { width: 100%; margin-left: 0; }
   .shelf__controls .btn { flex: 1; }
 }
