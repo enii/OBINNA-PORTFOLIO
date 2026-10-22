@@ -160,7 +160,7 @@ The covers use one render or drawing each. The Sting Rays render is still croppe
 
 ```
 sting-rays-render-hero.webp    (Sting Rays cover)
-vivonne-axonometric.webp       (Vivonne Cabin cover: the axonometric, 1408 × 1022)
+vivonne-axonometric.webp       (Vivonne Cabin cover: the axonometric, 1408 × 1022, filling the cover edge to edge with `cover__img--fill`)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: two of the lamps, rendered on white, 1312 × 1199)
 ```

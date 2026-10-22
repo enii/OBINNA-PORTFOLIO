@@ -885,6 +885,8 @@ a.btn { color: inherit; text-decoration: none; }
   object-position: 50% 50%;
   mix-blend-mode: multiply;
 }
+/* a drawing that fills the cover edge to edge, down to the title (Vivonne Cabin) */
+.cover__img--fill { top: 3%; left: 0; width: 100%; height: 66%; }
 .cover__top, .cover__foot { position: relative; }
 .cover__top {
   display: flex;
