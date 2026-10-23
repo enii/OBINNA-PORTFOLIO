@@ -890,8 +890,6 @@ a.btn { color: inherit; text-decoration: none; }
 /* Tangerine: the render, whole, above the title. The covers take on the render's own off-white
    (.page--tangerine), so the picture sits on them without an edge. */
 .page--board.page--tangerine { background: #f9f7f7; }
-/* on the Tangerine cover the issue line sits in the top-right corner, clear of the long title */
-.page--board.page--tangerine .cover__issue { top: 6cqw; bottom: auto; }
 /* the whole cover frame from Figma, its lights falling diagonally above the title */
 .cover__img--photo {
   top: 0;
