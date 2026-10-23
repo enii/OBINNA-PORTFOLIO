@@ -886,8 +886,8 @@ a.btn { color: inherit; text-decoration: none; }
   object-position: 50% 50%;
   mix-blend-mode: normal;
 }
-/* a drawing that fills the cover edge to edge, down to the title (Vivonne Cabin) */
-.cover__img--fill { top: 3%; left: 0; width: 100%; height: 66%; }
+/* a large drawing with an even margin of white around it, above the title (Vivonne Cabin) */
+.cover__img--fill { top: 7%; left: 7%; width: 86%; height: 60%; }
 .cover__top, .cover__foot { position: relative; }
 .cover__top {
   display: flex;
