@@ -856,7 +856,18 @@ a.btn { color: inherit; text-decoration: none; }
 .page--board::before { background: linear-gradient(90deg, rgba(0, 0, 0, .14), rgba(255, 255, 255, .7) 55%, rgba(0, 0, 0, .08)); }
 .is-spread .page--cover.page--l::before { left: auto; right: 3.4%; }
 
-.cover { justify-content: space-between; padding: 6cqw var(--px) 7cqw 10cqw; }
+.cover { justify-content: space-between; padding: 6cqw var(--px) 11cqw 10cqw; } /* room at the foot for the issue line */
+/* "Issue 01" in the bottom-left corner of every front cover, under the title */
+.cover__issue {
+  position: absolute;
+  z-index: 1;
+  left: 10cqw; bottom: 4.6cqw;
+  margin: 0;
+  font: 800 2.3cqw/1 var(--font-display);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 .cover__img {
   position: absolute;
   top: 14%;
@@ -970,7 +981,7 @@ a.btn { color: inherit; text-decoration: none; }
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .7));
   pointer-events: none;
 }
-.page--cover-image .cover__top, .page--cover-image .cover__foot { z-index: 1; color: #fff; }
+.page--cover-image .cover__top, .page--cover-image .cover__foot, .page--cover-image .cover__issue { z-index: 1; color: #fff; }
 .page--cover-image .cover__top, .page--cover-image .cover__kicker { color: rgba(255, 255, 255, .78); }
 
 /* ---------- Full-page plates (Super Slides) ---------- */

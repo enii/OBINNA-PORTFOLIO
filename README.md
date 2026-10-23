@@ -170,7 +170,7 @@ On the Tangerine cover the title runs up the cover beside the render, exactly as
 
 ### Text on the covers
 
-The covers show only their titles, and the back covers only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
+The covers show their title and, in the bottom-left corner, **ISSUE 01** (the `<p class="cover__issue">` line in each cover in `index.html`, and in `projectBook` in `assets/js/main.js` for Studio projects; change the number there for a new issue). The back covers show only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
 
 ### Copy
 

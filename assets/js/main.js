@@ -64,6 +64,7 @@
               <p class="cover__kicker">${esc(kicker)}</p>
               <h2 class="cover__title" style="font-size: calc(var(--fit) * ${titleScale} * 15cqw)">${esc(p.title)}</h2>
             </div>
+            <p class="cover__issue">Issue 01</p>
           </div>
         </div>
         ${frames}
