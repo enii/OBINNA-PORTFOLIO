@@ -133,7 +133,7 @@ Current books:
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 02 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
 | 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
-| 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · back cover |
+| 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
 
 ### Spreads made from your Figma frames
 
@@ -150,6 +150,7 @@ vivonne-frame-30.webp   (the structure)
 vivonne-frame-25.webp   (roof detail)
 tangerine-1-moodboard.webp   (Frame 10)
 tangerine-2-sketching.webp   (Frame 12)
+tangerine-3-render.webp      (Frame 48)
 ```
 
 To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, copy a `<!-- … -->` pair of frame pages in `index.html` and point both at the new file. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
