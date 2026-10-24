@@ -163,10 +163,10 @@ The covers use one render or drawing each. The Sting Rays render is still croppe
 sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-axonometric.webp       (Vivonne Cabin cover: the axonometric, 1408 × 1022, large with a white margin, `cover__img--fill`)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
-tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally, 1400 × 1698)
+tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 ```
 
-The Tangerine cover shows your whole cover frame, with the title across the foot of the cover below the lights. Its backdrop is a soft off-white, #f9f7f7, so the Tangerine covers take on that colour (`page--tangerine` in `style.css`) and the picture has no visible edge; if you replace the render with one on a different background, change that colour to match.
+The Tangerine cover shows your cover frame full bleed, with the title across the foot of the cover. Its backdrop is a soft off-white, #f9f7f7, so the Tangerine covers take on that colour (`page--tangerine` in `style.css`) and the picture has no visible edge; if you replace the render with one on a different background, change that colour to match.
 
 ### Text on the covers
 
