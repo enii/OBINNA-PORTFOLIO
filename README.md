@@ -106,7 +106,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Tangerine, Vivonne Cabin and Super Slides live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin, Super Slides and Tangerine live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
 
 ```html
 <article class="book-src" data-slug="sting-rays" data-number="01"
@@ -131,9 +131,9 @@ Current books:
 | Book | Pages |
 |---|---|
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
-| 02 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
-| 03 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
-| 04 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
+| 02 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
+| 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
+| 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
 
 ### Spreads made from your Figma frames
 
