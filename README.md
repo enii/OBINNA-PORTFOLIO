@@ -36,7 +36,7 @@ super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for 
 tangerine-animation.mp4             (and .webm, -poster.jpg: the same three for Tangerine)
 ```
 
-The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`). Tangerine is a render on white whose opened-up view fills its whole height, so it isn't cropped: `reel--whole` shows it whole in the strip on its own white (its backdrop was lifted to pure white to match).
+The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`). Tangerine is a render on white whose opened-up view fills its whole height, so it isn't cropped: `reel--whole` shows it whole in the strip on its own pure white.
 
 To add another animation, copy an `<article class="motion__item">` block in `index.html` and point it at the new files. Tips:
 
