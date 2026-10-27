@@ -914,6 +914,35 @@
     if (window.ResizeObserver) new ResizeObserver(fillLogos).observe(logos);
   }
 
+  /* ---------- 12e. Auto-scroll: the page drifts slowly down on its own ---------- */
+  // It starts a few seconds after the page opens. Any wheel, swipe, key or click hands control back to
+  // the visitor, and it picks up again once they've been idle for a while. It stops at the bottom, and
+  // never runs while a book is open or with reduced motion turned on.
+  const DRIFT_SPEED = 20; // px a second
+  const DRIFT_START = 4000; // ms after the page opens
+  const DRIFT_RESUME = 8000; // ms after the visitor last did something
+  let driftAt = performance.now() + DRIFT_START;
+  let driftCarry = 0; // whole pixels only, so fractions add up between frames
+  let driftLast = 0;
+  function drift(now) {
+    const dt = driftLast ? Math.min(now - driftLast, 100) : 0;
+    driftLast = now;
+    if (now >= driftAt && !shelf.hidden && document.body.classList.contains('is-shelf')) {
+      const bottom = document.documentElement.scrollHeight - window.innerHeight;
+      if (window.scrollY < bottom - 1) {
+        driftCarry += DRIFT_SPEED * dt / 1000;
+        const step = Math.floor(driftCarry);
+        if (step) { driftCarry -= step; window.scrollBy(0, step); }
+      }
+    }
+    requestAnimationFrame(drift);
+  }
+  if (!reduceMotion) {
+    const holdDrift = () => { driftAt = performance.now() + DRIFT_RESUME; driftCarry = 0; };
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((type) => window.addEventListener(type, holdDrift, { passive: true }));
+    requestAnimationFrame(drift);
+  }
+
   /* ---------- 13. Go ---------- */
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all([
