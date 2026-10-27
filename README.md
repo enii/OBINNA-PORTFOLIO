@@ -36,6 +36,8 @@ super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for 
 tangerine-animation.mp4             (and .webm, -poster.jpg: the same three for Tangerine)
 ```
 
+The Tangerine video is two renders joined into one loop: the jointed branch stand bending (your 960 × 540 sample, scaled up; a full-size export will be sharper), crossfading into the trio of lights, which crossfades back into the start of the branch so the loop has no jump. Send new versions of either and I'll rejoin them.
+
 The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`). Tangerine is a render on white whose opened-up view fills its whole height, so it isn't cropped: `reel--whole` shows it whole in the strip on its own pure white.
 
 To add another animation, copy an `<article class="motion__item">` block in `index.html` and point it at the new files. Tips:
