@@ -371,7 +371,7 @@ a.btn { color: inherit; text-decoration: none; }
   gap: 20px clamp(24px, 6vw, 96px);
   padding: clamp(28px, 4vw, 52px) var(--gutter) 0;
 }
-.motion__kicker { margin: 0 0 14px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--desk-muted); }
+.motion__kicker { margin: 0 0 12px; font-size: 15px; color: var(--desk-muted); } /* plain Tomato Grotesk, like the captions */
 .motion__title {
   margin: 0;
   font: 800 clamp(40px, 6vw, 84px)/.86 var(--font-display);
@@ -906,7 +906,7 @@ a.btn { color: inherit; text-decoration: none; }
   mix-blend-mode: normal;
 }
 /* a large drawing with an even margin of white around it, above the title (Vivonne Cabin) */
-.cover__img--fill { top: 7%; left: 7%; width: 86%; height: 60%; }
+.cover__img--fill { top: 5%; left: 7%; width: 86%; height: 63%; }
 .cover__top, .cover__foot { position: relative; }
 .cover__top {
   display: flex;

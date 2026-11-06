@@ -135,13 +135,13 @@ Current books:
 | Book | Pages |
 |---|---|
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
-| 02 Vivonne Cabin | cover · the cabin (Frame 26) · the structure (Frame 30) · roof detail (Frame 25) · back cover |
+| 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
 | 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
 | 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
 
 ### Spreads made from your Figma frames
 
-Every spread inside the books is one of your Figma frames: the frame (1920 × 1080) is rendered from your PDF at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays and Super Slides follow your booklets page for page:
+Every spread inside the books is one of your Figma frames: the frame (1920 × 1080) is rendered from your PDF at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays and Super Slides follow your booklets page for page, and Vivonne Cabin follows its pages in your 2026 portfolio PDF (those pages are already 1920 × 1080, so they are rendered at 144 dpi with no crop):
 
 ```
 sting-rays-1-moodboard.webp        super-slides-1-moodboard.webp
@@ -149,9 +149,16 @@ sting-rays-2-sketching.webp        super-slides-2-sketching.webp
 sting-rays-3-cad.webp              super-slides-3-cad.webp
 sting-rays-4-visualisation.webp    super-slides-4-render.webp
 sting-rays-5-detail.webp           super-slides-5-colourways.webp
-vivonne-frame-26.webp   (the cabin)
-vivonne-frame-30.webp   (the structure)
-vivonne-frame-25.webp   (roof detail)
+vivonne-01-site.webp              (2026 portfolio, p. 4)
+vivonne-02-option1.webp           (p. 6)
+vivonne-03-plans.webp             (p. 7)
+vivonne-04-section.webp           (p. 8)
+vivonne-05-details.webp           (p. 9)
+vivonne-06-schedules.webp         (p. 10)
+vivonne-07-compliance.webp        (p. 11)
+vivonne-08-option2.webp           (p. 12)
+vivonne-09-option2-plans.webp     (p. 13)
+vivonne-10-option2-section.webp   (p. 14)
 tangerine-1-moodboard.webp   (Frame 10)
 tangerine-2-sketching.webp   (Frame 12)
 tangerine-3-render.webp      (Frame 48)
@@ -165,7 +172,7 @@ The covers use one render or drawing each. The Sting Rays render is still croppe
 
 ```
 sting-rays-render-hero.webp    (Sting Rays cover)
-vivonne-axonometric.webp       (Vivonne Cabin cover: the axonometric, 1408 × 1022, large with a white margin, `cover__img--fill`)
+vivonne-axonometric.webp       (Vivonne Cabin cover: the exploded axonometric with the roof lifted, 1478 × 1745, above the title with a white margin, `cover__img--fill`)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 ```
