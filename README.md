@@ -213,11 +213,11 @@ This repository is public, so anyone can download the font files from it. Make s
 
 ### Netlify
 
-The site is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
+The site is live at **https://obinnaoti.netlify.app**. It is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
 
 `netlify.toml` also sets the security headers: a Content Security Policy that only runs the site's own scripts, and no caching or framing for the Studio. If you add a script, font or image from another website, add its address to the policy there.
 
-Once the site has its address (or a custom domain), put the full address in three places in `index.html`: `og:url`, the canonical link, and `og:image` (as `https://…/assets/images/og-image.jpg`). LinkedIn and Facebook only show the preview image with a full address.
+The address is written in three places in `index.html`; if it changes (for example to a custom domain), update all three: `og:url`, the canonical link, and `og:image` (as `https://…/assets/images/og-image.jpg`). LinkedIn and Facebook only show the preview image with a full address.
 
 ### GitHub Pages
 
