@@ -2,13 +2,13 @@
  *
  * The Studio writes this file for you. To edit it by hand, keep the first and last
  * lines as they are; everything between the brackets is plain JSON. Projects appear
- * in the carousel in this order, after the two hand-built books in index.html.
+ * in the carousel in this order, after the hand-built books in projects/books.js.
  *
  *   slug        short name used in the link (…/#my-project) and the image folder
  *   title       shown on the cover and in the carousel
  *   discipline  e.g. "Product design · Footwear"
  *   coverStyle  "dark" (renders on black), "light" (drawings on white) or "image" (photo fills the cover)
- *   cover       cover image (optional: the first frame is used if empty)
+ *   cover       cover image (optional: without one the cover is set in type only)
  *   frames      Figma frames in reading order; each one fills a two-page spread
  *   draft       true hides the project (preview it at …/?drafts)
  */

@@ -8,7 +8,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - **Phone / tablet held upright:** one taller page at a time, with larger type.
 - Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
-- **Auto-scroll:** a few seconds after the page opens, it drifts slowly down on its own (20px a second), from the books through the animations to the footer. Any scroll, swipe, key press or click hands control back to the visitor; it picks up again after 8 seconds of no activity, and stops at the bottom. It never runs while a book is open or for visitors with reduced motion turned on. The speed and timings are the `DRIFT_…` values in section 12e of `assets/js/main.js`.
+- **Auto-scroll:** a few seconds after the page opens, it drifts slowly down on its own (20px a second), from the books through the animations to the footer. The first scroll, swipe, key press or click hands control to the visitor for good, so it never fights someone who is reading. Moving the mouse only holds it until the mouse has been still for 8 seconds. It stops at the bottom, and never runs while a book is open or for visitors with reduced motion turned on. The speed and timings are the `DRIFT_…` values in section 12e of `assets/js/main.js`.
 - **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode turns the background pitch black. Until a visitor chooses, the site follows their device's setting; their choice is remembered. The colours are the `--desk…` values at the top of `assets/css/style.css`.
 - The mouse pointer is a drafting cross (CAD-style, with a small square at the centre); over anything clickable the square fills in. Both are inline SVGs in `--cursor` and `--cursor-hot` at the top of `assets/css/style.css`.
 - Text on the landing page rises into view as it scrolls in: the intro and caption on arrival, the Motion text and footer as you reach them. To add it to another element, give it the class `reveal`. Visitors with reduced motion turned on see the text straight away.
@@ -79,7 +79,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
    3. Under **Repository access**, choose **Only select repositories** and pick `OBINNA-PORTFOLIO`.
    4. Under **Permissions → Repository permissions**, set **Contents** to **Read and write**.
    5. Generate the token.
-3. Open the Studio, paste the token, check the repository and branch (the branch the site is published from, usually `main`), and click **Connect**. Tick **Remember on this device** to skip this step next time. The token stays in your browser and is only ever sent to GitHub.
+3. Open the Studio, paste the token, check the repository, and click **Connect**. Leave the branch empty: the Studio uses the repository's default branch, the one the site is published from. The token stays in the browser tab and is only ever sent to GitHub; it's forgotten when the tab closes. On your own computer, tick **Remember on this device** to skip this step next time.
 
 ### Each new project
 
@@ -93,7 +93,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
    Then drop in the cover image. It's optional; without one, the cover is set in type.
 4. **Drop in the frames.** They're ordered by file name (Frame 1, Frame 2…). Drag thumbnails or use the arrows to reorder. Each frame becomes one two-page spread. The dashed line on each thumbnail shows where the page fold falls.
 5. **Click Preview book** to see the flip book exactly as it will appear on the site.
-6. **Click Publish.** The Studio resizes and compresses the images, then saves everything to GitHub in one go. The site updates in about a minute.
+6. **Click Publish.** The Studio resizes and compresses the images, then saves everything to GitHub in one go. The site updates in a minute or two.
 
 ### Managing projects
 
@@ -110,23 +110,28 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin, Super Slides and Tangerine live in `index.html`. Every spread inside them is one of your Figma frames (see below); only the covers and back covers are built in HTML. Each book is one `<article class="book-src">` in the library at the bottom of the file:
+Sting Rays, Vivonne Cabin, Super Slides and Tangerine are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
-```html
-<article class="book-src" data-slug="sting-rays" data-number="01"
-         data-title="Sting Rays" data-meta="Product design · Eyewear">
-  <div class="page …">front cover (also the carousel card)</div>
-  <div class="page">frame, left half</div>
-  <div class="page">frame, right half</div>
-  …
-  <div class="page …">back cover</div>
-</article>
+```js
+{
+  "slug": "sting-rays",                       // the link: …/#sting-rays
+  "title": "Sting Rays",                      // the carousel caption
+  "discipline": "Product design · Eyewear",   // the part before · also signs the back cover
+  "coverStyle": "dark",                       // dark, light or image
+  "cover": "assets/images/sting-rays-render-hero.webp",
+  "coverTitle": "Sting\nrays",                // \n starts a new line on the cover
+  "frames": [
+    { "src": "assets/images/sting-rays-1-moodboard.webp", "alt": "Sting Rays, moodboard: …" },
+    …
+  ]
+}
 ```
 
-- **Carousel order** follows the order of the articles. To change it, move an article and update its `data-number`.
-- **Pages:** odd pages sit on the left and even pages on the right. Keep each book's page count **even**.
-- **Page turns:** every page peels like paper, covers included. To make a cover swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` on it in `index.html` (and in `projectBook` in `assets/js/main.js` for Studio projects).
-- **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically.
+- **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves.
+- **Covers:** `coverClass` and `pageClass` add the special cover treatments in `style.css` (`cover__img--fill` for Vivonne Cabin, `cover__img--centred` for Super Slides, `cover__img--photo` and `page--tangerine` for Tangerine).
+- **Loading:** only the covers load with the page. A book's spreads load when it's opened.
+- **Page turns:** every page peels like paper, covers included. To make the covers swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` in `renderBook` in `assets/js/main.js`.
+- **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically. The years are `YEARS` at the top of `assets/js/main.js`; the footer's © year updates by itself.
 - **Back cover buttons:** the "Next project" button finds the next book by itself.
 - **Sizing:** everything on a page is sized in `cqw` (percent of the page width), so it scales like print. If text would overflow on a small screen, `main.js` shrinks that page's type a little.
 
@@ -164,7 +169,7 @@ tangerine-2-sketching.webp   (Frame 12)
 tangerine-3-render.webp      (Frame 48)
 ```
 
-To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, copy a `<!-- … -->` pair of frame pages in `index.html` and point both at the new file. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
+To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
 ### Cover images
 
@@ -181,7 +186,7 @@ The Tangerine cover shows your cover frame full bleed, with the title across the
 
 ### Text on the covers
 
-The covers show their title and, in the bottom-right corner, **ISSUE 01** in a light weight (the `<p class="cover__issue">` line in each cover in `index.html`, and in `projectBook` in `assets/js/main.js` for Studio projects; change the number there for a new issue). The back covers show only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
+The covers show their title and, in the bottom-right corner, **ISSUE 01** in a light weight (the `<p class="cover__issue">` line in `renderBook` in `assets/js/main.js`; change the number there for a new issue). The back covers show only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
 
 ### Copy
 
@@ -196,21 +201,31 @@ All text on the site, including the Studio, is set upright in Tomato Grotesk, fr
 - **SemiBold:** medium emphasis (`TomatoGrotesk-SemiBoldUpright.otf`)
 - **Thin:** the large project numbers (`TomatoGrotesk-ThinUpright.otf`)
 
+The site loads the `.woff2` copy of each (about half the size), with the `.otf` as a fallback. After changing an `.otf`, make a new `.woff2` from it, for example with fontTools: `python3 -c "from fontTools.ttLib import TTFont; f = TTFont('X.otf'); f.flavor = 'woff2'; f.save('X.woff2')"` (needs `pip install fonttools brotli`).
+
 Only ExtraBold was supplied upright. The other weights came as Slanted files, so the `*Upright.otf` files were made from them with `tools/unslant.py`. The script straightens the 11.8° slant and was checked against the real upright ExtraBold, which it reproduces almost exactly. The original Slanted files stay in the folder as the source.
 
 **For a true Regular weight,** or official upright files, add them to `assets/fonts/` (for example `TomatoGrotesk-Regular.otf`). Then point the `@font-face` rules at the top of `assets/css/style.css` at them. Nothing else needs to change.
 
 This repository is public, so anyone can download the font files from it. Make sure your Tomato Grotesk licence covers web use, and that it allows modified versions of the font (the upright files). If it doesn't, send the official upright files and I'll swap them in.
 
-## Deploy (GitHub Pages)
+## Deploy
+
+### Netlify
+
+The site is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
+
+`netlify.toml` also sets the security headers: a Content Security Policy that only runs the site's own scripts, and no caching or framing for the Studio. If you add a script, font or image from another website, add its address to the policy there.
+
+Once the site has its address (or a custom domain), put the full address in three places in `index.html`: `og:url`, the canonical link, and `og:image` (as `https://…/assets/images/og-image.jpg`). LinkedIn and Facebook only show the preview image with a full address.
+
+### GitHub Pages
 
 1. On GitHub, open the repository's **Settings → Pages**.
-2. Under **Build and deployment**, choose **Deploy from a branch**, pick the branch the site lives on (today that's `claude/portfolio-flipbook-design-fz5q29`, the repository's default branch) and `/ (root)`, then **Save**.
-3. After a minute or two the site is live at `https://enii.github.io/OBINNA-PORTFOLIO/`. Every push to that branch updates it.
+2. Under **Build and deployment**, choose **Deploy from a branch**, pick the repository's default branch and `/ (root)`, then **Save**.
+3. After a minute or two the site is live at `https://enii.github.io/OBINNA-PORTFOLIO/`.
 
-The empty `.nojekyll` file tells GitHub to serve the files exactly as they are. To use your own domain (say obinnaoti.com), enter it under **Custom domain** on the same page and follow GitHub's DNS instructions at your registrar.
-
-It also works as-is on Netlify, Vercel or any static host.
+The empty `.nojekyll` file tells GitHub to serve the files exactly as they are. GitHub Pages can't send the security headers in `netlify.toml`, and its `404.html` and `robots.txt` only work at the root of a domain, so Netlify (or a custom domain) is the better home.
 
 ## Credits
 

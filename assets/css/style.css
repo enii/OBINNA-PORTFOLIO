@@ -10,38 +10,38 @@
    instead, drop them into /assets/fonts and point the faces below at them. */
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ExtraBold.woff2") format("woff2"), url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
   font-weight: 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.woff2") format("woff2"), url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.woff2") format("woff2"), url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
   font-weight: 200; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "Tomato Grotesk";
-  src: url("../fonts/TomatoGrotesk-ThinUpright.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ThinUpright.woff2") format("woff2"), url("../fonts/TomatoGrotesk-ThinUpright.otf") format("opentype");
   font-weight: 100; font-style: normal; font-display: swap;
 }
 
 @font-face { /* running text */
   font-family: "Tomato Grotesk Text";
-  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ExtraLightUpright.woff2") format("woff2"), url("../fonts/TomatoGrotesk-ExtraLightUpright.otf") format("opentype");
   font-weight: 100 400; font-style: normal; font-display: swap;
 }
 @font-face { /* medium emphasis */
   font-family: "Tomato Grotesk Text";
-  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-SemiBoldUpright.woff2") format("woff2"), url("../fonts/TomatoGrotesk-SemiBoldUpright.otf") format("opentype");
   font-weight: 500 600; font-style: normal; font-display: swap;
 }
 @font-face { /* bold */
   font-family: "Tomato Grotesk Text";
-  src: url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
+  src: url("../fonts/TomatoGrotesk-ExtraBold.woff2") format("woff2"), url("../fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
   font-weight: 700 900; font-style: normal; font-display: swap;
 }
 
@@ -110,6 +110,15 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
 html { font-synthesis: none; } /* never fake a bold or slanted version */
+html {
+  -webkit-tap-highlight-color: transparent; /* no grey flash on tap: every control has its own pressed state */
+  -webkit-text-size-adjust: 100%; /* iOS keeps the type size when the phone turns sideways */
+  text-size-adjust: 100%;
+}
+/* taps act at once (no wait to see whether it's a double-tap zoom) */
+a, button, [role="button"], .card, .reel__frame { touch-action: manipulation; }
+/* a long press on a control doesn't select its label or open the link menu */
+button, .btn, .bar__link, .round-btn, .pill, .reel__big { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 html { cursor: var(--cursor); }
 a, button, label, summary, select, [role="button"], input[type="checkbox"], input[type="radio"] { cursor: var(--cursor-hot); }
 input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="button"], [type="submit"]),
@@ -127,6 +136,15 @@ button { font: inherit; color: inherit; }
 img { -webkit-user-drag: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 [hidden] { display: none !important; }
+.sr-only { /* read by screen readers, not shown */
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .app {
   min-height: 100vh;
@@ -148,6 +166,7 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
 .reader { /* the open book covers the whole window */
   position: fixed;
   inset: 0;
+  overscroll-behavior: contain;
   z-index: 40;
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
@@ -172,6 +191,7 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
 .brand b { font: 800 16px/1 var(--font-display); letter-spacing: -.01em; }
 .bar__nav { display: flex; align-items: center; gap: 20px; margin-left: auto; }
 .bar__theme { /* light / dark switch */
+  position: relative;
   display: inline-grid;
   place-items: center;
   width: 24px; height: 24px;
@@ -182,9 +202,11 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   background: none;
   color: inherit;
 }
-.bar__theme svg { width: 15px; height: 15px; transition: transform .5s var(--ease); }
+.bar__theme::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; } /* a 40px target for a 24px icon */
+.bar__theme svg { width: 15px; height: 15px; transition: transform 250ms var(--ease); }
 .bar__theme[aria-pressed="true"] svg { transform: rotate(180deg); }
-.bar__theme:hover { background: var(--desk-hover); }
+/* the light / dark crossfade (main.js, where the browser has View Transitions) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: var(--ease); }
 .bar__link {
   color: inherit;
   font-size: 13px;
@@ -192,7 +214,6 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   border-bottom: 1px solid var(--desk-line);
   transition: border-color .2s;
 }
-.bar__link:hover { border-color: currentColor; }
 .bar__link:not([href]) { color: var(--desk-muted); border-color: transparent; cursor: inherit; } /* waiting for its section */
 /* Landing top bar: name on the left, the page's main points in the middle, email and the switch on the right */
 .shelf__screen > .bar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 24px; }
@@ -217,8 +238,10 @@ body.is-shelf { overflow-x: hidden; overflow-y: auto; } /* the landing scrolls d
   border: 1px solid var(--desk-line);
   background: transparent;
   cursor: var(--cursor-hot);
-  transition: background-color .2s, border-color .2s, color .2s, opacity .2s;
+  transition: background-color .2s, border-color .2s, color .2s, opacity .2s, transform 160ms var(--ease);
 }
+/* pressed: a small give, on mouse and touch alike */
+.btn:active:not(:disabled), .round-btn:active:not(:disabled) { transform: scale(.97); }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -243,8 +266,16 @@ a.btn { color: inherit; text-decoration: none; }
   border-radius: 50%;
 }
 .btn svg, .round-btn svg { width: 15px; height: 15px; }
-.btn:hover, .round-btn:hover:not(:disabled) { background: var(--desk-hover); }
-.btn--solid:hover { background: var(--desk-ink); opacity: .85; }
+/* Hover styles only for a real mouse or trackpad: on a phone they'd stay stuck on after a tap */
+@media (hover: hover) and (pointer: fine) {
+  .bar__theme:hover { background: var(--desk-hover); }
+  .bar__link[href]:hover { border-color: currentColor; }
+  .btn:hover, .round-btn:hover:not(:disabled) { background: var(--desk-hover); }
+  .btn--solid:hover { background: var(--desk-ink); opacity: .85; }
+  .reel__big:hover { transform: translate(-50%, -50%) scale(1.06); }
+  .pill:hover { background: rgba(128, 128, 128, .15); }
+  .logos.is-moving:hover .logos__belt { animation-play-state: paused; }
+}
 .round-btn:disabled { opacity: .3; cursor: var(--cursor); }
 #soundBtn .i-mute, #soundBtn[aria-pressed="false"] .i-wave { display: none; }
 #soundBtn[aria-pressed="false"] .i-mute { display: inline; }
@@ -260,6 +291,7 @@ a.btn { color: inherit; text-decoration: none; }
   touch-action: pan-y; /* horizontal swipes move the strip */
   -webkit-user-select: none;
   user-select: none;
+  -webkit-touch-callout: none; /* a long press on a book doesn't open the image menu */
   /* books fade in and out at the edges as they drift across */
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
@@ -274,9 +306,11 @@ a.btn { color: inherit; text-decoration: none; }
   will-change: transform;
 }
 
-/* transform and opacity are set every frame from main.js */
+/* transform and opacity are set every frame from main.js; each card is its own layer, so that
+   only moves it rather than repainting the strip and its soft shadows */
 .card {
   position: relative;
+  will-change: transform, opacity;
   flex: 0 0 var(--cw, 300px);
   aspect-ratio: 8 / 9;
   cursor: var(--cursor-hot);
@@ -320,7 +354,7 @@ a.btn { color: inherit; text-decoration: none; }
   transform: scale(var(--s, .4));
   transform-origin: 0 0;
 }
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .carousel:not(.is-dragging) .card:hover .card__btn { transform: translateY(-10px) rotate(-.6deg); }
 }
 
@@ -432,10 +466,9 @@ a.btn { color: inherit; text-decoration: none; }
   transform: translate(-50%, -50%);
   cursor: var(--cursor-hot);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6);
-  transition: transform .35s var(--ease), opacity .3s ease;
+  transition: transform .35s var(--ease), opacity .3s var(--ease);
 }
 .reel__big svg { width: 38%; height: 38%; fill: currentColor; }
-.reel__big:hover { transform: translate(-50%, -50%) scale(1.06); }
 .reel__big .i-pause, .reel.is-playing .reel__big:focus-visible .i-play { display: none; }
 .reel.is-playing .reel__big:focus-visible .i-pause { display: block; }
 .reel.is-playing .reel__big { opacity: 0; transform: translate(-50%, -50%) scale(.85); pointer-events: none; }
@@ -449,6 +482,7 @@ a.btn { color: inherit; text-decoration: none; }
 /* ---------- Text rising into view on scroll (main.js adds .is-in, then drops both classes) ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 .js .reveal { opacity: 0; }
+.js .reveal:focus-visible, .js .reveal:focus-within { opacity: 1; } /* never tab onto something invisible */
 .js .reveal.is-in { animation: rise .9s var(--ease) var(--d, 0s) both; }
 @media (prefers-reduced-motion: reduce) {
   .js .reveal { opacity: 1; }
@@ -505,7 +539,6 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .logos.is-moving .logos__belt { width: max-content; animation: logos var(--dur, 40s) linear infinite; }
 .logos.is-moving .logos__track { flex-wrap: nowrap; width: auto; padding: 0 var(--logo-gap) 0 0; }
-.logos.is-moving:hover .logos__belt { animation-play-state: paused; }
 @keyframes logos { to { transform: translateX(calc(-100% / var(--copies, 1))); } }
 
 .site-foot {
@@ -542,12 +575,13 @@ a.btn { color: inherit; text-decoration: none; }
 .book-wrap {
   position: relative;
   opacity: 0;
-  transition: transform .9s var(--ease), opacity .7s ease;
+  touch-action: pinch-zoom; /* swipes turn the page; the browser doesn't try to pan */
+  transition: transform .9s var(--ease), opacity .7s var(--ease);
 }
 .book-wrap.is-ready { opacity: 1; }
 /* while a book is being set up it takes its resting position without sliding */
 .book-wrap.no-anim, .book-wrap.no-anim .book-base,
-.book-wrap.no-anim .book-base::before, .book-wrap.no-anim .book-base::after { transition: opacity .7s ease !important; }
+.book-wrap.no-anim .book-base::before, .book-wrap.no-anim .book-base::after { transition: opacity .7s var(--ease) !important; }
 /* A closed book shows one page: slide it so that page sits in the middle */
 .book-wrap.is-shift-front { transform: translateX(-25%); }
 .book-wrap.is-shift-back { transform: translateX(25%); }
@@ -591,8 +625,11 @@ a.btn { color: inherit; text-decoration: none; }
   font-size: 12px;
   letter-spacing: .03em;
   white-space: nowrap;
+  max-width: calc(100% - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
-  transition: opacity .8s ease;
+  transition: opacity .4s var(--ease);
 }
 .hint.is-hidden { opacity: 0; }
 
@@ -947,7 +984,6 @@ a.btn { color: inherit; text-decoration: none; }
   cursor: var(--cursor-hot);
   transition: background-color .2s;
 }
-.pill:hover { background: rgba(128, 128, 128, .15); }
 
 /* ---------- Figma frames (Studio projects, and Sting Rays): each frame runs across a spread ---------- */
 .page__inner--frame { padding: 0; background: linear-gradient(var(--tone-top, #fff) 50%, var(--tone-bottom, #fff) 50%); }
@@ -1058,12 +1094,17 @@ a.btn { color: inherit; text-decoration: none; }
 }
 .no-js .book-src .page:first-child { grid-column: 2; }
 
+/* <noscript> note in place of the books */
+.noscript { max-width: 44ch; margin: 0 auto; padding: 48px var(--gutter); font-size: 16px; line-height: 1.6; }
+.noscript a { color: inherit; }
+
 /* Offscreen copy used by main.js to measure text fit */
 .measure { position: fixed; top: 0; left: -100000px; visibility: hidden; pointer-events: none; }
 .measure .page { position: absolute; top: 0; left: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .shelf, .reader { animation: none; }
-  .reel__big { transition: none; }
+  .reel__big, .bar__theme svg { transition: none; }
+  .btn:active:not(:disabled), .round-btn:active:not(:disabled) { transform: none; }
   .book-wrap, .book-base, .book-base::before, .book-base::after, .progress__fill, .card__btn { transition-duration: .01s; }
 }

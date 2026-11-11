@@ -89,6 +89,7 @@ body.studio { overflow: auto; }
   color: var(--desk-ink);
   font: 14px/1 var(--font-text);
 }
+@media (pointer: coarse) { .st-field input { font-size: 16px; } } /* under 16px, iOS zooms the page on focus */
 .st-field input:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
 .st-check { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: var(--cursor-hot); }
 .st-check input { width: 16px; height: 16px; accent-color: var(--desk-ink); }
@@ -110,7 +111,6 @@ body.studio { overflow: auto; }
   padding: 10px 8px;
   border-radius: 10px;
 }
-.st-item:hover { background: var(--desk-hover); }
 .st-item.is-current { background: var(--desk-hover); box-shadow: inset 2px 0 0 var(--desk-ink); }
 .st-item__num { font: 100 26px/1 var(--font-display); letter-spacing: -.03em; }
 .st-item__body { min-width: 0; display: grid; gap: 2px; }
@@ -141,7 +141,6 @@ body.studio { overflow: auto; }
   cursor: var(--cursor-hot);
   color: var(--desk-muted);
 }
-.st-icon:hover:not(:disabled) { background: var(--desk-hover); color: var(--desk-ink); }
 .st-icon:disabled { opacity: .3; cursor: var(--cursor); }
 .st-icon svg { width: 14px; height: 14px; }
 .st-list:empty::before {
@@ -229,7 +228,12 @@ body.studio { overflow: auto; }
 }
 .st-drop--cover { min-height: 100px; }
 .st-drop small { display: block; margin-top: 4px; font-size: 12px; color: var(--desk-muted); }
-.st-drop:hover, .st-drop.is-over { border-color: var(--desk-ink); background: var(--desk-hover); }
+.st-drop.is-over { border-color: var(--desk-ink); background: var(--desk-hover); }
+@media (hover: hover) and (pointer: fine) {
+  .st-item:hover { background: var(--desk-hover); }
+  .st-icon:hover:not(:disabled) { background: var(--desk-hover); color: var(--desk-ink); }
+  .st-drop:hover { border-color: var(--desk-ink); background: var(--desk-hover); }
+}
 
 /* Frame thumbnails */
 .st-thumbs { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
@@ -267,10 +271,9 @@ body.studio { overflow: auto; }
   border-radius: 50%;
   background: rgba(0, 0, 0, .65);
   color: #fff;
-  font-size: 16px;
-  line-height: 1;
   cursor: var(--cursor-hot);
 }
+.st-x svg { width: 14px; height: 14px; }
 
 /* Progress log */
 .st-log { display: grid; gap: 4px; font-size: 13px; line-height: 1.5; }

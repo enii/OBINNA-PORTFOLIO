@@ -5,34 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Obinna Oti — Product Design Portfolio</title>
   <meta name="description" content="Portfolio of Obinna Oti, product designer. Selected work 2020–2025, presented as interactive flip books.">
+  <!-- Sharing previews (LinkedIn, iMessage, Slack…). Once the site has its address, put it in og:url and
+       the canonical link, and make og:image a full https:// address: LinkedIn and Facebook need one. -->
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Obinna Oti — Product Design Portfolio">
   <meta property="og:description" content="Selected work 2020–2025, presented as interactive flip books.">
-  <meta name="theme-color" content="#ffffff">
+  <meta property="og:image" content="assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Obinna Oti, product design portfolio: the Sting Rays eyewear render">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- the colour of the phone's status bar; main.js keeps it in step with the light / dark switch -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Cpath d='M7 9.5h8v13H7zM17 9.5h8v13h-8z' fill='%23fff'/%3E%3C/svg%3E">
-  <link rel="preload" href="assets/fonts/TomatoGrotesk-ExtraBold.otf" as="font" type="font/otf" crossorigin>
+  <!-- the three faces the landing waits for before it lays out the books -->
+  <link rel="preload" href="assets/fonts/TomatoGrotesk-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/TomatoGrotesk-ThinUpright.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/TomatoGrotesk-ExtraLightUpright.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
-  <script>
-    document.documentElement.classList.replace('no-js', 'js');
-    try { var theme = localStorage.getItem('oo-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch (e) { /* storage blocked */ }
-  </script>
+  <script src="assets/js/boot.js"></script>
 </head>
 <body>
 <div class="app">
 
   <!-- ═══════════ LANDING: projects carousel, then animation ═══════════ -->
   <section class="shelf" id="shelf" aria-label="Projects">
+    <h1 class="sr-only">Obinna Oti — Product design portfolio</h1>
     <div class="shelf__screen">
       <header class="bar">
-        <a class="brand reveal" href="#"><b>Obinna Oti</b></a>
+        <a class="brand" href="#"><b>Obinna Oti</b></a>
         <!-- The page's main points. Each scrolls to its section; one whose section isn't on the page yet
              (Feedback, until there's a section with id="testimonials") shows as grey text until there is. -->
-        <nav class="bar__nav bar__sections reveal" aria-label="Sections">
+        <nav class="bar__nav bar__sections" aria-label="Sections">
           <a class="bar__link" href="#shelf" data-scroll="shelf">Products</a>
           <a class="bar__link" href="#motion" data-scroll="motion">Motion</a>
           <a class="bar__link" href="#clients" data-scroll="clients">Clients</a>
           <a class="bar__link" href="#testimonials" data-scroll="testimonials">Feedback</a>
         </nav>
-        <div class="bar__nav bar__end reveal">
+        <div class="bar__nav bar__end">
           <a class="bar__link" href="mailto:otimarvelous@gmail.com">otimarvelous@gmail.com</a>
           <button class="bar__theme" type="button" aria-pressed="false" aria-label="Dark mode" title="Dark mode">
             <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.6a6.4 6.4 0 0 1 0 12.8z" fill="currentColor"/></svg>
@@ -47,7 +58,7 @@
       <div class="shelf__caption reveal">
         <span class="shelf__num" id="capNum"></span>
         <div class="shelf__text">
-          <h1 class="shelf__title" id="capTitle"></h1>
+          <h2 class="shelf__title" id="capTitle"></h2>
           <p class="shelf__meta" id="capMeta"></p>
         </div>
         <div class="shelf__controls">
@@ -58,7 +69,7 @@
           <button class="round-btn" id="carNext" type="button" aria-label="Next project">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </button>
-          <button class="btn btn--solid" id="openBtn" type="button">Open the book</button>
+          <button class="btn btn--solid" id="openBtn" type="button" aria-describedby="capTitle">Open the book</button>
         </div>
       </div>
     </div>
@@ -71,11 +82,12 @@
          One <article class="motion__item"> per animation, shown full width in landscape.
          To add another, copy the whole block and change the video, poster and text. -->
     <section class="motion" id="motion" aria-label="Motion">
+      <h2 class="sr-only">Motion</h2>
       <article class="motion__item">
         <figure class="reel">
           <div class="reel__frame">
             <video class="reel__video" poster="assets/media/sting-rays-animation-poster.jpg"
-                   playsinline muted loop preload="auto" aria-label="Animation of the Sting Rays frame assembling">
+                   playsinline muted loop preload="none" aria-label="Animation of the Sting Rays frame assembling">
               <source src="assets/media/sting-rays-animation.mp4" type="video/mp4">
               <source src="assets/media/sting-rays-animation.webm" type="video/webm">
             </video>
@@ -98,9 +110,9 @@
         <figure class="reel">
           <div class="reel__frame">
             <video class="reel__video" style="--pos: 50% 30%" poster="assets/media/super-slides-animation-poster.jpg"
-                   playsinline muted loop preload="auto" aria-label="Animation of the Super Slides sandal being 3D printed layer by layer">
-              <source src="assets/media/super-slides-animation.mp4" type="video/mp4">
+                   playsinline muted loop preload="none" aria-label="Animation of the Super Slides sandal being 3D printed layer by layer">
               <source src="assets/media/super-slides-animation.webm" type="video/webm">
+              <source src="assets/media/super-slides-animation.mp4" type="video/mp4">
             </video>
             <button class="reel__big" type="button" aria-label="Play animation">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
@@ -122,9 +134,9 @@
         <figure class="reel reel--whole">
           <div class="reel__frame">
             <video class="reel__video" poster="assets/media/tangerine-animation-poster.jpg"
-                   playsinline muted loop preload="auto" aria-label="Animation of the Tangerine stand, an orange jointed branch, bending and reaching; then three Tangerine lights, purple, orange and green, lighting up, and the orange one opening into its parts and closing again">
-              <source src="assets/media/tangerine-animation.mp4" type="video/mp4">
+                   playsinline muted loop preload="none" aria-label="Animation of the Tangerine stand, an orange jointed branch, bending and reaching; then three Tangerine lights, purple, orange and green, lighting up, and the orange one opening into its parts and closing again">
               <source src="assets/media/tangerine-animation.webm" type="video/webm">
+              <source src="assets/media/tangerine-animation.mp4" type="video/mp4">
             </video>
             <button class="reel__big" type="button" aria-label="Play animation">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
@@ -166,7 +178,7 @@
     </div>
 
     <footer class="site-foot">
-      <span class="reveal">© 2025 Obinna Oti</span>
+      <span class="reveal">© <span id="year">2026</span> Obinna Oti</span>
       <a class="reveal" href="mailto:otimarvelous@gmail.com">otimarvelous@gmail.com</a>
     </footer>
   </section>
@@ -193,7 +205,7 @@
       <div class="book-wrap" id="bookWrap">
         <div class="book-base" aria-hidden="true"></div>
       </div>
-      <p class="hint" id="hint" aria-hidden="true"></p>
+      <p class="hint" id="hint"></p>
     </main>
 
     <footer class="bar bar--bottom">
@@ -210,421 +222,24 @@
 </div>
 
 <!--
-  THE LIBRARY
+  THE BOOKS
   ─────────────────────────────────────────────────────────────
-  Each <article class="book-src"> is one project = one flip book, and one card in the carousel.
-  Carousel order = the order of the articles below.
-  New projects are easier to add in the Studio (studio.html): they're saved to projects/projects.js
-  and appear after these hand-built books.
-
-  Inside a book every .page is one page. The first page is the front cover (also used as the
-  carousel card), the last is the back cover. Each Figma frame is split across a spread:
-  odd pages sit on the LEFT, even pages on the RIGHT. Keep the page count EVEN.
-
-  page--dark   black page          page--band   black image band across the top
-  .span        image drawn across both pages of a spread (use span--l on the left page, span--r on the right)
-  The running head ("Obinna Oti · 2020—2025") and page numbers are added by main.js.
+  The flip books are built by main.js from two lists:
+    projects/books.js      the hand-built books (Sting Rays, Vivonne Cabin, Super Slides, Tangerine)
+    projects/projects.js   the projects added with the Studio (studio.html), which follow them
+  Their pages are only loaded when a book is opened. If the page-turning script can't run,
+  main.js lays every book out here as plain stacked spreads instead.
 -->
-<div class="library" id="library">
+<div class="library" id="library"></div>
+<noscript>
+  <div class="noscript">
+    <p><b>Obinna Oti</b>: product design portfolio</p>
+    <p>The projects are interactive flip books and need JavaScript. Turn it on to read them, or write to
+      <a href="mailto:otimarvelous@gmail.com">otimarvelous@gmail.com</a>.</p>
+  </div>
+</noscript>
 
-  <!-- ═══════════ 01 · STING RAYS ═══════════ -->
-  <article class="book-src" data-slug="sting-rays" data-number="01" data-title="Sting Rays" data-meta="Product design · Eyewear">
-
-    <!-- Front cover -->
-    <div class="page page--dark page--cover" data-density="soft">
-      <div class="page__inner cover">
-        <img class="cover__img" src="assets/images/sting-rays-render-hero.webp" alt="" draggable="false">
-        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
-        <div class="cover__foot">
-          <p class="cover__kicker">01 — Product design, eyewear</p>
-          <h2 class="cover__title">Sting<br>rays</h2>
-        </div>
-        <p class="cover__issue">Issue 01</p>
-      </div>
-    </div>
-
-    <!-- Moodboard: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/sting-rays-1-moodboard.webp" alt="Sting Rays, moodboard: reference images of sculpted sports eyewear and manta rays, with a tone palette of olive, coral, orange and blues. Moodboard: inspired by the fluid movement and distinctive anatomy of stingrays, the design explores the intersection of marine biology and futuristic eyewear." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/sting-rays-1-moodboard.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Concept sketching: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/sting-rays-2-sketching.webp" alt="Sting Rays, concept sketching: line studies of a stingray beside a red geometric construction of its form, front-view lens studies, temple sketches, and side and perspective sketches of the frame. Concept Sketching: initial sketches explore the distinctive silhouette of stingrays, focusing on their sweeping wings, tapered tails and fluid body contours. Process: the design process begins by studying the stingray&#x27;s anatomy and translating its defining features into functional eyewear elements." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/sting-rays-2-sketching.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- CAD: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/sting-rays-3-cad.webp" alt="Sting Rays, CAD (Rhino subdivision modelling): wireframe views of the frame and its parts: the left hand and hinge, the right hand and hinge, the eye frame and bridge, and the detachable lens." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/sting-rays-3-cad.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Visualisation: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/sting-rays-4-visualisation.webp" alt="Sting Rays, visualisation: a close render of the cobalt frame with its amber lining and gold hinge, beside the frame in three colourways. Visualisation: building on the technical sketches, the selected concept is developed into a detailed 3D model, transforming the initial two-dimensional explorations into a fully realised product. This stage focuses on translating the stingray&#x27;s distinctive anatomy into a cohesive eyewear design, balancing expressive, organic forms with structural precision and functional considerations." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/sting-rays-4-visualisation.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Visualisation, detail: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/sting-rays-5-detail.webp" alt="Sting Rays, visualisation: two close renders of the cobalt frame, one showing the metal hinge and one the gold hinge inside the amber lining. Visualisation: through careful surface modelling, the sweeping contours, tapered extensions and sculptural transitions are refined to create a continuous visual flow across the frame." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/sting-rays-5-detail.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Back cover -->
-    <div class="page page--dark page--cover" data-density="soft">
-      <div class="page__inner backcover">
-        <p class="backcover__mark">Sting rays</p>
-        <p class="backcover__sub">Obinna Oti — Product Design</p>
-        <div class="backcover__actions">
-          <button class="pill" type="button" data-action="next">Next project</button>
-          <button class="pill" type="button" data-action="restart">Read again</button>
-          <button class="pill" type="button" data-action="close">All projects</button>
-        </div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ═══════════ 02 · VIVONNE CABIN ═══════════ -->
-  <article class="book-src" data-slug="vivonne-cabin" data-number="02" data-title="Vivonne Cabin" data-meta="Architecture · Residential">
-
-    <!-- Front cover -->
-    <div class="page page--cover page--board" data-density="soft">
-      <div class="page__inner cover">
-        <img class="cover__img cover__img--drawing cover__img--fill" src="assets/images/vivonne-axonometric.webp" alt="" draggable="false">
-        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
-        <div class="cover__foot">
-          <p class="cover__kicker">02 — Architecture, residential</p>
-          <h2 class="cover__title">Vivonne<br>cabin</h2>
-        </div>
-        <p class="cover__issue">Issue 01</p>
-      </div>
-    </div>
-
-    <!-- Site and proposal: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-01-site.webp" alt="Vivonne Cabin, site and proposal: lot 143 on Crabb Road, 828 m² falling 1.5 m towards the bay, with its bushfire, coastal, flooding and native vegetation overlays, and notes on the two options for the same 10.66 × 6.66 m cabin." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-01-site.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · the gable: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-02-option1.webp" alt="Vivonne Cabin, option 01: a 3D view of the gable-roofed cabin among trees on its steel piers, with its deck, stair and full-height glazing, beside the project details and context notes." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-02-option1.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · floor plan and elevations: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-03-plans.webp" alt="Vivonne Cabin, option 01: floor plan with dimensions and room areas, and the north, south, east and west elevations at 1:50." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-03-plans.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · section and footing: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-04-section.webp" alt="Vivonne Cabin, option 01: section 01 through the living area and bathroom at 1:25, from the Colorbond roof down to the Uni-Pier footing, with a footing detail at 1:10." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-04-section.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · construction details: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-05-details.webp" alt="Vivonne Cabin, option 01: construction details of the Uni-Pier and Prydar hanger, the external wall system and the internal wall system." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-05-details.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · schedules: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-06-schedules.webp" alt="Vivonne Cabin, option 01: the door and window schedules, beside the general, timber and project notes." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-06-schedules.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 01 · compliance blow-out: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-07-compliance.webp" alt="Vivonne Cabin, option 01: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-07-compliance.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 02 · the split skillion: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-08-option2.webp" alt="Vivonne Cabin, option 02: a 3D view of the split-skillion cabin, two offset roofs over the same plan on steel piers, beside the project details and context notes." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-08-option2.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 02 · floor plan and elevations: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-09-option2-plans.webp" alt="Vivonne Cabin, option 02: floor plan with dimensions and room areas, and the four elevations at 1:50." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-09-option2-plans.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Option 02 · section and detail: the portfolio page itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/vivonne-10-option2-section.webp" alt="Vivonne Cabin, option 02: section 01 through the living area and bathroom at 1:25, showing the Colorbond roof, Stria-clad timber walls and Structaflor floor on galvanised Uni-Piers, with a detail at 1:10." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/vivonne-10-option2-section.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Back cover -->
-    <div class="page page--cover page--board" data-density="soft">
-      <div class="page__inner backcover">
-        <p class="backcover__mark">Vivonne cabin</p>
-        <p class="backcover__sub">Obinna Oti — Product Design</p>
-        <div class="backcover__actions">
-          <button class="pill" type="button" data-action="next">Next project</button>
-          <button class="pill" type="button" data-action="restart">Read again</button>
-          <button class="pill" type="button" data-action="close">All projects</button>
-        </div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ═══════════ 03 · SUPER SLIDES ═══════════ -->
-  <article class="book-src" data-slug="super-slides" data-number="03" data-title="Super Slides" data-meta="Product design · Footwear">
-
-    <!-- Front cover -->
-    <div class="page page--dark page--cover" data-density="soft">
-      <div class="page__inner cover">
-        <img class="cover__img cover__img--centred" src="assets/images/super-slides-hero.webp" alt="" draggable="false">
-        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
-        <div class="cover__foot">
-          <p class="cover__kicker">03 — Product design, footwear</p>
-          <h2 class="cover__title">Super<br>slides.</h2>
-        </div>
-        <p class="cover__issue">Issue 01</p>
-      </div>
-    </div>
-
-    <!-- Moodboard: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/super-slides-1-moodboard.webp" alt="Super Slides, moodboard: reference images of sculpted foam footwear and soft textures, with a tone palette of sage, cream, coral, blue and lavender. Moodboard: exploring the intersection of sculptural form, layered cushioning and contemporary comfort, this moodboard establishes the visual and material direction for a soft double-foam slide concept." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/super-slides-1-moodboard.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Concept sketching: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/super-slides-2-sketching.webp" alt="Super Slides, concept sketching: side-view sketches of slide shapes and soles, a thick sole split into two and recombined, and the final double-sole concept. Process: the design process focused on refining the slide&#x27;s overall shape while developing the idea of a double-sole construction. Starting with a thick, exaggerated sole, I explored splitting it into two individual layers, then superimposing and recombining them to create a more interesting silhouette. The result is the concept of a Super Slide: two layers of cushioning working together to create extra comfort, with the layered construction becoming the defining feature of the design." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/super-slides-2-sketching.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- CAD: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/super-slides-3-cad.webp" alt="Super Slides, CAD: wireframe views of the slide and its two sole layers, modelled in Rhino with SubD." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/super-slides-3-cad.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Render: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/super-slides-4-render.webp" alt="Super Slides: a close render of the slide in bone. Process: the final CAD model was brought into KeyShot to explore materials, colours and lighting, bringing the Super Slides concept to life through realistic 3D visualisation. I experimented with dramatic, high-contrast lighting to exaggerate the sculptural curves, flowing surfaces and layered sole construction." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/super-slides-4-render.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Colourways: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/super-slides-5-colourways.webp" alt="Super Slides: the slide in bone, the slide in sage, olive and lavender, and a close-up of the rippled sole. Process: different colourways and soft matte finishes were explored to highlight the foam-like material qualities, while close-up renders focus on the outsole detailing and subtle surface textures." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/super-slides-5-colourways.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Back cover -->
-    <div class="page page--dark page--cover" data-density="soft">
-      <div class="page__inner backcover">
-        <p class="backcover__mark">Super slides.</p>
-        <p class="backcover__sub">Obinna Oti — Product Design</p>
-        <div class="backcover__actions">
-          <button class="pill" type="button" data-action="next">Next project</button>
-          <button class="pill" type="button" data-action="restart">Read again</button>
-          <button class="pill" type="button" data-action="close">All projects</button>
-        </div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ═══════════ 04 · TANGERINE ═══════════ -->
-  <article class="book-src" data-slug="tangerine" data-number="04" data-title="Tangerine" data-meta="Product design · Lighting">
-
-    <!-- Front cover: the render on its own off-white, which the cover takes on so the picture has no edge -->
-    <div class="page page--cover page--board page--tangerine" data-density="soft">
-      <div class="page__inner cover">
-        <img class="cover__img cover__img--photo" src="assets/images/tangerine-hero.webp" alt="" draggable="false">
-        <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
-        <div class="cover__foot">
-          <p class="cover__kicker">04 — Product design, lighting</p>
-          <h2 class="cover__title">Tangerine</h2>
-        </div>
-        <p class="cover__issue">Issue 01</p>
-      </div>
-    </div>
-
-    <!-- Moodboard: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/tangerine-1-moodboard.webp" alt="Tangerine, moodboard: lamps and lights in wood, glass and coloured metal, from a branching wooden stand and hanging globe lights to a mushroom lamp and a yellow tube light, beside the tone swatches." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/tangerine-1-moodboard.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Concept sketching: the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/tangerine-2-sketching.webp" alt="Tangerine, concept sketching: hands holding a fruit-shaped torch light, studies of the light in section, and branching modular stands it plugs into." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/tangerine-2-sketching.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Renders (Frame 48): the Figma frame itself, split across the spread -->
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--l" src="assets/images/tangerine-3-render.webp" alt="Tangerine, renders: the light in purple and white on black, beside the three colourways, purple, orange and green, and close-ups of their two-button tops." draggable="false">
-      </div>
-    </div>
-    <div class="page page--frame" data-bare>
-      <div class="page__inner page__inner--frame">
-        <img class="frame frame--r" src="assets/images/tangerine-3-render.webp" alt="" draggable="false">
-      </div>
-    </div>
-
-    <!-- Back cover -->
-    <div class="page page--cover page--board page--tangerine" data-density="soft">
-      <div class="page__inner backcover">
-        <p class="backcover__mark">Tangerine</p>
-        <p class="backcover__sub">Obinna Oti — Product Design</p>
-        <div class="backcover__actions">
-          <button class="pill" type="button" data-action="next">Next project</button>
-          <button class="pill" type="button" data-action="restart">Read again</button>
-          <button class="pill" type="button" data-action="close">All projects</button>
-        </div>
-      </div>
-    </div>
-  </article>
-
-</div>
-
+<script src="projects/books.js"></script>
 <script src="projects/projects.js"></script>
 <script src="assets/js/vendor/page-flip.browser.js"></script>
 <script src="assets/js/main.js"></script>

@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Studio — Obinna Oti</title>
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Cpath d='M7 9.5h8v13H7zM17 9.5h8v13h-8z' fill='%23fff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/studio.css">
-  <script>try { var theme = localStorage.getItem('oo-theme'); if (theme) document.documentElement.dataset.theme = theme; } catch (e) { /* storage blocked */ }</script>
+  <script src="assets/js/boot.js"></script>
 </head>
 <body class="studio">
 
@@ -18,7 +20,7 @@
     <a class="btn" href="./" target="_blank" rel="noopener">View site</a>
   </header>
 
-  <main class="st-main">
+  <main class="st-main" id="studioMain">
     <aside class="st-side">
 
       <!-- Connect to GitHub (once per device) -->
@@ -32,18 +34,19 @@
             <li>Name it “Portfolio Studio” and pick an expiry date.</li>
             <li>Under <b>Repository access</b> choose <b>Only select repositories</b> and pick your portfolio repository.</li>
             <li>Under <b>Permissions → Repository permissions</b> set <b>Contents</b> to <b>Read and write</b>.</li>
-            <li>Generate the token and paste it below. It stays on this device and is only sent to GitHub.</li>
+            <li>Generate the token and paste it below. It stays in this browser and is only sent to GitHub.</li>
           </ol>
         </details>
         <label class="st-field"><span>Access token</span>
-          <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+          <input id="token" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="github_pat_…">
         </label>
         <div class="st-row">
-          <label class="st-field"><span>Repository</span><input id="repo" spellcheck="false" value="enii/OBINNA-PORTFOLIO"></label>
-          <label class="st-field st-field--sm"><span>Branch</span><input id="branch" spellcheck="false" value="main"></label>
+          <label class="st-field"><span>Repository</span><input id="repo" autocapitalize="none" autocorrect="off" spellcheck="false" value="enii/OBINNA-PORTFOLIO"></label>
+          <label class="st-field st-field--sm"><span>Branch</span><input id="branch" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="default"></label>
         </div>
-        <p class="st-note st-note--sm">Use the branch your website is published from.</p>
-        <label class="st-check"><input type="checkbox" id="remember" checked> Remember on this device</label>
+        <p class="st-note st-note--sm">Leave the branch empty to use the repository’s default branch, the one the website is published from.</p>
+        <label class="st-check"><input type="checkbox" id="remember"> Remember on this device</label>
+        <p class="st-note st-note--sm">Only on your own computer. Otherwise the token is forgotten when you close this tab.</p>
         <div class="st-actions">
           <button class="btn btn--solid" type="button" id="connectBtn">Connect</button>
         </div>
@@ -78,7 +81,7 @@
         <ol class="st-how">
           <li><b>01</b><span><strong>Export</strong>Export each Figma frame as PNG or JPG at 2×. Each frame becomes a two-page spread.</span></li>
           <li><b>02</b><span><strong>Drop</strong>Start a new project, add a title, a cover image and your frames.</span></li>
-          <li><b>03</b><span><strong>Publish</strong>Preview the book, then publish. The site updates in about a minute.</span></li>
+          <li><b>03</b><span><strong>Publish</strong>Preview the book, then publish. The site updates in a minute or two.</span></li>
         </ol>
         <button class="btn btn--solid" type="button" id="emptyNewBtn">New project</button>
       </div>
@@ -108,7 +111,7 @@
             </div>
             <figure class="st-cover__thumb" id="coverThumb" hidden>
               <img alt="Cover image">
-              <button class="st-x" type="button" id="coverRemove" aria-label="Remove cover image">×</button>
+              <button class="st-x" type="button" id="coverRemove" aria-label="Remove cover image"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7m0-7l-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
             </figure>
           </div>
           <p class="st-note st-note--sm">Optional. Without one, the cover is set in type only.</p>
@@ -145,6 +148,7 @@
     <iframe id="previewFrame" title="Book preview"></iframe>
   </div>
 
+  <script src="projects/books.js"></script>
   <script src="projects/projects.js"></script>
   <script src="assets/js/studio.js"></script>
 </body>

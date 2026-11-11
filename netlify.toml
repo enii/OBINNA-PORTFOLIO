@@ -1,0 +1,30 @@
+# Netlify: a plain static site, served as it is (no build step).
+[build]
+  publish = "."
+  command = ""
+
+# Security headers for every page.
+# The Content Security Policy only lets the site run its own scripts. Images may also come from
+# blob:/data: URLs and raw.githubusercontent.com: the Studio previews and shows images from there.
+# The Studio talks to the GitHub API, and shows its preview in a frame of this same site.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com; media-src 'self'; font-src 'self'; connect-src 'self' https://api.github.com; frame-src 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# The Studio holds a GitHub token: never cache it, never let other sites frame it
+[[headers]]
+  for = "/studio.html"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Frame-Options = "DENY"
+
+# Fonts never change under the same name; everything else keeps Netlify's default (always revalidated),
+# so a replaced image or video shows up straight away.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"

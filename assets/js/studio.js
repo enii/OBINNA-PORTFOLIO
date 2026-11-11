@@ -2,7 +2,8 @@
  *
  * Projects live in projects/projects.js (a JSON list) with their images in projects/<slug>/.
  * Publishing writes everything to the website's GitHub repository in a single commit through
- * the GitHub API, using a fine-grained access token that stays in this browser. */
+ * the GitHub API, using a fine-grained access token that stays in this browser: for this tab only,
+ * unless "Remember on this device" is ticked. */
 (() => {
   'use strict';
 
@@ -13,12 +14,13 @@
   const LIST_FILE = 'projects/projects.js';
   const FRAME_MAX = 3200; // px wide: crisp on large screens, light enough for the web
   const COVER_MAX = 1600;
-  const QUALITY = 0.86;
+  const QUALITY = 0.86; // JPEG, for browsers that can't write WebP
+  const QUALITY_WEBP = 0.85;
   const FILE_HEAD = `/* Projects added with the Studio (studio.html).
  *
  * The Studio writes this file for you. To edit it by hand, keep the first and last
  * lines as they are; everything between the brackets is plain JSON. Projects appear
- * in the carousel in this order, after the two hand-built books in index.html.
+ * in the carousel in this order, after the hand-built books in projects/books.js.
  *
  *   slug        short name used in the link (…/#my-project) and the image folder
  *   title       shown on the cover and in the carousel
@@ -30,16 +32,21 @@
  */
 window.PROJECTS = `;
 
-  const store = {
-    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } },
-    del(k) { try { localStorage.removeItem(k); } catch (e) { /* private mode */ } },
-  };
+  const makeStore = (area) => ({
+    get(k) { try { return JSON.parse(window[area].getItem(k)); } catch (e) { return null; } },
+    set(k, v) { try { window[area].setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } },
+    del(k) { try { window[area].removeItem(k); } catch (e) { /* private mode */ } },
+  });
+  const store = makeStore('localStorage'); // "Remember on this device"
+  const tabStore = makeStore('sessionStorage'); // otherwise: until this tab is closed
 
   /* ---------- State ---------- */
   let conn = null; // { token, repo, branch }
   let projects = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
-  let builtIns = []; // the hand-built books in index.html
+  // the hand-built books (projects/books.js), numbered before the Studio's own
+  const builtIns = (Array.isArray(window.BOOKS) ? window.BOOKS : []).map((b, i) => ({
+    number: pad(i + 1), title: b.title || '', meta: b.discipline || '', slug: b.slug,
+  }));
   let listDirty = false;
   let model = null; // the project in the editor
   let busy = false;
@@ -73,6 +80,7 @@ window.PROJECTS = `;
   const ICON_DOWN = icon('M8 3v10M4 9l4 4 4-4');
   const ICON_LEFT = icon('M13 8H3m4-4L3 8l4 4');
   const ICON_RIGHT = icon('M3 8h10M9 4l4 4-4 4');
+  const ICON_X = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7m0-7l-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
   function friendly(err) {
     if (!navigator.onLine) return 'You seem to be offline. Check your connection and try again.';
@@ -89,7 +97,7 @@ window.PROJECTS = `;
 
   /* ---------- GitHub ---------- */
   async function gh(path, { method = 'GET', body } = {}) {
-    const res = await fetch(`https://api.github.com/repos/${conn.repo}/${path}`, {
+    const res = await fetch(`https://api.github.com/repos/${conn.repo}${path ? `/${path}` : ''}`, {
       method,
       cache: 'no-store',
       headers: {
@@ -160,6 +168,7 @@ window.PROJECTS = `;
     conn = details;
     if (!quiet) setMsg(connectMsg, 'Connecting…');
     try {
+      if (!conn.branch) conn.branch = (await gh('')).default_branch; // no branch given: the repository's default
       await gh(`git/ref/heads/${branchPath()}`);
       projects = await readRemoteList();
       listDirty = false;
@@ -192,20 +201,22 @@ window.PROJECTS = `;
     const details = {
       token: $('#token').value.trim(),
       repo: $('#repo').value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/+$/, ''),
-      branch: $('#branch').value.trim() || 'main',
+      branch: $('#branch').value.trim(), // empty: use the repository's default branch
     };
     if (!details.token) { setMsg(connectMsg, 'Paste your access token first.', 'error'); return; }
     if (!/^[\w.-]+\/[\w.-]+$/.test(details.repo)) { setMsg(connectMsg, 'Repository should look like owner/name.', 'error'); return; }
     const ok = await connect(details);
     if (ok) {
-      if ($('#remember').checked) store.set('oo-studio', details);
-      else store.del('oo-studio');
+      if ($('#remember').checked) { store.set('oo-studio', details); tabStore.del('oo-studio'); }
+      else { tabStore.set('oo-studio', details); store.del('oo-studio'); }
       $('#token').value = '';
+      $('#branch').value = details.branch;
     }
   });
   $('#disconnectBtn').addEventListener('click', () => {
     conn = null;
     store.del('oo-studio');
+    tabStore.del('oo-studio');
     projects = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
     showConnected(false);
     renderList();
@@ -265,7 +276,7 @@ window.PROJECTS = `;
       projects = next;
       listDirty = false;
       renderList();
-      setMsg(listMsg, 'Saved. The site updates in about a minute.', 'ok');
+      setMsg(listMsg, 'Saved. The site updates in a minute or two.', 'ok');
     } catch (e) {
       setMsg(listMsg, friendly(e), 'error');
     } finally {
@@ -277,13 +288,6 @@ window.PROJECTS = `;
     return String(v == null ? '' : v).replace(/[&<>"']/g, (ch) => (
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   }
-
-  // The hand-built books, read from the live index.html
-  fetch('index.html', { cache: 'no-store' }).then((r) => r.text()).then((html) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    builtIns = $$('.book-src', doc).map((a) => ({ number: a.dataset.number || '', title: a.dataset.title || '', meta: a.dataset.meta || '', slug: a.dataset.slug }));
-    renderList();
-  }).catch(() => { /* opened from disk: the list just shows Studio projects */ });
 
   /* ---------- Editor ---------- */
   const form = $('#form');
@@ -326,7 +330,10 @@ window.PROJECTS = `;
     form.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
 
+  // Images dropped in are shown from object URLs; free each one once it leaves the editor
+  const release = (item) => { if (item && item.url && item.url.startsWith('blob:')) URL.revokeObjectURL(item.url); };
   function closeEditor() {
+    if (model) { model.frames.forEach(release); release(model.cover); }
     model = null;
     form.hidden = true;
     empty.hidden = false;
@@ -358,9 +365,9 @@ window.PROJECTS = `;
     const file = [...files].find((f) => f.type.startsWith('image/'));
     if (!file) return;
     const item = await readImage(file);
-    if (item) { model.cover = item; renderCover(); }
+    if (item) { release(model.cover); model.cover = item; renderCover(); }
   }
-  $('#coverRemove').addEventListener('click', () => { model.cover = null; renderCover(); });
+  $('#coverRemove').addEventListener('click', () => { release(model.cover); model.cover = null; renderCover(); });
 
   /* Frames */
   function renderFrames() {
@@ -377,7 +384,7 @@ window.PROJECTS = `;
             <button class="st-icon" type="button" data-act="right" aria-label="Move later" ${i === model.frames.length - 1 ? 'disabled' : ''}>${ICON_RIGHT}</button>
           </span>
           <span class="st-thumb__warn">${warn}</span>
-          <button class="st-x" type="button" data-act="remove" aria-label="Remove frame ${i + 1}">×</button>
+          <button class="st-x" type="button" data-act="remove" aria-label="Remove frame ${i + 1}">${ICON_X}</button>
         </li>`;
     }).join('');
     updateButtons();
@@ -394,7 +401,7 @@ window.PROJECTS = `;
     if (!btn) return;
     const i = Number(btn.closest('.st-thumb').dataset.i);
     const f = model.frames;
-    if (btn.dataset.act === 'remove') f.splice(i, 1);
+    if (btn.dataset.act === 'remove') release(f.splice(i, 1)[0]);
     if (btn.dataset.act === 'left' && i > 0) [f[i - 1], f[i]] = [f[i], f[i - 1]];
     if (btn.dataset.act === 'right' && i < f.length - 1) [f[i + 1], f[i]] = [f[i], f[i + 1]];
     renderFrames();
@@ -466,12 +473,16 @@ window.PROJECTS = `;
     previewFrame.src = `index.html?preview=${Date.now()}#${encodeURIComponent(slug)}`;
     preview.hidden = false;
     document.body.style.overflow = 'hidden';
+    behindPreview.forEach((el) => { el.inert = true; }); // Tab stays inside the preview
     $('#closePreview').focus();
   });
+  const behindPreview = [$('.st-bar'), $('#studioMain')];
   function closePreview() {
     preview.hidden = true;
     previewFrame.src = 'about:blank';
     document.body.style.overflow = '';
+    behindPreview.forEach((el) => { el.inert = false; });
+    $('#previewBtn').focus({ preventScroll: true });
   }
   $('#closePreview').addEventListener('click', closePreview);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !preview.hidden) closePreview(); });
@@ -484,15 +495,16 @@ window.PROJECTS = `;
     logEl.appendChild(p);
   }
 
-  // Resize and compress an image for the web (JPEG, white behind any transparency)
+  // Resize and compress an image for the web: WebP (about a third smaller), or JPEG where the browser
+  // can't write WebP. White goes behind any transparency.
   async function optimise(file, maxW) {
+    const url = URL.createObjectURL(file);
     const img = await new Promise((resolve, reject) => {
-      const url = URL.createObjectURL(file);
       const el = new Image();
       el.onload = () => resolve(el);
       el.onerror = reject;
       el.src = url;
-    });
+    }).finally(() => URL.revokeObjectURL(url));
     const scale = Math.min(1, maxW / img.naturalWidth);
     const w = Math.round(img.naturalWidth * scale);
     const h = Math.round(img.naturalHeight * scale);
@@ -504,13 +516,18 @@ window.PROJECTS = `;
     ctx.fillRect(0, 0, w, h);
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(img, 0, 0, w, h);
-    return new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', QUALITY));
+    const toBlob = (type, q) => new Promise((resolve) => canvas.toBlob(resolve, type, q));
+    const webp = await toBlob('image/webp', QUALITY_WEBP);
+    if (webp && webp.type === 'image/webp') return webp; // Safari quietly hands back a PNG instead
+    return toBlob('image/jpeg', QUALITY);
   }
+  const extOf = (blob) => (blob.type === 'image/webp' ? 'webp' : 'jpg');
 
   function uniqueSlug(base, list) {
     const taken = new Set(list.map((p) => p.slug).concat(builtIns.map((b) => b.slug)));
-    let slug = base || `project-${rand()}`;
-    for (let k = 2; taken.has(slug); k++) slug = `${base}-${k}`;
+    const stem = base || `project-${rand()}`; // a title with no Latin letters has no slug of its own
+    let slug = stem;
+    for (let k = 2; taken.has(slug); k++) slug = `${stem}-${k}`;
     return slug;
   }
 
@@ -537,8 +554,9 @@ window.PROJECTS = `;
         const f = model.frames[i];
         if (f.path) { frames.push(f.path); continue; }
         log(`Preparing frame ${i + 1} of ${model.frames.length}…`);
-        const path = `${folder}frame-${pad(i + 1)}-${rand()}.jpg`;
-        changes.push({ path, blob: await optimise(f.file, FRAME_MAX), label: `frame ${i + 1}` });
+        const blob = await optimise(f.file, FRAME_MAX);
+        const path = `${folder}frame-${pad(i + 1)}-${rand()}.${extOf(blob)}`;
+        changes.push({ path, blob, label: `frame ${i + 1}` });
         frames.push(path);
       }
       let cover = '';
@@ -546,8 +564,9 @@ window.PROJECTS = `;
         if (model.cover.path) cover = model.cover.path;
         else {
           log('Preparing the cover…');
-          cover = `${folder}cover-${rand()}.jpg`;
-          changes.push({ path: cover, blob: await optimise(model.cover.file, COVER_MAX), label: 'the cover' });
+          const blob = await optimise(model.cover.file, COVER_MAX);
+          cover = `${folder}cover-${rand()}.${extOf(blob)}`;
+          changes.push({ path: cover, blob, label: 'the cover' });
         }
       }
       if (existing) { // tidy up images this project no longer uses
@@ -583,8 +602,8 @@ window.PROJECTS = `;
       renderCover();
       renderList();
       log(entry.draft
-        ? `Published as a draft. It will appear at …/?drafts#${slug} in about a minute.`
-        : `Published. “${title}” will appear on the site in about a minute.`, 'ok');
+        ? `Published as a draft. It will appear at …/?drafts#${slug} in a minute or two.`
+        : `Published. “${title}” will appear on the site in a minute or two.`, 'ok');
     } catch (err) {
       log(friendly(err), 'error');
     } finally {
@@ -625,7 +644,7 @@ window.PROJECTS = `;
       await commit(changes, `Remove project: ${model.title || model.slug}`);
       projects = next;
       closeEditor();
-      setMsg(listMsg, 'Project deleted. The site updates in about a minute.', 'ok');
+      setMsg(listMsg, 'Project deleted. The site updates in a minute or two.', 'ok');
     } catch (err) {
       log(friendly(err), 'error');
     } finally {
@@ -653,10 +672,12 @@ window.PROJECTS = `;
 
   /* ---------- Start ---------- */
   renderList();
-  const saved = store.get('oo-studio');
+  const remembered = store.get('oo-studio');
+  const saved = remembered || tabStore.get('oo-studio');
   if (saved && saved.token) {
     $('#repo').value = saved.repo;
-    $('#branch').value = saved.branch;
+    $('#branch').value = saved.branch || '';
+    $('#remember').checked = !!remembered;
     connect(saved, true);
   }
 })();

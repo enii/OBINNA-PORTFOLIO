@@ -31,47 +31,61 @@
   const fsBtn = $('#fsBtn');
   const hint = $('#hint');
 
-  /* ---------- 0. Projects added with the Studio (projects/projects.js) ----------
+  /* ---------- 0. The books: projects/books.js (hand-built), then projects/projects.js (the Studio) ----------
      Each project is a list of Figma frames. Every frame becomes a two-page spread:
      the left half on the left page, the right half on the right page. */
+  const YEARS = '2020—2025'; // the running head on every cover and page
   const params = new URLSearchParams(location.search);
   const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (ch) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const assetUrl = (u) => esc(/^(blob:|data:|https?:)/.test(u) ? u : String(u || '').replace(/^\/+/, ''));
+  const valid = (p) => p && p.slug && p.title && Array.isArray(p.frames) && p.frames.length;
 
-  function projectBook(p, number) {
+  function renderBook(p, number) {
     const style = ['dark', 'light', 'image'].includes(p.coverStyle) ? p.coverStyle : 'dark';
     const light = style === 'light';
-    const coverImg = p.cover; // without a cover image the cover is set in type only
-    const kicker = `${number} — ${(p.discipline || '').replace(/\s*·\s*/g, ', ')}`;
-    const longest = Math.max(1, ...String(p.title).split(/\s+/).map((w) => w.length));
-    const titleScale = Math.min(1, 7.5 / longest).toFixed(3); // long words get a smaller title
-    const coverClass = light ? 'page page--cover page--board' : 'page page--dark page--cover';
-    const imgClass = { dark: 'cover__img', light: 'cover__img cover__img--drawing', image: 'cover__img cover__img--full' }[style];
-    const frames = p.frames.map((src, k) => ['l', 'r'].map((side) => `
+    const discipline = p.discipline || '';
+    const kicker = `${number} — ${discipline.replace(/\s*·\s*/g, ', ')}`;
+    const practice = discipline.split('·')[0].trim() || 'Product design'; // signs the back cover
+    const pageClass = `${light ? 'page page--cover page--board' : 'page page--dark page--cover'}${p.pageClass ? ` ${esc(p.pageClass)}` : ''}`;
+    const imgClass = { dark: 'cover__img', light: 'cover__img cover__img--drawing', image: 'cover__img cover__img--full' }[style]
+      + (p.coverClass ? ` ${esc(p.coverClass)}` : '');
+    // A hand-set title (coverTitle) keeps its line breaks; a Studio title shrinks if it has a long word
+    let title;
+    if (p.coverTitle) title = `<h2 class="cover__title">${esc(p.coverTitle).replace(/\n/g, '<br>')}</h2>`;
+    else {
+      const longest = Math.max(1, ...String(p.title).split(/\s+/).map((w) => w.length));
+      const scale = Math.min(1, 7.5 / longest).toFixed(3);
+      title = `<h2 class="cover__title" style="font-size: calc(var(--fit) * ${scale} * 15cqw)">${esc(p.title)}</h2>`;
+    }
+    const frames = p.frames.map((f, k) => {
+      const src = typeof f === 'string' ? f : f.src;
+      const alt = (typeof f === 'object' && f.alt) || `${p.title}, frame ${k + 1}`;
+      return ['l', 'r'].map((side) => `
       <div class="page page--frame" data-bare>
         <div class="page__inner page__inner--frame">
-          <img class="frame frame--${side}" src="${assetUrl(src)}" alt="${side === 'l' ? `${esc(p.title)}, frame ${k + 1}` : ''}" draggable="false">
+          <img class="frame frame--${side}" src="${assetUrl(src)}" alt="${side === 'l' ? esc(alt) : ''}" draggable="false">
         </div>
-      </div>`).join('')).join('');
+      </div>`).join('');
+    }).join('');
     return `
-      <article class="book-src" data-slug="${esc(p.slug)}" data-number="${number}" data-title="${esc(p.title)}" data-meta="${esc(p.discipline)}">
-        <div class="${coverClass}${style === 'image' ? ' page--cover-image' : ''}" data-density="soft">
+      <article class="book-src" data-slug="${esc(p.slug)}" data-number="${number}" data-title="${esc(p.title)}" data-meta="${esc(discipline)}">
+        <div class="${pageClass}${style === 'image' ? ' page--cover-image' : ''}" data-density="soft">
           <div class="page__inner cover">
-            ${coverImg ? `<img class="${imgClass}" src="${assetUrl(coverImg)}" alt="" draggable="false">` : ''}
-            <div class="cover__top"><span>Obinna Oti</span><span>2020—2025</span></div>
+            ${p.cover ? `<img class="${imgClass}" src="${assetUrl(p.cover)}" alt="" draggable="false">` : ''}
+            <div class="cover__top"><span>Obinna Oti</span><span>${YEARS}</span></div>
             <div class="cover__foot">
               <p class="cover__kicker">${esc(kicker)}</p>
-              <h2 class="cover__title" style="font-size: calc(var(--fit) * ${titleScale} * 15cqw)">${esc(p.title)}</h2>
+              ${title}
             </div>
             <p class="cover__issue">Issue 01</p>
           </div>
         </div>
         ${frames}
-        <div class="${coverClass}" data-density="soft">
+        <div class="${pageClass}" data-density="soft">
           <div class="page__inner backcover">
-            <p class="backcover__mark">${esc(p.title)}</p>
-            <p class="backcover__sub">Obinna Oti — Product Design</p>
+            <p class="backcover__mark">${esc(p.backTitle || (p.coverTitle ? p.coverTitle.replace(/\n/g, ' ') : p.title))}</p>
+            <p class="backcover__sub">Obinna Oti — ${esc(practice)}</p>
             <div class="backcover__actions">
               <button class="pill" type="button" data-action="next">Next project</button>
               <button class="pill" type="button" data-action="restart">Read again</button>
@@ -82,23 +96,29 @@
       </article>`;
   }
 
-  (function addStudioProjects() {
-    let list = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
-    if (!params.has('drafts')) list = list.filter((p) => p && !p.draft);
+  function bookList() {
+    const builtIn = (Array.isArray(window.BOOKS) ? window.BOOKS : []).filter(valid);
+    let studio = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
+    if (!params.has('drafts')) studio = studio.filter((p) => p && !p.draft);
     if (params.has('preview')) { // a project being prepared in the Studio
       try {
         const draft = JSON.parse(sessionStorage.getItem('oo-preview'));
-        if (draft) list = list.filter((p) => p.slug !== draft.slug).concat(draft);
+        if (draft) studio = studio.filter((p) => p.slug !== draft.slug).concat(draft);
       } catch (e) { /* no preview */ }
     }
-    const library = $('#library');
-    const builtIn = $$('.book-src', library).length;
-    list.filter((p) => p && p.slug && p.title && Array.isArray(p.frames) && p.frames.length)
-      .forEach((p, i) => library.insertAdjacentHTML('beforeend', projectBook(p, pad(builtIn + i + 1))));
-  }());
+    return builtIn.concat(studio.filter(valid));
+  }
 
-  /* ---------- 1. Read the books ---------- */
-  const books = $$('.book-src').map((src) => {
+  /* ---------- 1. Read the books ----------
+     Each book is parsed in a <template>, which doesn't download images: a book's pages only load
+     when it's opened. Only the covers, shown in the carousel, load straight away. */
+  const library = $('#library');
+  const sources = bookList().map((p, i) => {
+    const tpl = document.createElement('template');
+    tpl.innerHTML = renderBook(p, pad(i + 1));
+    return tpl.content.firstElementChild;
+  });
+  const books = sources.map((src) => {
     const pages = $$(':scope > .page', src);
     const total = pages.length;
     pages.forEach((page, i) => {
@@ -108,7 +128,7 @@
       const inner = $('.page__inner', page);
       if (i > 0 && i < total - 1 && inner && !page.hasAttribute('data-bare')) {
         inner.insertAdjacentHTML('afterbegin',
-          '<div class="page__head" aria-hidden="true"><span>Obinna Oti</span><span>2020—2025</span></div>');
+          `<div class="page__head" aria-hidden="true"><span>Obinna Oti</span><span>${YEARS}</span></div>`);
         inner.insertAdjacentHTML('beforeend', `<div class="page__folio" aria-hidden="true">${pad(i)}</div>`);
       }
     });
@@ -131,11 +151,15 @@
     b.html = b.el.innerHTML;
   });
 
-  if (!books.length || !window.St || !window.St.PageFlip) { // fall back to plain stacked pages
+  // Without the page-turning script, every book is laid out as plain stacked spreads
+  function showLibrary() {
+    sources.forEach((src) => library.appendChild(src));
     document.documentElement.classList.replace('js', 'no-js');
-    return;
   }
-  $('#library').remove();
+  if (!books.length || !window.St || !window.St.PageFlip) { showLibrary(); return; }
+  library.remove();
+  const yearEl = $('#year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -164,7 +188,7 @@
   let suppressClick = false;
   let raf = 0;
   let lastT = 0;
-  let lastW = 0; // carousel width at the last layout
+  let lastW = 0; // carousel width at the last layout (read once per resize, never per frame)
 
   const cruise = () => (reduceMotion ? 0 : step / 11); // one book passes the centre about every 11 s
   const stripX = () => -(((offset % setW) + setW) % setW); // always in (-setW, 0]
@@ -201,10 +225,11 @@
     cards.forEach((c) => c.cover.style.setProperty('--s', (cw / 800).toFixed(4)));
     paint();
   }
+  const carouselW = () => lastW || carousel.clientWidth;
 
   // Position the strip, scale books by their distance from the centre, update the caption
   function paint() {
-    const W = carousel.clientWidth;
+    const W = carouselW();
     const x = stripX();
     track.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
     let best = 0;
@@ -219,6 +244,7 @@
     if (show !== active) setActive(show);
   }
 
+  const EASE = getComputedStyle(document.documentElement).getPropertyValue('--ease').trim() || 'ease-out';
   function setActive(i) {
     const first = active < 0;
     active = i;
@@ -227,11 +253,17 @@
     capTitle.textContent = b.title;
     capMeta.textContent = b.meta;
     capPager.innerHTML = `${pad(i + 1)} <span>/ ${pad(n)}</span>`;
-    if (!first && !reduceMotion && capTitle.animate) {
-      [capNum, capTitle, capMeta].forEach((el, k) => el.animate(
-        [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }],
-        { duration: 380, delay: k * 40, easing: 'cubic-bezier(.2,.75,.2,1)', fill: 'backwards' },
-      ));
+    // The text rises in when the drift or the arrows bring a new book to the centre. While the strip is
+    // dragged, flung or hovered the title changes often, so it just swaps rather than flickering.
+    const settled = !drag && hoverBook < 0 && Math.abs(vel) < step;
+    if (!first && settled && !reduceMotion && capTitle.animate) {
+      [capNum, capTitle, capMeta].forEach((el, k) => {
+        el.getAnimations().forEach((a) => a.cancel()); // start from where it is, not from blank
+        el.animate(
+          [{ opacity: 0, transform: 'translateY(6px)', filter: 'blur(2px)' }, { opacity: 1, transform: 'none', filter: 'none' }],
+          { duration: 220, delay: k * 40, easing: EASE, fill: 'backwards' },
+        );
+      });
     }
   }
 
@@ -256,7 +288,7 @@
 
   // Bring the next (dir 1) or previous (dir -1) book to the centre; dir 0 centres the nearest
   function stepBy(dir) {
-    const W = carousel.clientWidth;
+    const W = carouselW();
     const x = stripX();
     const k = Math.round((W / 2 - cw / 2 - x) / step);
     const target = x + (k + dir) * step + cw / 2;
@@ -267,7 +299,7 @@
 
   // Jump (no animation) so that a given book sits in the centre
   function centreBook(i) {
-    const W = carousel.clientWidth;
+    const W = carouselW();
     let x = W / 2 - cw / 2 - i * step;
     while (x > 0) x -= setW;
     while (x <= -setW) x += setW;
@@ -352,7 +384,7 @@
   caption.addEventListener('focusout', () => { held = false; });
   $('#carPrev').addEventListener('click', () => stepBy(-1));
   $('#carNext').addEventListener('click', () => stepBy(1));
-  $('#openBtn').addEventListener('click', () => openBook(books[active].slug));
+  $('#openBtn').addEventListener('click', () => openBook(books[Math.max(0, active)].slug));
 
   /* ---------- 3. Views + links ---------- */
   let book = null; // the open book
@@ -363,6 +395,8 @@
   let turned = false;
   let autoOpen = false;
   let hintTimer;
+  let opener = null; // what had focus when the book opened, to return to when it closes
+  const reels = []; // the Motion videos (section 12), paused while a book is open
 
   // Each book has its own link: …/#sting-rays
   function openBook(slug) {
@@ -397,10 +431,17 @@
     centreBook(from ? books.indexOf(from) : 0);
     if (from) window.scrollTo(0, shelfScroll);
     if (carouselInView) startDrift();
+    // hand focus back to where it was (the card or button that opened the book)
+    if (from) {
+      const back = opener && opener !== document.body && opener.isConnected && !opener.closest('[hidden]') ? opener : $('#openBtn');
+      back.focus({ preventScroll: true });
+    }
+    opener = null;
   }
 
   function showReader(b) {
     if (book === b && pf) return;
+    if (!opener && shelfShown) opener = document.activeElement;
     book = b;
     stopDrift();
     reels.forEach((v) => v.pause());
@@ -419,6 +460,7 @@
       hintTimer = setTimeout(hideHint, 8000);
     }
     build(computeLayout(), 0);
+    $('#closeBtn').focus({ preventScroll: true }); // keyboard and screen-reader users land in the reader
   }
 
   /* ---------- 4. Book geometry ---------- */
@@ -502,7 +544,7 @@
       usePortrait: L.single,
       autoSize: true,
       startPage: clamp(startPage, 0, book.total - 1),
-      flippingTime: reduceMotion ? 450 : 900,
+      flippingTime: reduceMotion ? 1 : 900, // with reduced motion, pages change without the turn
       drawShadow: true,
       maxShadowOpacity: 0.45,
       showPageCorners: true,
@@ -520,6 +562,7 @@
       }));
       if (autoOpen) {
         autoOpen = false;
+        if (reduceMotion) return; // the book stays closed until the reader turns the cover
         // The book arrives closed, then its cover swings open
         setTimeout(() => { if (pf === instance && current === 0) instance.flipNext(); }, reduceMotion ? 100 : 650);
       }
@@ -626,7 +669,8 @@
     if (!pf || !layout) return;
     const r = pf.getBoundsRect();
     if (!r) return;
-    const s = wrap.style;
+    // set on the shadow itself, its only reader: on the book they'd restyle every page under it
+    const s = base.style;
     s.setProperty('--bx', `${r.left}px`);
     s.setProperty('--by', `${r.top}px`);
     s.setProperty('--bw', `${r.width}px`);
@@ -699,6 +743,7 @@
       if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
       return;
     }
+    if (!carouselInView || e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
     if (e.key === 'ArrowRight') { e.preventDefault(); stepBy(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); stepBy(-1); }
   });
@@ -711,7 +756,7 @@
       if (L.single === layout.single) wrap.style.width = `${L.W}px`; // StPageFlip re-fits itself right after this
       requestAnimationFrame(updateBase);
     }
-    if (!shelf.hidden) sizeCards();
+    if (!shelf.hidden && !window.ResizeObserver) sizeCards(); // otherwise the observer in section 13 does it
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       if (!shelf.hidden) return;
@@ -786,7 +831,6 @@
 
   /* ---------- 12. Motion: animation players under the carousel ---------- */
   // No control bar: the video loops on its own; clicking it (or its button) pauses and plays.
-  const reels = [];
   $$('.reel').forEach((reel) => {
     const video = $('.reel__video', reel);
     const frame = $('.reel__frame', reel);
@@ -811,6 +855,14 @@
     // Plays on a loop while it's on screen, and pauses once it has scrolled away.
     // With reduced motion turned on, it waits for the play button instead.
     if (window.IntersectionObserver) {
+      // The videos are marked preload="none", so they don't compete with the books on arrival.
+      // Each starts loading when it's a screen or so away.
+      const warm = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        warm.disconnect();
+        if (video.preload !== 'auto') { video.preload = 'auto'; video.load(); }
+      }, { rootMargin: '600px 0px' });
+      warm.observe(frame);
       new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) { if (!video.paused) video.pause(); }
         else if (entry.intersectionRatio >= 0.2 && video.paused && !userPaused && !reduceMotion) play();
@@ -849,7 +901,7 @@
       entries.filter((e) => e.isIntersecting).forEach((e, i) => {
         const el = e.target;
         io.unobserve(el);
-        el.style.setProperty('--d', `${i * 90}ms`);
+        el.style.setProperty('--d', `${i * 60}ms`);
         el.addEventListener('animationend', function end(ev) {
           if (ev.target !== el) return;
           el.removeEventListener('animationend', end);
@@ -873,15 +925,24 @@
       themeBtn.setAttribute('aria-pressed', String(dark));
       themeBtn.title = dark ? 'Light mode' : 'Dark mode';
     }
-    const meta = $('meta[name="theme-color"]');
-    if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--desk').trim();
+    // The status bar colour: the <head> has one tag per device setting. Once the visitor has picked a
+    // theme, both follow their pick instead.
+    if (document.documentElement.dataset.theme) {
+      const desk = getComputedStyle(document.documentElement).getPropertyValue('--desk').trim();
+      $$('meta[name="theme-color"]').forEach((meta) => { meta.removeAttribute('media'); meta.content = desk; });
+    }
   }
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
       const next = isDark() ? 'light' : 'dark';
-      document.documentElement.dataset.theme = next;
+      const apply = () => {
+        document.documentElement.dataset.theme = next;
+        showTheme();
+      };
+      // a quick crossfade between the two themes, where the browser supports it
+      if (document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
+      else apply();
       try { localStorage.setItem('oo-theme', next); } catch (e) { /* storage blocked: still switches for this visit */ }
-      showTheme();
     });
   }
   if (darkQuery.addEventListener) darkQuery.addEventListener('change', showTheme);
@@ -902,9 +963,12 @@
       copy.setAttribute('aria-hidden', 'true');
       logoBelt.appendChild(copy);
     }
-    // the copies are identical, so sliding by 1/copies of the belt moves exactly one copy
-    logoBelt.style.setProperty('--copies', logoBelt.children.length);
-    logoBelt.style.setProperty('--dur', `${(w / 40).toFixed(1)}s`); // 40px a second, however many logos
+    // the copies are identical, so sliding by 1/copies of the belt moves exactly one copy.
+    // Only written when they change: a new duration makes the running belt jump.
+    const copies = String(logoBelt.children.length);
+    const dur = `${(w / 40).toFixed(1)}s`; // 40px a second, however many logos
+    if (logoBelt.style.getPropertyValue('--copies') !== copies) logoBelt.style.setProperty('--copies', copies);
+    if (logoBelt.style.getPropertyValue('--dur') !== dur) logoBelt.style.setProperty('--dur', dur);
   }
   function startLogos() {
     if (!logoBelt || reduceMotion) return;
@@ -914,42 +978,80 @@
     if (window.ResizeObserver) new ResizeObserver(fillLogos).observe(logos);
   }
 
-  /* ---------- 12e. Auto-scroll: the page drifts slowly down on its own ---------- */
-  // It starts a few seconds after the page opens. Any wheel, swipe, key or click hands control back to
-  // the visitor, and it picks up again once they've been idle for a while. It stops at the bottom, and
-  // never runs while a book is open or with reduced motion turned on.
+  /* ---------- 12e. Auto-scroll: the page drifts slowly down on its own ----------
+     It starts a few seconds after the page opens, and hands over to the visitor for good the first time
+     they scroll, swipe, press a key or click (so it never fights someone who is reading). Moving the mouse
+     only holds it for a while. It stops at the bottom, and never runs while a book is open or with
+     reduced motion turned on. The loop only runs while the page is actually drifting. */
   const DRIFT_SPEED = 20; // px a second
   const DRIFT_START = 4000; // ms after the page opens
-  const DRIFT_RESUME = 8000; // ms after the visitor last did something
-  let driftAt = performance.now() + DRIFT_START;
-  let driftCarry = 0; // whole pixels only, so fractions add up between frames
+  const DRIFT_RESUME = 8000; // ms after the mouse last moved
+  let driftOff = reduceMotion; // the visitor has taken over
+  let driftRaf = 0;
+  let driftTimer = 0;
   let driftLast = 0;
+  let driftY = 0; // where the drift has got to, in fractions of a pixel
+  let driftSet = -1; // the scroll position the drift last asked for
+  let driftBottom = Infinity;
+  const measureBottom = () => { driftBottom = document.documentElement.scrollHeight - window.innerHeight; };
+  const canDrift = () => !driftOff && !shelf.hidden && document.body.classList.contains('is-shelf');
   function drift(now) {
+    driftRaf = 0;
+    if (!canDrift()) return;
     const dt = driftLast ? Math.min(now - driftLast, 100) : 0;
     driftLast = now;
-    if (now >= driftAt && !shelf.hidden && document.body.classList.contains('is-shelf')) {
-      const bottom = document.documentElement.scrollHeight - window.innerHeight;
-      if (window.scrollY < bottom - 1) {
-        driftCarry += DRIFT_SPEED * dt / 1000;
-        const step = Math.floor(driftCarry);
-        if (step) { driftCarry -= step; window.scrollBy(0, step); }
-      }
-    }
-    requestAnimationFrame(drift);
+    if (window.scrollY >= driftBottom - 1) return; // at the bottom: rest
+    driftY += DRIFT_SPEED * dt / 1000;
+    const dpr = window.devicePixelRatio || 1;
+    const y = Math.round(driftY * dpr) / dpr; // whole device pixels: smooth on sharp screens
+    if (y !== driftSet) { driftSet = y; window.scrollTo(0, y); }
+    driftRaf = requestAnimationFrame(drift);
   }
-  if (!reduceMotion) {
-    const holdDrift = () => { driftAt = performance.now() + DRIFT_RESUME; driftCarry = 0; };
-    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((type) => window.addEventListener(type, holdDrift, { passive: true }));
-    requestAnimationFrame(drift);
+  function startPageDrift(delay) {
+    clearTimeout(driftTimer);
+    if (driftRaf) { cancelAnimationFrame(driftRaf); driftRaf = 0; }
+    if (driftOff) return;
+    driftTimer = setTimeout(() => {
+      if (!canDrift()) return;
+      measureBottom();
+      driftY = window.scrollY;
+      driftSet = -1;
+      driftLast = 0;
+      driftRaf = requestAnimationFrame(drift);
+    }, delay);
+  }
+  function stopPageDrift() {
+    driftOff = true;
+    clearTimeout(driftTimer);
+    if (driftRaf) { cancelAnimationFrame(driftRaf); driftRaf = 0; }
+  }
+  if (!driftOff) {
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((type) => window.addEventListener(type, stopPageDrift, { passive: true }));
+    // dragging the scroll bar: a scroll the drift didn't ask for
+    window.addEventListener('scroll', () => {
+      if (driftRaf && driftSet >= 0 && Math.abs(window.scrollY - driftSet) > 2) stopPageDrift();
+    }, { passive: true });
+    let lastMove = 0;
+    window.addEventListener('mousemove', (e) => {
+      if (driftOff || e.timeStamp - lastMove < 200) return;
+      lastMove = e.timeStamp;
+      startPageDrift(DRIFT_RESUME); // someone is here, perhaps reading: hold it
+    }, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(measureBottom).observe(document.body);
+    window.addEventListener('resize', measureBottom);
+    startPageDrift(DRIFT_START);
   }
 
   /* ---------- 13. Go ---------- */
-  const fontsReady = document.fonts && document.fonts.load
+  // Wait for the fonts the books are measured in, but never for long: on a slow connection the
+  // landing shows in the fallback face rather than staying empty.
+  const fontsLoaded = document.fonts && document.fonts.load
     ? Promise.all([
       ...['800 1em', '100 1em'].map((f) => document.fonts.load(`${f} "Tomato Grotesk"`)),
       document.fonts.load('400 1em "Tomato Grotesk Text"'), // measured before laying out the books
     ]).catch(() => {})
     : Promise.resolve();
+  const fontsReady = Promise.race([fontsLoaded, new Promise((resolve) => { setTimeout(resolve, 1500); })]);
   if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) sizeCards(); }).observe(carousel);
   fontsReady.then(() => {
     route();
