@@ -40,7 +40,7 @@ architecture-animation.mp4          (and .webm, -poster.jpg: the same three for 
 
 The Tangerine video is two renders joined into one loop: the jointed branch stand bending (your 960 × 540 sample, scaled up; a full-size export will be sharper), crossfading into the trio of lights, which crossfades back into the start of the branch so the loop has no jump. Send new versions of either and I'll rejoin them.
 
-The Architecture video is your portfolio flip-book animation (Blackwood Cafe, Vivonne Cabin, Smith Residence). Its end dissolves back into its start over half a second, so the loop has no jump; the poster is the Smith Residence cover. Its **See the books** button scrolls up to the carousel and brings the first architecture book to the centre, like **Architecture** in the top bar.
+The Architecture video is your portfolio flip-book animation on white (Blackwood Cafe, Vivonne Cabin, Smith Residence), shown whole in the strip like Tangerine (`reel--whole`). Its end dissolves back into its start over half a second, so the loop has no jump; the poster is the Smith Residence cover. Its **See the books** button scrolls up to the carousel and brings the first architecture book to the centre, like **Architecture** in the top bar.
 
 The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`). Tangerine is a render on white whose opened-up view fills its whole height, so it isn't cropped: `reel--whole` shows it whole in the strip on its own pure white.
 

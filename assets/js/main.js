@@ -966,15 +966,21 @@
     if (window.IntersectionObserver) {
       // The videos are marked preload="none", so they don't compete with the books on arrival.
       // Each starts loading when it's a screen or so away.
+      const warmUp = () => { if (video.preload !== 'auto') { video.preload = 'auto'; video.load(); } };
       const warm = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) return;
         warm.disconnect();
-        if (video.preload !== 'auto') { video.preload = 'auto'; video.load(); }
+        warmUp();
       }, { rootMargin: '600px 0px' });
       warm.observe(frame);
       new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) { if (!video.paused) video.pause(); }
-        else if (entry.intersectionRatio >= 0.2 && video.paused && !userPaused && !reduceMotion) play();
+        else if (entry.intersectionRatio >= 0.2 && video.paused && !userPaused && !reduceMotion) {
+          // Landing straight on a video (a jump, or the browser restoring the scroll position) can run this
+          // before the warm-up above: load first, or the load would cancel the play.
+          warmUp();
+          play();
+        }
       }, { threshold: [0, 0.2] }).observe(frame);
     }
   });
