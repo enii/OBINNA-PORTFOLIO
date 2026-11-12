@@ -1149,4 +1149,11 @@
     watchReveals(); // after the fonts, so text doesn't rise in a fallback face
     startLogos(); // measured in the real face too
   });
+
+  // Temporary: …/?cursorlab adds a bar for trying book cursors (assets/js/cursor-lab.js). Remove once one is chosen.
+  if (new URLSearchParams(location.search).has('cursorlab')) {
+    const lab = document.createElement('script');
+    lab.src = 'assets/js/cursor-lab.js';
+    document.body.appendChild(lab);
+  }
 })();
