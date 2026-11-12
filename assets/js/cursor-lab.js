@@ -26,6 +26,14 @@
   const HAND_TF = 'translate(4 3.5)';
   const options = {
     hand: { label: 'System hand (live now)', note: 'the browser’s own open hand, closing while you hold a page' },
+    thinhand: {
+      label: 'Thin hand',
+      note: 'Phosphor’s thin hand and grab (MIT licence): a white hand with a 1px line, like the Mac one but slimmer',
+      css: {
+        idle: `image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 256 256'%3E%3Cpath d='M188,52a23.9,23.9,0,0,0-16,6.13V44a24,24,0,0,0-47.93-1.8A24,24,0,0,0,84,60v78L72.75,119.94a24,24,0,0,0-41.62,23.92C64.44,214.12,82.17,236,128,236a84.09,84.09,0,0,0,84-84V76A24,24,0,0,0,188,52Z' fill='white' stroke='white' stroke-opacity='.6' stroke-width='22' stroke-linejoin='round'/%3E%3Cpath d='M188,52a23.9,23.9,0,0,0-16,6.13V44a24,24,0,0,0-47.93-1.8A24,24,0,0,0,84,60v78L72.75,119.94a24,24,0,0,0-41.62,23.92C64.44,214.12,82.17,236,128,236a84.09,84.09,0,0,0,84-84V76A24,24,0,0,0,188,52Zm16,100a76.09,76.09,0,0,1-76,76c-37.29,0-53.59-11.51-89.71-87.71l-.15-.29a16,16,0,0,1,27.71-16,.75.75,0,0,1,.07.12l18.68,30A4,4,0,0,0,92,152V60a16,16,0,0,1,32,0v60a4,4,0,0,0,8,0V44a16,16,0,0,1,32,0v76a4,4,0,0,0,8,0V76a16,16,0,0,1,32,0Z' fill='black'/%3E%3C/svg%3E") 2x) 16 16, grab`,
+        held: `image-set(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 256 256'%3E%3Cpath d='M188,84a23.87,23.87,0,0,0-16.07,6.2A24,24,0,0,0,128,78.75,24,24,0,0,0,84,92v24H68a24,24,0,0,0-24,24v12a84,84,0,0,0,168,0V108A24,24,0,0,0,188,84Z' fill='white' stroke='white' stroke-opacity='.6' stroke-width='22' stroke-linejoin='round'/%3E%3Cpath d='M188,84a23.87,23.87,0,0,0-16.07,6.2A24,24,0,0,0,128,78.75,24,24,0,0,0,84,92v24H68a24,24,0,0,0-24,24v12a84,84,0,0,0,168,0V108A24,24,0,0,0,188,84Zm16,68a76,76,0,0,1-152,0V140a16,16,0,0,1,16-16H84v28a4,4,0,0,0,8,0V92a16,16,0,0,1,32,0v28a4,4,0,0,0,8,0V92a16,16,0,0,1,32,0v28a4,4,0,0,0,8,0V108a16,16,0,0,1,32,0Z' fill='black'/%3E%3C/svg%3E") 2x) 16 16, grabbing`,
+      },
+    },
     slimhand: {
       label: 'Slim hand',
       note: 'the hand redrawn with the cross’s 1px line, sharp on Retina; it closes while you hold a page',
@@ -77,7 +85,13 @@
 
   function apply() {
     const o = options[pick];
-    if (!o || !o.idle) { root.style.removeProperty('--cursor-hand'); root.style.removeProperty('--cursor-grab'); $note.textContent = o ? o.note || '' : ''; return; }
+    if (!o || (!o.idle && !o.css)) { root.style.removeProperty('--cursor-hand'); root.style.removeProperty('--cursor-grab'); $note.textContent = o ? o.note || '' : ''; return; }
+    if (o.css) {
+      root.style.setProperty('--cursor-hand', o.css.idle);
+      root.style.setProperty('--cursor-grab', o.css.held);
+      $note.textContent = o.note;
+      return;
+    }
     const dark = isDark();
     const base = o.opts || {};
     root.style.setProperty('--cursor-hand', cur(...o.idle(dir), dark, 'grab', { ...base, solid: o.solidIdle || [] }));
