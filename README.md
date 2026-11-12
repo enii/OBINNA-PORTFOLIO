@@ -218,7 +218,7 @@ This repository is public, so anyone can download the font files from it. Make s
 
 ### Netlify
 
-The site is live at **https://obinnaoti.netlify.app**. It is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
+The site is live at **https://obinnaoti.com** (its own domain, set up in Netlify under **Domain management**; https://obinnaoti.netlify.app is its original Netlify address). It is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
 
 `netlify.toml` also sets the security headers: a Content Security Policy that only runs the site's own scripts, and no caching or framing for the Studio. If you add a script, font or image from another website, add its address to the policy there.
 
