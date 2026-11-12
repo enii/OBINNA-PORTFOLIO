@@ -1052,7 +1052,7 @@
       // a quick crossfade between the two themes, where the browser supports it
       if (document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
       else apply();
-      try { localStorage.setItem('oo-theme', next); } catch (e) { /* storage blocked: still switches for this visit */ }
+      try { localStorage.setItem('oo-theme-v2', next); } catch (e) { /* storage blocked: still switches for this visit */ }
     });
   }
   if (darkQuery.addEventListener) darkQuery.addEventListener('change', showTheme);
