@@ -41,7 +41,8 @@
         <!-- The page's main points. Each scrolls to its section; one whose section isn't on the page yet
              (Feedback, until there's a section with id="testimonials") shows as grey text until there is. -->
         <nav class="bar__nav bar__sections" aria-label="Sections">
-          <a class="bar__link" href="#shelf" data-scroll="shelf">Products</a>
+          <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="products">Products</a>
+          <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="architecture">Architecture</a>
           <a class="bar__link" href="#motion" data-scroll="motion">Motion</a>
           <a class="bar__link" href="#clients" data-scroll="clients">Clients</a>
           <a class="bar__link" href="#testimonials" data-scroll="testimonials">Feedback</a>
@@ -228,7 +229,7 @@
   THE BOOKS
   ─────────────────────────────────────────────────────────────
   The flip books are built by main.js from two lists:
-    projects/books.js      the hand-built books (Sting Rays, Vivonne Cabin, Super Slides, Tangerine, Smith Residence)
+    projects/books.js      the hand-built books (Sting Rays, Super Slides, Tangerine, Vivonne Cabin, Smith Residence)
     projects/projects.js   the projects added with the Studio (studio.html), which follow them
   Their pages are only loaded when a book is opened. If the page-turning script can't run,
   main.js lays every book out here as plain stacked spreads instead.

@@ -80,8 +80,8 @@
   --cursor-grab: grabbing;
   --ease: cubic-bezier(.2, .75, .2, 1);
 }
-/* Dark mode: follows the device unless the visitor picks one with the switch in the top bar
-   (main.js stores it and sets data-theme on <html>) */
+/* Dark mode: the site opens dark (boot.js sets data-theme="dark") unless the visitor has picked light with
+   the switch in the top bar. Without JavaScript it follows the device, below. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --desk: #000;
@@ -560,9 +560,10 @@ a.btn { color: inherit; text-decoration: none; }
   .shelf__screen > .bar { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand end" "sections sections"; row-gap: 12px; }
   .shelf__screen > .bar .brand { grid-area: brand; }
   .bar__end { grid-area: end; }
-  .bar__sections { grid-area: sections; }
+  .bar__sections { grid-area: sections; flex-wrap: wrap; row-gap: 8px; } /* wraps rather than running off a narrow screen */
 }
 @media (max-width: 420px) { .bar__nav { gap: 14px; } }
+@media (max-width: 350px) { .bar__sections { gap: 8px 10px; } } /* five links on the smallest phones */
 
 /* ==========================================================================
    Reader

@@ -308,6 +308,24 @@
     paint();
   }
 
+  // Bring the first book of a group to the centre (the top bar's Products and Architecture links).
+  // A book is architecture when its discipline starts with "Architecture"; everything else is a product.
+  const isArchitecture = (b) => /^architecture\b/i.test(b.meta);
+  function showGroup(group) {
+    const i = books.findIndex((b) => isArchitecture(b) === (group === 'architecture'));
+    if (i < 0) return;
+    const now = performance.now();
+    pauseUntil = now + 6000; // let it sit for a moment before the drift carries on
+    if (!carouselInView || reduceMotion) { centreBook(i); return; } // off screen: be there on arrival
+    const W = carouselW();
+    const x = stripX();
+    const k = Math.round((W / 2 - cw / 2 - x) / step); // the card in the centre now
+    let d = i - (((k % n) + n) % n); // books to travel, the short way round
+    if (d > n / 2) d -= n;
+    if (d < -n / 2) d += n;
+    glide = { from: offset, to: offset + x + (k + d) * step + cw / 2 - W / 2, t0: now, dur: 900 };
+  }
+
   // Mouse over a book pauses the drift
   track.addEventListener('pointerover', (e) => {
     if (e.pointerType !== 'mouse' || drag) return;
@@ -972,6 +990,7 @@
     const target = document.getElementById(link.dataset.scroll);
     if (!target) return;
     e.preventDefault();
+    if (link.dataset.group) showGroup(link.dataset.group); // Products / Architecture: that group's first book
     const behavior = reduceMotion ? 'auto' : 'smooth';
     if (getComputedStyle(target).position === 'sticky') {
       // a banner that sticks while you scroll (Clients): go to where it comes to rest, at the end of its run
@@ -1005,8 +1024,8 @@
   }
 
   /* ---------- 12c. Light / dark switch ---------- */
-  // Follows the device until the visitor picks; the choice is remembered (and read before
-  // first paint by the small script in <head>)
+  // Dark until the visitor picks; the choice is remembered (and read before first paint by
+  // assets/js/boot.js, which sets data-theme on every visit). Without JavaScript the device decides.
   const themeBtn = $('.bar__theme');
   const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
   const isDark = () => (document.documentElement.dataset.theme || (darkQuery.matches ? 'dark' : 'light')) === 'dark';

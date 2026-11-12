@@ -45,56 +45,6 @@ window.BOOKS =
     ]
   },
   {
-    "slug": "vivonne-cabin",
-    "title": "Vivonne Cabin",
-    "discipline": "Architecture · Residential",
-    "coverStyle": "image",
-    "cover": "assets/images/vivonne-cabin-hero.webp",
-    "coverTitle": "Vivonne\ncabin",
-    "frames": [
-      {
-        "src": "assets/images/vivonne-01-site.webp",
-        "alt": "Vivonne Cabin, site and proposal: lot 143 on Crabb Road, 828 m² falling 1.5 m towards the bay, with its bushfire, coastal, flooding and native vegetation overlays, and notes on the two options for the same 10.66 × 6.66 m cabin."
-      },
-      {
-        "src": "assets/images/vivonne-02-option1.webp",
-        "alt": "Vivonne Cabin, option 01: a 3D view of the gable-roofed cabin among trees on its steel piers, with its deck, stair and full-height glazing, beside the project details and context notes."
-      },
-      {
-        "src": "assets/images/vivonne-03-plans.webp",
-        "alt": "Vivonne Cabin, option 01: floor plan with dimensions and room areas, and the north, south, east and west elevations at 1:50."
-      },
-      {
-        "src": "assets/images/vivonne-04-section.webp",
-        "alt": "Vivonne Cabin, option 01: section 01 through the living area and bathroom at 1:25, from the Colorbond roof down to the Uni-Pier footing, with a footing detail at 1:10."
-      },
-      {
-        "src": "assets/images/vivonne-05-details.webp",
-        "alt": "Vivonne Cabin, option 01: construction details of the Uni-Pier and Prydar hanger, the external wall system and the internal wall system."
-      },
-      {
-        "src": "assets/images/vivonne-06-schedules.webp",
-        "alt": "Vivonne Cabin, option 01: the door and window schedules, beside the general, timber and project notes."
-      },
-      {
-        "src": "assets/images/vivonne-07-compliance.webp",
-        "alt": "Vivonne Cabin, option 01: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959."
-      },
-      {
-        "src": "assets/images/vivonne-08-option2.webp",
-        "alt": "Vivonne Cabin, option 02: a 3D view of the split-skillion cabin, two offset roofs over the same plan on steel piers, beside the project details and context notes."
-      },
-      {
-        "src": "assets/images/vivonne-09-option2-plans.webp",
-        "alt": "Vivonne Cabin, option 02: floor plan with dimensions and room areas, and the four elevations at 1:50."
-      },
-      {
-        "src": "assets/images/vivonne-10-option2-section.webp",
-        "alt": "Vivonne Cabin, option 02: section 01 through the living area and bathroom at 1:25, showing the Colorbond roof, Stria-clad timber walls and Structaflor floor on galvanised Uni-Piers, with a detail at 1:10."
-      }
-    ]
-  },
-  {
     "slug": "super-slides",
     "title": "Super Slides",
     "discipline": "Product design · Footwear",
@@ -146,6 +96,56 @@ window.BOOKS =
       {
         "src": "assets/images/tangerine-3-render.webp",
         "alt": "Tangerine, renders: the light in purple and white on black, beside the three colourways, purple, orange and green, and close-ups of their two-button tops."
+      }
+    ]
+  },
+  {
+    "slug": "vivonne-cabin",
+    "title": "Vivonne Cabin",
+    "discipline": "Architecture · Residential",
+    "coverStyle": "image",
+    "cover": "assets/images/vivonne-cabin-hero.webp",
+    "coverTitle": "Vivonne\ncabin",
+    "frames": [
+      {
+        "src": "assets/images/vivonne-01-site.webp",
+        "alt": "Vivonne Cabin, site and proposal: lot 143 on Crabb Road, 828 m² falling 1.5 m towards the bay, with its bushfire, coastal, flooding and native vegetation overlays, and notes on the two options for the same 10.66 × 6.66 m cabin."
+      },
+      {
+        "src": "assets/images/vivonne-02-option1.webp",
+        "alt": "Vivonne Cabin, option 01: a 3D view of the gable-roofed cabin among trees on its steel piers, with its deck, stair and full-height glazing, beside the project details and context notes."
+      },
+      {
+        "src": "assets/images/vivonne-03-plans.webp",
+        "alt": "Vivonne Cabin, option 01: floor plan with dimensions and room areas, and the north, south, east and west elevations at 1:50."
+      },
+      {
+        "src": "assets/images/vivonne-04-section.webp",
+        "alt": "Vivonne Cabin, option 01: section 01 through the living area and bathroom at 1:25, from the Colorbond roof down to the Uni-Pier footing, with a footing detail at 1:10."
+      },
+      {
+        "src": "assets/images/vivonne-05-details.webp",
+        "alt": "Vivonne Cabin, option 01: construction details of the Uni-Pier and Prydar hanger, the external wall system and the internal wall system."
+      },
+      {
+        "src": "assets/images/vivonne-06-schedules.webp",
+        "alt": "Vivonne Cabin, option 01: the door and window schedules, beside the general, timber and project notes."
+      },
+      {
+        "src": "assets/images/vivonne-07-compliance.webp",
+        "alt": "Vivonne Cabin, option 01: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959."
+      },
+      {
+        "src": "assets/images/vivonne-08-option2.webp",
+        "alt": "Vivonne Cabin, option 02: a 3D view of the split-skillion cabin, two offset roofs over the same plan on steel piers, beside the project details and context notes."
+      },
+      {
+        "src": "assets/images/vivonne-09-option2-plans.webp",
+        "alt": "Vivonne Cabin, option 02: floor plan with dimensions and room areas, and the four elevations at 1:50."
+      },
+      {
+        "src": "assets/images/vivonne-10-option2-section.webp",
+        "alt": "Vivonne Cabin, option 02: section 01 through the living area and bathroom at 1:25, showing the Colorbond roof, Stria-clad timber walls and Structaflor floor on galvanised Uni-Piers, with a detail at 1:10."
       }
     ]
   },

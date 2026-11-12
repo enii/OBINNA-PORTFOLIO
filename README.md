@@ -9,7 +9,7 @@ A product design portfolio set in Tomato Grotesk. It opens on a carousel of proj
 - Each project has its own link, such as `/#sting-rays`, `/#vivonne-cabin` or `/#super-slides`.
 - There's an optional page-turn sound (made in the browser, no audio files) and full screen.
 - **Auto-scroll:** a few seconds after the page opens, it drifts slowly down on its own (20px a second), from the books through the animations to the footer. The first scroll, swipe, key press or click hands control to the visitor for good, so it never fights someone who is reading. Moving the mouse only holds it until the mouse has been still for 8 seconds. It stops at the bottom, and never runs while a book is open or for visitors with reduced motion turned on. The speed and timings are the `DRIFT_…` values in section 12e of `assets/js/main.js`.
-- **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode turns the background pitch black. Until a visitor chooses, the site follows their device's setting; their choice is remembered. The colours are the `--desk…` values at the top of `assets/css/style.css`.
+- **Dark mode:** the round switch at the right of the top bar flips between light and dark. Dark mode turns the background pitch black. The site opens in dark mode; a visitor who switches to light gets light from then on (their choice is remembered). To open in light again, change `'dark'` in `assets/js/boot.js`. The colours are the `--desk…` values at the top of `assets/css/style.css`.
 - The mouse pointer is a drafting cross (CAD-style, with a small square at the centre); over anything clickable the square fills in. Both are inline SVGs in `--cursor` and `--cursor-hot` at the top of `assets/css/style.css`.
 - Text on the landing page rises into view as it scrolls in: the intro and caption on arrival, the Motion text and footer as you reach them. To add it to another element, give it the class `reveal`. Visitors with reduced motion turned on see the text straight away.
 
@@ -51,7 +51,7 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 
 The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it, and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-**Clients** in the top bar jumps here. (Next to it, **Products** returns to the books, **Motion** goes to the animations, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
+**Clients** in the top bar jumps here. (Next to it, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **Motion** goes to the animations, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 
@@ -110,7 +110,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin, Super Slides, Tangerine and Smith Residence are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Sting Rays, Super Slides, Tangerine, Vivonne Cabin and Smith Residence are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -127,7 +127,7 @@ Sting Rays, Vivonne Cabin, Super Slides, Tangerine and Smith Residence are liste
 }
 ```
 
-- **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves.
+- **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves. The product books come first, then architecture: a book counts as architecture when its `discipline` starts with "Architecture", and that's what the top bar's **Products** and **Architecture** links use to find each group.
 - **Covers:** `coverClass` and `pageClass` add the special cover treatments in `style.css` (`cover__img--centred` for Super Slides, `cover__img--photo` and `page--tangerine` for Tangerine).
 - **Loading:** only the covers load with the page. A book's spreads load when it's opened.
 - **Page turns:** every page peels like paper, covers included. To make the covers swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` in `renderBook` in `assets/js/main.js`.
@@ -140,9 +140,9 @@ Current books:
 | Book | Pages |
 |---|---|
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
-| 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
-| 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
-| 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
+| 02 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
+| 03 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
+| 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
 | 05 Smith Residence | cover · title page (Frame 52) · floor plan, sheet A01 (Frame 55) · section and detail, sheet A03 (Frame 60) · back cover |
 
 ### Spreads made from your Figma frames
