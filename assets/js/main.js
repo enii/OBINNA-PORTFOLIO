@@ -511,7 +511,7 @@
     if (pf) { try { pf.destroy(); } catch (e) { /* already gone */ } }
     pf = null;
     $$('.book', wrap).forEach((el) => el.remove());
-    wrap.classList.remove('is-ready');
+    wrap.classList.remove('is-ready', 'is-holding');
   }
 
   function build(L, startPage) {
@@ -774,11 +774,16 @@
   /* ---------- 9. Sound: a soft paper swish, synthesised (no audio files) ---------- */
   let audio = null;
   let soundOn = store.get('oo-sound') !== 'off';
-  function playFlip(hard) {
+  function getAudio() {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    if (audio.state === 'suspended') audio.resume();
+    return audio;
+  }
+  // level: 1 for a page that turns over, less for one that falls back where it was
+  function playFlip(hard, level = 1) {
     if (!soundOn) return;
     try {
-      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-      if (audio.state === 'suspended') audio.resume();
+      getAudio();
       const t = audio.currentTime;
       const dur = hard ? 0.38 : 0.55;
       const buf = audio.createBuffer(1, Math.floor(audio.sampleRate * dur), audio.sampleRate);
@@ -797,16 +802,102 @@
       filter.frequency.exponentialRampToValueAtTime(hard ? 300 : 700, t + dur);
       const gain = audio.createGain();
       gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(hard ? 0.5 : 0.22, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime((hard ? 0.5 : 0.22) * level, t + 0.05);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
       src.connect(filter).connect(gain).connect(audio.destination);
       src.start(t);
     } catch (e) { /* audio unavailable */ }
   }
+  // While a page is dragged: a quiet paper rustle that follows how fast it moves
+  let noise = null; // two seconds of paper noise, made once and looped
+  let rustle = null; // { src, filter, gain } while a drag is sounding
+  function holdAt(param, t) {
+    if (param.cancelAndHoldAtTime) param.cancelAndHoldAtTime(t); else param.cancelScheduledValues(t);
+  }
+  function rustleTo(speed) { // speed in px per ms
+    if (!soundOn) return;
+    try {
+      const ctx = getAudio();
+      if (!rustle) {
+        if (!noise) {
+          noise = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+          const d = noise.getChannelData(0);
+          for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (Math.random() < 0.003 ? 2.2 : 1);
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = noise;
+        src.loop = true;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.Q.value = 0.8;
+        filter.frequency.value = 1400;
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        src.connect(filter).connect(gain).connect(ctx.destination);
+        src.start();
+        rustle = { src, filter, gain };
+      }
+      const t = ctx.currentTime;
+      const g = rustle.gain.gain;
+      holdAt(g, t);
+      g.setTargetAtTime(Math.min(0.1, speed * 0.05), t, 0.03); // louder the faster the page moves
+      g.setTargetAtTime(0, t + 0.08, 0.08); // and quiet again when the hand stops
+      rustle.filter.frequency.setTargetAtTime(1200 + Math.min(1.5, speed) * 1000, t, 0.05);
+    } catch (e) { /* audio unavailable */ }
+  }
+  function stopRustle() {
+    if (!rustle) return;
+    const { src, gain } = rustle;
+    rustle = null;
+    try {
+      const t = audio.currentTime;
+      holdAt(gain.gain, t);
+      gain.gain.setTargetAtTime(0, t, 0.02);
+      src.stop(t + 0.15);
+    } catch (e) { /* already stopped */ }
+  }
+
+  /* A page taken by hand: the cursor's hand closes, the page rustles as it's pulled, and letting go
+     sends it over with the swish (softer when it falls back). StPageFlip never enters 'flipping' for
+     a drag (it goes user_fold → read), so the swish in the changeState handler only ever heard clicks. */
+  let holding = false;
+  let lastPt = null;
+  let dragSpeed = 0;
+  wrap.addEventListener('pointerdown', (e) => {
+    if (!pf || e.button > 0) return;
+    holding = true;
+    lastPt = { x: e.clientX, y: e.clientY, t: e.timeStamp };
+    dragSpeed = 0;
+    wrap.classList.add('is-holding');
+    if (soundOn) { try { getAudio(); } catch (err) { /* audio unavailable */ } } // sound may only start from a press
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!holding || lastState !== 'user_fold') return;
+    const dt = Math.max(1, e.timeStamp - lastPt.t);
+    const v = Math.hypot(e.clientX - lastPt.x, e.clientY - lastPt.y) / dt;
+    lastPt = { x: e.clientX, y: e.clientY, t: e.timeStamp };
+    dragSpeed = dragSpeed * 0.6 + v * 0.4;
+    rustleTo(dragSpeed);
+  }, { passive: true });
+  function letGo() {
+    if (!holding) return;
+    holding = false;
+    wrap.classList.remove('is-holding');
+    stopRustle();
+    if (!pf || !book || lastState !== 'user_fold') return; // a click: the 'flipping' state plays its own swish
+    // Read where the page is before StPageFlip hears the release: past the spine, it turns over
+    let turns = true;
+    try { turns = pf.getFlipController().getCalculation().getPosition().x <= 0; } catch (e) { /* assume it turns */ }
+    playFlip(current === 0 || current >= book.total - 2, turns ? 1 : 0.45);
+  }
+  window.addEventListener('pointerup', letGo);
+  window.addEventListener('pointercancel', letGo);
+
   function setSound(on) {
     soundOn = on;
     soundBtn.setAttribute('aria-pressed', String(on));
     store.set('oo-sound', on ? 'on' : 'off');
+    if (!on) stopRustle();
   }
   setSound(soundOn);
   soundBtn.addEventListener('click', () => setSound(!soundOn));
