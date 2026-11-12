@@ -27,7 +27,7 @@ Then open the printed URL.
 
 Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are four animations: Sting Rays, Super Slides and Tangerine, then Architecture. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
+There are four animations, in this order: Sting Rays, Super Slides, Architecture and Tangerine. To reorder them, move their `<article class="motion__item">` blocks in `index.html` and renumber the "01 —" lines. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
