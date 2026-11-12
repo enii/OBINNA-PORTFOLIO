@@ -128,7 +128,7 @@ Sting Rays, Vivonne Cabin, Super Slides, Tangerine and Smith Residence are liste
 ```
 
 - **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves.
-- **Covers:** `coverClass` and `pageClass` add the special cover treatments in `style.css` (`cover__img--fill` for Vivonne Cabin, `cover__img--centred` for Super Slides, `cover__img--photo` and `page--tangerine` for Tangerine).
+- **Covers:** `coverClass` and `pageClass` add the special cover treatments in `style.css` (`cover__img--centred` for Super Slides, `cover__img--photo` and `page--tangerine` for Tangerine).
 - **Loading:** only the covers load with the page. A book's spreads load when it's opened.
 - **Page turns:** every page peels like paper, covers included. To make the covers swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` in `renderBook` in `assets/js/main.js`.
 - **Running heads and page numbers** ("Obinna Oti · 2020—2025") are added automatically. The years are `YEARS` at the top of `assets/js/main.js`; the footer's © year updates by itself.
@@ -181,7 +181,7 @@ The covers use one render or drawing each. The Sting Rays render is still croppe
 
 ```
 sting-rays-render-hero.webp    (Sting Rays cover)
-vivonne-axonometric.webp       (Vivonne Cabin cover: the exploded axonometric with the roof lifted, 1478 × 1745, above the title with a white margin, `cover__img--fill`)
+vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the split-skillion cabin, cropped square around the stair, 1116 × 1116, full bleed with the title in white: coverStyle "image")
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")

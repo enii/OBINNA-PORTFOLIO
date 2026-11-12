@@ -6,7 +6,7 @@
  *   discipline   "Practice · Field"; the part before the · also signs the back cover
  *   coverStyle   "dark" (renders on black), "light" (drawings on white) or "image" (photo fills the cover)
  *   cover        the cover image
- *   coverClass   extra classes for the cover image (cover__img--fill, --centred, --photo; see style.css)
+ *   coverClass   extra classes for the cover image (cover__img--centred, --photo; see style.css)
  *   pageClass    extra classes for both covers (page--tangerine)
  *   coverTitle   the title as set on the cover; a line break (\n) starts a new line
  *   frames       Figma frames in reading order, each split across a two-page spread.
@@ -48,9 +48,8 @@ window.BOOKS =
     "slug": "vivonne-cabin",
     "title": "Vivonne Cabin",
     "discipline": "Architecture · Residential",
-    "coverStyle": "light",
-    "cover": "assets/images/vivonne-axonometric.webp",
-    "coverClass": "cover__img--fill",
+    "coverStyle": "image",
+    "cover": "assets/images/vivonne-cabin-hero.webp",
     "coverTitle": "Vivonne\ncabin",
     "frames": [
       {
