@@ -149,5 +149,27 @@ window.BOOKS =
         "alt": "Tangerine, renders: the light in purple and white on black, beside the three colourways, purple, orange and green, and close-ups of their two-button tops."
       }
     ]
+  },
+  {
+    "slug": "smith-residence",
+    "title": "Smith Residence",
+    "discipline": "Architecture · Residential",
+    "coverStyle": "image",
+    "cover": "assets/images/smith-residence-hero.webp",
+    "coverTitle": "Smith\nresidence",
+    "frames": [
+      {
+        "src": "assets/images/smith-residence-1-title.webp",
+        "alt": "Smith Residence: a render of the single-storey brick house at golden hour, with its hipped roof, a gabled carport and a gabled entry porch on white columns, under the title Smith Residence, Building Design & Drafting, and Obinna's contact details."
+      },
+      {
+        "src": "assets/images/smith-residence-2-floor-plan.webp",
+        "alt": "Smith Residence, floor plan (sheet A01, 1:50): the family room, kitchen, dining, laundry, WC, bathroom and three bedrooms, with the carport and deck, overall dimensions, a legend, general notes, and the door and window schedules. Overview: this stage focused on developing the architectural floor plan and elevations, translating the design concept into accurate technical drawings."
+      },
+      {
+        "src": "assets/images/smith-residence-3-section.webp",
+        "alt": "Smith Residence, section and detail (sheet A03): a section through the house showing the 22.5° pitched roof, ridge beam, rafters and ceiling joists on a raft slab footing, with a 3D detail and a section of the brick veneer wall meeting the slab and concrete paving. Overview: this stage focused on detailed building sections and construction details, specifying roof framing, wall systems, insulation, floor construction and footings."
+      }
+    ]
   }
 ];

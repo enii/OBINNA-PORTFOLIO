@@ -110,7 +110,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Vivonne Cabin, Super Slides and Tangerine are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Sting Rays, Vivonne Cabin, Super Slides, Tangerine and Smith Residence are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -143,6 +143,7 @@ Current books:
 | 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
 | 03 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
 | 04 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
+| 05 Smith Residence | cover · title page (Frame 52) · floor plan, sheet A01 (Frame 55) · section and detail, sheet A03 (Frame 60) · back cover |
 
 ### Spreads made from your Figma frames
 
@@ -167,6 +168,9 @@ vivonne-10-option2-section.webp   (p. 14)
 tangerine-1-moodboard.webp   (Frame 10)
 tangerine-2-sketching.webp   (Frame 12)
 tangerine-3-render.webp      (Frame 48)
+smith-residence-1-title.webp        (Frame 52)
+smith-residence-2-floor-plan.webp   (Frame 55)
+smith-residence-3-section.webp      (Frame 60)
 ```
 
 To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
@@ -180,6 +184,7 @@ sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-axonometric.webp       (Vivonne Cabin cover: the exploded axonometric with the roof lifted, 1478 × 1745, above the title with a white margin, `cover__img--fill`)
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
+smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
 
 The Tangerine cover shows your cover frame full bleed, with the title across the foot of the cover. Its backdrop is a soft off-white, #f9f7f7, so the Tangerine covers take on that colour (`page--tangerine` in `style.css`) and the picture has no visible edge; if you replace the render with one on a different background, change that colour to match.
