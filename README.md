@@ -27,7 +27,7 @@ Then open the printed URL.
 
 Scrolling down from the carousel, or clicking **Motion** in the top bar, reaches the animations. Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are three animations: Sting Rays, Super Slides and Tangerine. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
+There are four animations: Sting Rays, Super Slides and Tangerine, then Architecture. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
@@ -35,9 +35,12 @@ sting-rays-animation.webm           the same video as WebM, a fallback for the f
 sting-rays-animation-poster.jpg     the still shown before it plays
 super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for Super Slides)
 tangerine-animation.mp4             (and .webm, -poster.jpg: the same three for Tangerine)
+architecture-animation.mp4          (and .webm, -poster.jpg: the same three for Architecture)
 ```
 
 The Tangerine video is two renders joined into one loop: the jointed branch stand bending (your 960 × 540 sample, scaled up; a full-size export will be sharper), crossfading into the trio of lights, which crossfades back into the start of the branch so the loop has no jump. Send new versions of either and I'll rejoin them.
+
+The Architecture video is your portfolio flip-book animation (Blackwood Cafe, Vivonne Cabin, Smith Residence). Its end dissolves back into its start over half a second, so the loop has no jump; the poster is the Smith Residence cover. Its **See the books** button scrolls up to the carousel and brings the first architecture book to the centre, like **Architecture** in the top bar.
 
 The Super Slides video is your 2560 × 1600 render cropped to 16:9 from the top (the empty space under the print bed goes) and scaled to 1920 × 1080. On the page each video shows as a full-width 21:9 strip; `--pos` on a `<video>` moves the crop up or down (Super Slides uses `50% 30%`). Tangerine is a render on white whose opened-up view fills its whole height, so it isn't cropped: `reel--whole` shows it whole in the strip on its own pure white.
 
