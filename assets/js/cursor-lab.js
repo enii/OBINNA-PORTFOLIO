@@ -25,7 +25,7 @@
   // The hand, after Lucide's hand / hand-grab (ISC), redrawn with the cross's 1px line and halo
   const HAND_TF = 'translate(4 3.5)';
   const options = {
-    hand: { label: 'Hand (live now)' },
+    hand: { label: 'System hand (live now)', note: 'the browser’s own open hand, closing while you hold a page' },
     slimhand: {
       label: 'Slim hand',
       note: 'the hand redrawn with the cross’s 1px line, sharp on Retina; it closes while you hold a page',
@@ -77,7 +77,7 @@
 
   function apply() {
     const o = options[pick];
-    if (!o || !o.idle) { root.style.removeProperty('--cursor-hand'); root.style.removeProperty('--cursor-grab'); return; }
+    if (!o || !o.idle) { root.style.removeProperty('--cursor-hand'); root.style.removeProperty('--cursor-grab'); $note.textContent = o ? o.note || '' : ''; return; }
     const dark = isDark();
     const base = o.opts || {};
     root.style.setProperty('--cursor-hand', cur(...o.idle(dir), dark, 'grab', { ...base, solid: o.solidIdle || [] }));
