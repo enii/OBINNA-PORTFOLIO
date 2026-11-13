@@ -147,22 +147,22 @@ Current books:
 | Book | Pages |
 |---|---|
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
-| 02 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
-| 03 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
+| 02 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
+| 03 Tangerine | cover · moodboard · brief and sketching · CAD · colourways · the stand · back cover |
 | 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
 | 05 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
 | 06 Blackwood Cafe | cover · one blank spread (its pages aren't in yet) · back cover |
 
 ### Spreads made from your Figma frames
 
-Every spread inside the books is one of your Figma frames: the frame (1920 × 1080) is rendered from your PDF at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays and Super Slides follow your booklets page for page, and Vivonne Cabin follows its pages in your 2026 portfolio PDF (those pages are already 1920 × 1080, so they are rendered at 144 dpi with no crop):
+Every spread inside the books is one of your Figma frames: the frame (1920 × 1080) is rendered from your PDF at 2×, 3840 × 2160, and split down the middle, so the spread looks exactly like the design, text included. Sting Rays, Super Slides and Tangerine follow their updated portfolio PDFs page for page (1920 × 1080, rendered at 144 dpi), and Vivonne Cabin follows its pages in your 2026 portfolio PDF (those pages are already 1920 × 1080, so they are rendered at 144 dpi with no crop):
 
 ```
 sting-rays-1-moodboard.webp        super-slides-1-moodboard.webp
 sting-rays-2-sketching.webp        super-slides-2-sketching.webp
 sting-rays-3-cad.webp              super-slides-3-cad.webp
-sting-rays-4-visualisation.webp    super-slides-4-render.webp
-sting-rays-5-detail.webp           super-slides-5-colourways.webp
+sting-rays-4-visualisation.webp    super-slides-4-colourways.webp
+sting-rays-5-detail.webp           super-slides-5-render.webp
 vivonne-01-site.webp              (2026 portfolio, p. 4)
 vivonne-02-option1.webp           (p. 6)
 vivonne-03-plans.webp             (p. 7)
@@ -173,9 +173,11 @@ vivonne-07-compliance.webp        (p. 11)
 vivonne-08-option2.webp           (p. 12)
 vivonne-09-option2-plans.webp     (p. 13)
 vivonne-10-option2-section.webp   (p. 14)
-tangerine-1-moodboard.webp   (Frame 10)
-tangerine-2-sketching.webp   (Frame 12)
-tangerine-3-render.webp      (Frame 48)
+tangerine-1-moodboard.webp
+tangerine-2-sketching.webp
+tangerine-3-cad.webp
+tangerine-4-colourways.webp
+tangerine-5-stand.webp
 smith-residence-1-title.webp        (draft portfolio, p. 3)
 smith-residence-2-site-plan.webp    (p. 4)
 smith-residence-3-overview.webp     (p. 5)

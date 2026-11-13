@@ -25,23 +25,23 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/sting-rays-1-moodboard.webp",
-        "alt": "Sting Rays, moodboard: reference images of sculpted sports eyewear and manta rays, with a tone palette of olive, coral, orange and blues. Moodboard: inspired by the fluid movement and distinctive anatomy of stingrays, the design explores the intersection of marine biology and futuristic eyewear."
+        "alt": "Sting Rays, moodboard: reference images of sculpted sports eyewear and manta rays, with tone swatches in aqua, ivory, blues, coral and green. Inspired by the fluid movement and distinctive anatomy of stingrays, the design explores the intersection of marine biology and futuristic eyewear. The stingray's sweeping wings, streamlined body and elongated tail inform a sculptural silhouette that balances organic movement with aerodynamic precision. Tone: a contrast between aquatic depth and vibrant marine energy; electric blues, iridescent greens and warm metallic golds, balanced by softer ivory and muted olive."
       },
       {
         "src": "assets/images/sting-rays-2-sketching.webp",
-        "alt": "Sting Rays, concept sketching: line studies of a stingray beside a red geometric construction of its form, front-view lens studies, temple sketches, and side and perspective sketches of the frame. Concept Sketching: initial sketches explore the distinctive silhouette of stingrays, focusing on their sweeping wings, tapered tails and fluid body contours. Process: the design process begins by studying the stingray's anatomy and translating its defining features into functional eyewear elements."
+        "alt": "Sting Rays, concept sketching: a stingray outline abstracted into construction lines, its wing and tail geometry carried into the frame, front frame variations, temple profiles, side profile development and three-quarter refinement. Process: initial sketches explore the stingray's sweeping wings, tapered tail and fluid body; simplified line studies abstract them into sharp, aerodynamic geometries. The wings inspire the frame's extended contours and the tail the streamlined temples."
       },
       {
         "src": "assets/images/sting-rays-3-cad.webp",
-        "alt": "Sting Rays, CAD (Rhino subdivision modelling): wireframe views of the frame and its parts: the left hand and hinge, the right hand and hinge, the eye frame and bridge, and the detachable lens."
+        "alt": "Sting Rays, CAD (Rhino subdivision modelling): wireframe views of the frame and its four parts, the left hand and hinge, the right hand and hinge, the eye frame and bridge, and the detachable lens. Process: the refined sketches were rebuilt in Rhino using SubD, keeping the soft, continuous surfaces while controlling every edge. The temples sweep back like the ray's wings and taper towards the ear like its tail; the hinges sit inside the curve of the frame, and the lens detaches so tints can be swapped."
       },
       {
         "src": "assets/images/sting-rays-4-visualisation.webp",
-        "alt": "Sting Rays, visualisation: a close render of the cobalt frame with its amber lining and gold hinge, beside the frame in three colourways. Visualisation: building on the technical sketches, the selected concept is developed into a detailed 3D model, transforming the initial two-dimensional explorations into a fully realised product. This stage focuses on translating the stingray's distinctive anatomy into a cohesive eyewear design, balancing expressive, organic forms with structural precision and functional considerations."
+        "alt": "Sting Rays, visualisation: a close render of the cobalt frame with its amber lining and gold hinge on black, beside the frame in three colourways. Building on the technical sketches, the selected concept is developed into a detailed 3D model, balancing expressive, organic forms with structural precision."
       },
       {
         "src": "assets/images/sting-rays-5-detail.webp",
-        "alt": "Sting Rays, visualisation: two close renders of the cobalt frame, one showing the metal hinge and one the gold hinge inside the amber lining. Visualisation: through careful surface modelling, the sweeping contours, tapered extensions and sculptural transitions are refined to create a continuous visual flow across the frame."
+        "alt": "Sting Rays, visualisation: a close render of the cobalt frame and its gold hinge on black. Through careful surface modelling, the sweeping contours and sculptural transitions are refined into one continuous flow; close-ups focus on the hinge, where the gold accent sits inside the temple."
       }
     ]
   },
@@ -56,23 +56,23 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/super-slides-1-moodboard.webp",
-        "alt": "Super Slides, moodboard: reference images of sculpted foam footwear and soft textures, with a tone palette of sage, cream, coral, blue and lavender. Moodboard: exploring the intersection of sculptural form, layered cushioning and contemporary comfort, this moodboard establishes the visual and material direction for a soft double-foam slide concept."
+        "alt": "Super Slides, moodboard: reference images of sculpted foam footwear and soft textures, with tone swatches in sage, ivory, powder blue, coral and periwinkle. Exploring the intersection of sculptural form, layered cushioning and contemporary comfort, this moodboard sets the visual and material direction for a soft double-foam slide: organic contours, fluid transitions and exaggerated volumes, with a dual-density foam construction. Tone: muted sage green, warm ivory and powder blue, with vibrant coral, periwinkle and cool lavender."
       },
       {
         "src": "assets/images/super-slides-2-sketching.webp",
-        "alt": "Super Slides, concept sketching: side-view sketches of slide shapes and soles, a thick sole split into two and recombined, and the final double-sole concept. Process: the design process focused on refining the slide's overall shape while developing the idea of a double-sole construction. Starting with a thick, exaggerated sole, I explored splitting it into two individual layers, then superimposing and recombining them to create a more interesting silhouette. The result is the concept of a Super Slide: two layers of cushioning working together to create extra comfort, with the layered construction becoming the defining feature of the design."
+        "alt": "Super Slides, concept sketching: standard slide shapes with gripped soles, a thick sole split into two and recombined, and the final double-sole concept. Process: the sketches explore slide shapes, grip patterns and outsole shapes, then split a thick, exaggerated sole into two layers and recombine them. The result is the Super Slide: two layers of cushioning working together, with the layered construction as the defining feature."
       },
       {
         "src": "assets/images/super-slides-3-cad.webp",
-        "alt": "Super Slides, CAD: wireframe views of the slide and its two sole layers, modelled in Rhino with SubD."
+        "alt": "Super Slides, CAD: wireframe views of the outsole grip pattern from underneath and above, a side elevation with a foot for scale showing the upper on the double sole, and the lower sole layer separated. Process: the concept was developed in Rhino using SubD, with the upper and the two sole layers modelled as separate components and refined so they come together seamlessly."
       },
       {
-        "src": "assets/images/super-slides-4-render.webp",
-        "alt": "Super Slides: a close render of the slide in bone. Process: the final CAD model was brought into KeyShot to explore materials, colours and lighting, bringing the Super Slides concept to life through realistic 3D visualisation. I experimented with dramatic, high-contrast lighting to exaggerate the sculptural curves, flowing surfaces and layered sole construction."
+        "src": "assets/images/super-slides-4-colourways.webp",
+        "alt": "Super Slides, visualisation: the slide in bone, the slide in sage, olive and navy, and a close-up of the rippled sole, on black. Different colourways and soft matte finishes bring out the foam-like material; dark backgrounds and controlled lighting let the form and the double-sole silhouette stand out."
       },
       {
-        "src": "assets/images/super-slides-5-colourways.webp",
-        "alt": "Super Slides: the slide in bone, the slide in sage, olive and lavender, and a close-up of the rippled sole. Process: different colourways and soft matte finishes were explored to highlight the foam-like material qualities, while close-up renders focus on the outsole detailing and subtle surface textures."
+        "src": "assets/images/super-slides-5-render.webp",
+        "alt": "Super Slides, visualisation: a close render of the slide in bone on black. The final CAD model was taken into KeyShot; dramatic, high-contrast lighting exaggerates the sculptural curves and the layered sole."
       }
     ]
   },
@@ -88,15 +88,23 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/tangerine-1-moodboard.webp",
-        "alt": "Tangerine, moodboard: lamps and lights in wood, glass and coloured metal, from a branching wooden stand and hanging globe lights to a mushroom lamp and a yellow tube light, beside the tone swatches."
+        "alt": "Tangerine, moodboard: lamps and lights in wood, glass and coloured metal, from a branching stand and hanging globes to domed lamps and bent tube lights, with tone swatches in olive, sage, tangerine, coral and yellow. Tangerine started with a simple question: what if light could be picked like fruit? The moodboard gathers objects that sit between lamp and sculpture: soft domes, glowing spheres, bent tubes and stands that grow like branches. The direction: a modular, branch-like stand holding small portable light pods that can be lifted off and carried. Range: fruit-shaped torch pods with +/- controls that dock onto the stand and charge by magnetic contact; olive and sage for the stand, tangerine, coral and warm yellow for the pods."
       },
       {
         "src": "assets/images/tangerine-2-sketching.webp",
-        "alt": "Tangerine, concept sketching: hands holding a fruit-shaped torch light, studies of the light in section, and branching modular stands it plugs into."
+        "alt": "Tangerine, brief and sketching: hands holding a fruit-shaped torch light, studies of the pod, and branching modular stands it plugs into. Brief: design a lamp that is more than a fixed light; a stand with detachable light pods, each shaped like a small fruit, that work as hand-held torches and return to the stand to charge. The stand should feel organic, not mechanical, like a branch holding fruit, and be modular and easy to assemble."
       },
       {
-        "src": "assets/images/tangerine-3-render.webp",
-        "alt": "Tangerine, renders: the light in purple and white on black, beside the three colourways, purple, orange and green, and close-ups of their two-button tops."
+        "src": "assets/images/tangerine-3-cad.webp",
+        "alt": "Tangerine, CAD sketching: line drawings of the pod in front, side and section views, and the stand built from bent tube segments, labelled detachable pod, pod docked on top, tube collar joint, docking pocket, pod in side pocket and stand base. Process: developed in Rhino using SubD; pockets in the lower and top tubes let a pod dock and charge by magnetic contact, and the wide base keeps the stand stable with both pods attached."
+      },
+      {
+        "src": "assets/images/tangerine-4-colourways.webp",
+        "alt": "Tangerine, visualisation: the pod in lilac on black, the pods in lilac, tangerine and soft green, and a close-up of the lilac pod's controls and cap. Each pod was tested across a family of colourways; soft matte finishes make them friendly and tactile, and a white diffuser cap stays constant so they read as one product."
+      },
+      {
+        "src": "assets/images/tangerine-5-stand.webp",
+        "alt": "Tangerine, visualisation: the stand rendered on its own in lilac and in tangerine against a clean background, its tube segments reading as one continuous branch, with the joints, pockets and base as quiet details."
       }
     ]
   },
