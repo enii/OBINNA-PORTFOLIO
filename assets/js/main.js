@@ -1007,6 +1007,64 @@
     }
   });
 
+  /* ---------- 12a. About: the words type themselves out as the section comes into view,
+     and the portrait fades in with them ---------- */
+  function typeAbout() {
+    const about = $('#about');
+    if (!about || reduceMotion || !window.IntersectionObserver) return; // otherwise it's all simply there
+    const photo = $('.about__photo', about);
+    // the name, the practice line, then the paragraphs, each at its own pace (ms per letter)
+    const parts = $$('.about__head h2, .about__head p, .about__text p', about).map((el) => {
+      const text = el.textContent;
+      const shown = document.createElement('span');
+      const caret = document.createElement('span');
+      const rest = document.createElement('span'); // the rest keeps its place, invisible (and readable to screen readers)
+      caret.className = 'type-caret';
+      caret.setAttribute('aria-hidden', 'true');
+      rest.className = 'type-rest';
+      rest.textContent = text;
+      el.replaceChildren(shown, caret, rest);
+      return { text, shown, caret, rest, n: 0, pace: el.matches('h2') ? 75 : el.matches('.about__role') ? 22 : 13 };
+    });
+    const total = parts.reduce((t, p) => t + p.text.length * p.pace, 0);
+    if (photo) photo.style.opacity = '0';
+    let start = 0;
+    let active = null;
+    const step = (now) => {
+      if (!start) start = now;
+      const t = now - start;
+      let budget = t;
+      let current = null;
+      parts.forEach((p) => {
+        const n = Math.max(0, Math.min(p.text.length, Math.floor(budget / p.pace)));
+        budget -= p.text.length * p.pace;
+        if (n !== p.n) {
+          p.n = n;
+          p.shown.textContent = p.text.slice(0, n);
+          p.rest.textContent = p.text.slice(n);
+        }
+        if (!current && n < p.text.length) current = p;
+      });
+      const last = parts[parts.length - 1];
+      const on = current || last; // when it's all typed, the caret rests at the end for a moment
+      if (on !== active) {
+        if (active) active.caret.classList.remove('is-on');
+        on.caret.classList.add('is-on');
+        active = on;
+      }
+      if (photo) photo.style.opacity = String(1 - Math.pow(1 - Math.min(1, t / total), 2)); // eases in alongside the words
+      if (t < total) requestAnimationFrame(step);
+      else setTimeout(() => last.caret.classList.remove('is-on'), 2200);
+    };
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      requestAnimationFrame(step);
+    }, { rootMargin: '0px 0px -30% 0px' }); // starts once the section is well into view
+    io.observe(about);
+  }
+  typeAbout();
+
   /* ---------- 12b. Landing text rises into view as it scrolls in ---------- */
   function watchReveals() {
     const els = $$('.reveal');

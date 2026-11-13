@@ -554,7 +554,27 @@ a.btn { color: inherit; text-decoration: none; }
   padding: clamp(72px, 10vw, 144px) var(--gutter) clamp(56px, 8vw, 112px);
 }
 .about__photo { margin: 0; }
-.about__photo img { display: block; width: 100%; height: auto; } /* 4:5, from its width and height */
+/* 4:5, from its width and height. A radial fade melts its edges into the page, whatever the theme */
+.about__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: radial-gradient(ellipse closest-side at 50% 44%, #000 34%, rgba(0, 0, 0, .78) 56%, rgba(0, 0, 0, .38) 78%, transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side at 50% 44%, #000 34%, rgba(0, 0, 0, .78) 56%, rgba(0, 0, 0, .38) 78%, transparent 100%);
+}
+/* Typing (main.js): the words not yet typed keep their place, invisible, so nothing below moves;
+   a thin caret blinks where the typing is */
+.type-rest { color: transparent; }
+.type-caret { position: relative; }
+.type-caret.is-on::after {
+  content: "";
+  position: absolute;
+  top: .06em; bottom: .02em; left: .03em;
+  width: max(2px, .055em);
+  background: currentColor;
+  animation: caret 1s steps(1) infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
 .about__head { margin-bottom: clamp(28px, 4vw, 48px); }
 .about__role { margin: 16px 0 0; font-size: 15px; color: var(--desk-muted); }
 .about__text { max-width: 60ch; }

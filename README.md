@@ -52,7 +52,7 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 
 ## About me
 
-The **About me** section sits under the company banner, just above the footer, and **About** in the top bar scrolls to it. Your portrait (`assets/images/obinna-oti-portrait.webp`, 1280 × 1600) sits on the left, or above the text on phones; to change it, overwrite that file with another 4:5 photo. Its text comes from the "Who am I?" page of your 2026 portfolio (the first and last paragraphs), in `<section class="about">` in `index.html`: edit the paragraphs there (the first one is set larger, as a lead). Your phone number is left off the site; the email in the top bar and footer is the way to get in touch.
+The **About me** section sits under the company banner, just above the footer, and **About** in the top bar scrolls to it. Your portrait (`assets/images/obinna-oti-portrait.webp`, 1280 × 1600) sits on the left, or above the text on phones; to change it, overwrite that file with another 4:5 photo. Its text comes from the "Who am I?" page of your 2026 portfolio (the first and last paragraphs), in `<section class="about">` in `index.html`: edit the paragraphs there (the first one is set larger, as a lead). When the section scrolls into view, your name and the text type themselves out with a blinking caret while the portrait fades in (`typeAbout` in `assets/js/main.js`, where `pace` sets the speed); visitors with reduced motion turned on see it all at once. The portrait's edges fade into the page with a radial mask (`.about__photo img` in `style.css`). Your phone number is left off the site; the email in the top bar and footer is the way to get in touch.
 
 ## Companies (the logo strip above the footer)
 
