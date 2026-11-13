@@ -50,11 +50,15 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 - **Poster:** use a strong frame as the poster image; the last frame often works well.
 - **Fallback:** a WebM copy is optional. I can make one for you.
 
+## About me
+
+The **About me** section sits under the company banner, just above the footer, and **About** in the top bar scrolls to it. Its text is the "Who am I?" page of your 2026 portfolio, in `<section class="about">` in `index.html`: edit the paragraphs there (the first one is set larger, as a lead). Your phone number is left off the site; the email in the top bar and footer is the way to get in touch.
+
 ## Companies (the logo strip above the footer)
 
 The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it, and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-**Clients** in the top bar jumps here. (Next to it, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
+**Clients** in the top bar jumps here. (Next to it, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **About** goes to the About me section, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 
