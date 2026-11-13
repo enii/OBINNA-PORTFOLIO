@@ -164,12 +164,12 @@ sting-rays-3-cad.webp              super-slides-3-cad.webp
 sting-rays-4-visualisation.webp    super-slides-4-colourways.webp
 sting-rays-5-detail.webp           super-slides-5-render.webp
 vivonne-01-site.webp              (2026 portfolio, p. 4)
-vivonne-02-option1.webp           (p. 6)
-vivonne-03-plans.webp             (p. 7)
-vivonne-04-section.webp           (p. 8)
-vivonne-05-details.webp           (p. 9)
+vivonne-02-option1.webp           (Frame 34)
+vivonne-03-plans.webp             (Frame 33, sheet A02)
+vivonne-04-section.webp           (Frame 32, sheet A03)
+vivonne-05-details.webp           (Frame 35, sheet A04)
 vivonne-06-schedules.webp         (p. 10)
-vivonne-07-compliance.webp        (p. 11)
+vivonne-07-compliance.webp        (Frame 36)
 vivonne-08-option2.webp           (p. 12)
 vivonne-09-option2-plans.webp     (p. 13)
 vivonne-10-option2-section.webp   (p. 14)

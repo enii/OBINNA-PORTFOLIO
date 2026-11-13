@@ -122,19 +122,19 @@ window.BOOKS =
       },
       {
         "src": "assets/images/vivonne-02-option1.webp",
-        "alt": "Vivonne Cabin, option 01: a 3D view of the gable-roofed cabin among trees on its steel piers, with its deck, stair and full-height glazing, beside the project details and context notes."
+        "alt": "Vivonne Cabin, option 01: a 3D view of the gable-roofed cabin among trees on its steel piers, with its deck, stair and full-height glazing, beside the project details, the context and the list of sheets."
       },
       {
         "src": "assets/images/vivonne-03-plans.webp",
-        "alt": "Vivonne Cabin, option 01: floor plan with dimensions and room areas, and the north, south, east and west elevations at 1:50."
+        "alt": "Vivonne Cabin, option 01, floor plan and elevations (sheet A02, 1:50): the floor plan with dimensions and room areas, and the north, south, east and west elevations. Overview: this stage developed the floor plan and elevations, planning internal spaces, positioning doors and windows, establishing dimensions and specifying materials and finishes."
       },
       {
         "src": "assets/images/vivonne-04-section.webp",
-        "alt": "Vivonne Cabin, option 01: section 01 through the living area and bathroom at 1:25, from the Colorbond roof down to the Uni-Pier footing, with a footing detail at 1:10."
+        "alt": "Vivonne Cabin, option 01, section and detail (sheet A03): section 01 through the living area and bathroom at 1:25, from the Colorbond roof down to the Uni-Pier footing, with a footing detail at 1:10. Overview: this stage developed detailed building sections and construction details to understand how the structural elements come together."
       },
       {
         "src": "assets/images/vivonne-05-details.webp",
-        "alt": "Vivonne Cabin, option 01: construction details of the Uni-Pier and Prydar hanger, the external wall system and the internal wall system."
+        "alt": "Vivonne Cabin, option 01, details (sheet A04): 3D construction assemblies of the Uni-Pier and Pryda hanger, the external wall system and the internal wall system. Overview: this stage modelled how the building components connect, using manufacturer specifications, to improve the accuracy of the building model and resolve construction details."
       },
       {
         "src": "assets/images/vivonne-06-schedules.webp",
@@ -142,7 +142,7 @@ window.BOOKS =
       },
       {
         "src": "assets/images/vivonne-07-compliance.webp",
-        "alt": "Vivonne Cabin, option 01: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959."
+        "alt": "Vivonne Cabin, option 01, compliance blow-out: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959, from the corrosion-rated Colorbond roof to the BAL-40 rated cladding."
       },
       {
         "src": "assets/images/vivonne-08-option2.webp",
