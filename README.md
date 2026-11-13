@@ -117,7 +117,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Super Slides, Tangerine, Vivonne Cabin and Smith Residence are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Sting Rays, Super Slides, Tangerine, Vivonne Cabin, Smith Residence and Blackwood Cafe are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -151,6 +151,7 @@ Current books:
 | 03 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
 | 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
 | 05 Smith Residence | cover · title page (Frame 52) · floor plan, sheet A01 (Frame 55) · section and detail, sheet A03 (Frame 60) · back cover |
+| 06 Blackwood Cafe | cover · one blank spread (its pages aren't in yet) · back cover |
 
 ### Spreads made from your Figma frames
 
@@ -180,7 +181,7 @@ smith-residence-2-floor-plan.webp   (Frame 55)
 smith-residence-3-section.webp      (Frame 60)
 ```
 
-To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
+To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Blackwood Cafe, for now) opens to one blank spread. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
 ### Cover images
 
@@ -191,6 +192,7 @@ sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the gable cabin at sunset, framed square around the whole cabin, 1226 × 1226; the render was a little too short for a tall cover, so its sky and grass are extended slightly at the top and bottom; full bleed with the title in white: coverStyle "image")
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
+blackwood-cafe-hero.webp       (Blackwood Cafe cover: the photo of the brick building behind its tree, cropped square, 1042 × 1042, full bleed with the title in white: coverStyle "image")
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
 

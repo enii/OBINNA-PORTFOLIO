@@ -10,6 +10,7 @@
  *   pageClass    extra classes for both covers (page--tangerine)
  *   coverTitle   the title as set on the cover; a line break (\n) starts a new line
  *   frames       Figma frames in reading order, each split across a two-page spread.
+ *                Leave it empty ([]) and the book opens to one blank spread until its pages are ready.
  *                Each one's alt text describes the frame and the words in it, for screen readers.
  */
 window.BOOKS = 
@@ -170,5 +171,14 @@ window.BOOKS =
         "alt": "Smith Residence, section and detail (sheet A03): a section through the house showing the 22.5° pitched roof, ridge beam, rafters and ceiling joists on a raft slab footing, with a 3D detail and a section of the brick veneer wall meeting the slab and concrete paving. Overview: this stage focused on detailed building sections and construction details, specifying roof framing, wall systems, insulation, floor construction and footings."
       }
     ]
+  },
+  {
+    "slug": "blackwood-cafe",
+    "title": "Blackwood Cafe",
+    "discipline": "Architecture · Hospitality",
+    "coverStyle": "image",
+    "cover": "assets/images/blackwood-cafe-hero.webp",
+    "coverTitle": "Blackwood\ncafe",
+    "frames": []
   }
 ];

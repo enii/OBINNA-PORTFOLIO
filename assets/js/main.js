@@ -39,7 +39,7 @@
   const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (ch) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const assetUrl = (u) => esc(/^(blob:|data:|https?:)/.test(u) ? u : String(u || '').replace(/^\/+/, ''));
-  const valid = (p) => p && p.slug && p.title && Array.isArray(p.frames) && p.frames.length;
+  const valid = (p) => p && p.slug && p.title && Array.isArray(p.frames); // no frames yet: blank pages
 
   function renderBook(p, number) {
     const style = ['dark', 'light', 'image'].includes(p.coverStyle) ? p.coverStyle : 'dark';
@@ -58,7 +58,12 @@
       const scale = Math.min(1, 7.5 / longest).toFixed(3);
       title = `<h2 class="cover__title" style="font-size: calc(var(--fit) * ${scale} * 15cqw)">${esc(p.title)}</h2>`;
     }
-    const frames = p.frames.map((f, k) => {
+    // A book whose pages aren't ready yet ("frames": []) opens to one blank spread
+    const blank = `
+      <div class="page page--blank" data-bare>
+        <div class="page__inner"></div>
+      </div>`;
+    const frames = !p.frames.length ? blank + blank : p.frames.map((f, k) => {
       const src = typeof f === 'string' ? f : f.src;
       const alt = (typeof f === 'object' && f.alt) || `${p.title}, frame ${k + 1}`;
       return ['l', 'r'].map((side) => `
