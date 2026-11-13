@@ -545,19 +545,23 @@ a.btn { color: inherit; text-decoration: none; }
 .logos.is-moving .logos__track { flex-wrap: nowrap; width: auto; padding: 0 var(--logo-gap) 0 0; }
 @keyframes logos { to { transform: translateX(calc(-100% / var(--copies, 1))); } }
 
-/* About: the name on the left, the text on the right; one column on phones */
+/* About: the portrait on the left, the name and text beside it; on phones the portrait comes first */
 .about {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 28px clamp(24px, 6vw, 96px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: 40px clamp(32px, 6vw, 112px);
   padding: clamp(72px, 10vw, 144px) var(--gutter) clamp(56px, 8vw, 112px);
 }
+.about__photo { margin: 0; }
+.about__photo img { display: block; width: 100%; height: auto; } /* 4:5, from its width and height */
+.about__head { margin-bottom: clamp(28px, 4vw, 48px); }
 .about__role { margin: 16px 0 0; font-size: 15px; color: var(--desk-muted); }
 .about__text { max-width: 60ch; }
 .about__text p { margin: 0 0 1.1em; font-size: 16px; line-height: 1.6; color: var(--desk-muted); }
 .about__text p:last-child { margin-bottom: 0; }
 .about__text .about__lead { font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; color: var(--desk-ink); }
-@media (max-width: 760px) { .about { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) { .about { grid-template-columns: minmax(0, 1fr); } .about__photo { max-width: 520px; } }
 
 .site-foot {
   display: flex;

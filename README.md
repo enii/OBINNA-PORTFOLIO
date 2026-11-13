@@ -27,7 +27,7 @@ Then open the printed URL.
 
 Scrolling down from the carousel reaches the animations (the top bar has no link to them). Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are four animations, in this order: Sting Rays, Super Slides, Architecture and Tangerine. To reorder them, move their `<article class="motion__item">` blocks in `index.html` and renumber the "01 —" lines. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
+There are four animations, in this order: Sting Rays, Super Slides, Architecture and Tangerine. Tangerine is hidden for now: delete `hidden` from its `<article class="motion__item" hidden>` in `index.html` to show it again. To reorder them, move their `<article class="motion__item">` blocks in `index.html` and renumber the "01 —" lines. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
@@ -52,7 +52,7 @@ To add another animation, copy an `<article class="motion__item">` block in `ind
 
 ## About me
 
-The **About me** section sits under the company banner, just above the footer, and **About** in the top bar scrolls to it. Its text is the "Who am I?" page of your 2026 portfolio, in `<section class="about">` in `index.html`: edit the paragraphs there (the first one is set larger, as a lead). Your phone number is left off the site; the email in the top bar and footer is the way to get in touch.
+The **About me** section sits under the company banner, just above the footer, and **About** in the top bar scrolls to it. Your portrait (`assets/images/obinna-oti-portrait.webp`, 1280 × 1600) sits on the left, or above the text on phones; to change it, overwrite that file with another 4:5 photo. Its text comes from the "Who am I?" page of your 2026 portfolio (the first and last paragraphs), in `<section class="about">` in `index.html`: edit the paragraphs there (the first one is set larger, as a lead). Your phone number is left off the site; the email in the top bar and footer is the way to get in touch.
 
 ## Companies (the logo strip above the footer)
 
