@@ -118,7 +118,7 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/vivonne-01-site.webp",
-        "alt": "Vivonne Cabin, site and proposal: lot 143 on Crabb Road, 828 m² falling 1.5 m towards the bay, with its bushfire, coastal, flooding and native vegetation overlays, and notes on the two options for the same 10.66 × 6.66 m cabin."
+        "alt": "Vivonne Cabin, site plan (sheet A01): lot 143 on Crabb Road with the proposed cabin, the north point and boundary dimensions, and a 3D terrain model and contour map of the site with its levels: highest point RL 8.36, lowest RL 6.75, a 1.6 m fall across the lot and a 3–4% slope. Beside it, the site information and the proposal: two ways of building the same 10.66 × 6.66 m cabin, the first a simple gable with no eaves that suits a high bushfire rating, the second a split skillion with modest overhangs."
       },
       {
         "src": "assets/images/vivonne-02-option1.webp",
@@ -145,16 +145,28 @@ window.BOOKS =
         "alt": "Vivonne Cabin, option 01, compliance blow-out: an exploded view of the roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959, from the corrosion-rated Colorbond roof to the BAL-40 rated cladding."
       },
       {
-        "src": "assets/images/vivonne-08-option2.webp",
+        "src": "assets/images/vivonne-08-option2-title.webp",
+        "alt": "Vivonne Cabin 02: a render of the split-skillion cabin at sunset, two offset roofs over timber-clad, glazed walls on steel piers, with its deck and stair, under the title Vivonne Cabin 02, Building Design & Drafting, and Obinna's contact details."
+      },
+      {
+        "src": "assets/images/vivonne-09-option2.webp",
         "alt": "Vivonne Cabin, option 02: a 3D view of the split-skillion cabin, two offset roofs over the same plan on steel piers, beside the project details and context notes."
       },
       {
-        "src": "assets/images/vivonne-09-option2-plans.webp",
-        "alt": "Vivonne Cabin, option 02: floor plan with dimensions and room areas, and the four elevations at 1:50."
+        "src": "assets/images/vivonne-10-option2-plans.webp",
+        "alt": "Vivonne Cabin, option 02, floor plan and elevations (sheet A06, 1:50): the floor plan with dimensions and room areas, and the north, south, east and west elevations of the split-skillion cabin. Overview: this stage developed the floor plan and elevations, planning internal spaces, positioning doors and windows, establishing dimensions and specifying materials and finishes."
       },
       {
-        "src": "assets/images/vivonne-10-option2-section.webp",
-        "alt": "Vivonne Cabin, option 02: section 01 through the living area and bathroom at 1:25, showing the Colorbond roof, Stria-clad timber walls and Structaflor floor on galvanised Uni-Piers, with a detail at 1:10."
+        "src": "assets/images/vivonne-11-option2-section.webp",
+        "alt": "Vivonne Cabin, option 02, section and detail (sheet A07): section 01 through the cabin under its skillion roof at 1:25, with a detail at 1:10. Levels: the floor at ±0, natural ground at −1102 and the top of the wall plate at +3000."
+      },
+      {
+        "src": "assets/images/vivonne-12-option2-roof.webp",
+        "alt": "Vivonne Cabin, option 02, roof and wall system and tie-down (sheet A08, 1:25): a 3D cut-away of the skillion roof and wall build-up, from the Colorbond Surfmist sheeting at 5° pitch, purlins at 1200 centres and sarking down to the Hardie cavity battens, beside a tie-down detail and its notes to NCC 2022 and AS 1684.2."
+      },
+      {
+        "src": "assets/images/vivonne-13-option2-compliance.webp",
+        "alt": "Vivonne Cabin, option 02, compliance blow-out: an exploded view of the split-skillion cabin's roof, wall and floor systems, each annotated with how it meets the NCC 2022 Housing Provisions and AS 3959."
       }
     ]
   },

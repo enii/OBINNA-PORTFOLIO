@@ -149,7 +149,7 @@ Current books:
 | 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 02 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
 | 03 Tangerine | cover · moodboard · brief and sketching · CAD · colourways · the stand · back cover |
-| 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
+| 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
 | 05 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
 | 06 Blackwood Cafe | cover · one blank spread (its pages aren't in yet) · back cover |
 
@@ -163,16 +163,19 @@ sting-rays-2-sketching.webp        super-slides-2-sketching.webp
 sting-rays-3-cad.webp              super-slides-3-cad.webp
 sting-rays-4-visualisation.webp    super-slides-4-colourways.webp
 sting-rays-5-detail.webp           super-slides-5-render.webp
-vivonne-01-site.webp              (2026 portfolio, p. 4)
+vivonne-01-site.webp              (Frame 38V, sheet A01)
 vivonne-02-option1.webp           (Frame 34)
 vivonne-03-plans.webp             (Frame 33, sheet A02)
 vivonne-04-section.webp           (Frame 32, sheet A03)
 vivonne-05-details.webp           (Frame 35, sheet A04)
 vivonne-06-schedules.webp         (p. 10)
 vivonne-07-compliance.webp        (Frame 36)
-vivonne-08-option2.webp           (p. 12)
-vivonne-09-option2-plans.webp     (p. 13)
-vivonne-10-option2-section.webp   (p. 14)
+vivonne-08-option2-title.webp     (the "Vivonne Cabin 02" title page)
+vivonne-09-option2.webp           (2026 portfolio, p. 12)
+vivonne-10-option2-plans.webp     (Frame 44, sheet A06)
+vivonne-11-option2-section.webp   (Frame 41, sheet A07)
+vivonne-12-option2-roof.webp      (Frame 51, sheet A08)
+vivonne-13-option2-compliance.webp (Frame 54)
 tangerine-1-moodboard.webp
 tangerine-2-sketching.webp
 tangerine-3-cad.webp
