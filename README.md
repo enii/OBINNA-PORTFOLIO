@@ -229,6 +229,8 @@ This repository is public, so anyone can download the font files from it. Make s
 
 The site is live at **https://obinnaoti.com** (its own domain, set up in Netlify under **Domain management**; https://obinnaoti.netlify.app is its original Netlify address). It is plain files, so Netlify serves the repository as it is: no build command, publish directory `.` (both set in `netlify.toml`). Connect the GitHub repository in Netlify and every push, including every Studio publish, redeploys the site in about a minute.
 
+**Publishing, and Netlify credits.** On the free plan Netlify gives 300 credits a month, and each deploy of the live site uses about 15, so roughly 20 updates a month. Netlify only builds `main`, so day-to-day changes go to the `draft` branch, which costs nothing, and the shareable preview shows them; when a batch is ready, `draft` is merged into `main` and goes live as one deploy. Everything that lands on `main` deploys, including Studio publishes and anyone else's pushes, so those count too. Opening a pull request also builds a deploy preview, which uses credits. Netlify shows the balance under **Usage & billing**; the credits renew on the 11th of each month.
+
 `netlify.toml` also sets the security headers: a Content Security Policy that only runs the site's own scripts, and no caching or framing for the Studio. If you add a script, font or image from another website, add its address to the policy there.
 
 The address is written in three places in `index.html`; if it changes (for example to a custom domain), update all three: `og:url`, the canonical link, and `og:image` (as `https://…/assets/images/og-image.jpg`). LinkedIn and Facebook only show the preview image with a full address.
