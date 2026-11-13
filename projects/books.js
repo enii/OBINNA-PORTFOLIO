@@ -160,15 +160,31 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/smith-residence-1-title.webp",
-        "alt": "Smith Residence: a render of the single-storey brick house at golden hour, with its hipped roof, a gabled carport and a gabled entry porch on white columns, under the title Smith Residence, Building Design & Drafting, and Obinna's contact details."
+        "alt": "Smith Residence: a render of the single-storey brick house at golden hour, with its hipped roof, a gabled carport and a gabled entry porch on white columns, under the title Smith Residence, Building Design & Drafting."
       },
       {
-        "src": "assets/images/smith-residence-2-floor-plan.webp",
-        "alt": "Smith Residence, floor plan (sheet A01, 1:50): the family room, kitchen, dining, laundry, WC, bathroom and three bedrooms, with the carport and deck, overall dimensions, a legend, general notes, and the door and window schedules. Overview: this stage focused on developing the architectural floor plan and elevations, translating the design concept into accurate technical drawings."
+        "src": "assets/images/smith-residence-2-site-plan.webp",
+        "alt": "Smith Residence, site plan (sheet A01): the house on its lot with the north point, boundaries and notes, beside the site information and the proposal."
       },
       {
-        "src": "assets/images/smith-residence-3-section.webp",
-        "alt": "Smith Residence, section and detail (sheet A03): a section through the house showing the 22.5° pitched roof, ridge beam, rafters and ceiling joists on a raft slab footing, with a 3D detail and a section of the brick veneer wall meeting the slab and concrete paving. Overview: this stage focused on detailed building sections and construction details, specifying roof framing, wall systems, insulation, floor construction and footings."
+        "src": "assets/images/smith-residence-3-overview.webp",
+        "alt": "Smith Residence, project overview: two 3D views of the house, one from the entry porch and one from the carport, beside the project details, the context and the list of sheets."
+      },
+      {
+        "src": "assets/images/smith-residence-4-floor-plan.webp",
+        "alt": "Smith Residence, floor plan (sheet A03, 1:50): the dimensioned plan of the family room, kitchen, dining, laundry, bathroom, WC and three bedrooms with the carport and deck, beside a colour-coded plan of the rooms."
+      },
+      {
+        "src": "assets/images/smith-residence-5-kitchen.webp",
+        "alt": "Smith Residence, floor plan blow-out (sheet A04): two kitchen layout options drawn at a larger scale, with the general notes for the kitchen."
+      },
+      {
+        "src": "assets/images/smith-residence-6-elevations.webp",
+        "alt": "Smith Residence, elevations (sheet A05, 1:50): the north, south, east and west elevations, with the brick veneer, roof pitches, carport and porch gables annotated."
+      },
+      {
+        "src": "assets/images/smith-residence-7-section.webp",
+        "alt": "Smith Residence, section and detail (sheet A06): a section through the house showing the roof framing on a raft slab, with a 3D detail and a section of the brick veneer wall meeting the slab and paving."
       }
     ]
   },

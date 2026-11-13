@@ -150,7 +150,7 @@ Current books:
 | 02 Super Slides | cover · moodboard · concept sketching · CAD · render · colourways · back cover |
 | 03 Tangerine | cover · moodboard (Frame 10) · concept sketching (Frame 12) · renders (Frame 48) · back cover |
 | 04 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, plans and elevations, section, details, schedules, compliance blow-out · option 02 (split skillion): 3D view, plans and elevations, section · back cover |
-| 05 Smith Residence | cover · title page (Frame 52) · floor plan, sheet A01 (Frame 55) · section and detail, sheet A03 (Frame 60) · back cover |
+| 05 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
 | 06 Blackwood Cafe | cover · one blank spread (its pages aren't in yet) · back cover |
 
 ### Spreads made from your Figma frames
@@ -176,9 +176,13 @@ vivonne-10-option2-section.webp   (p. 14)
 tangerine-1-moodboard.webp   (Frame 10)
 tangerine-2-sketching.webp   (Frame 12)
 tangerine-3-render.webp      (Frame 48)
-smith-residence-1-title.webp        (Frame 52)
-smith-residence-2-floor-plan.webp   (Frame 55)
-smith-residence-3-section.webp      (Frame 60)
+smith-residence-1-title.webp        (draft portfolio, p. 3)
+smith-residence-2-site-plan.webp    (p. 4)
+smith-residence-3-overview.webp     (p. 5)
+smith-residence-4-floor-plan.webp   (p. 6)
+smith-residence-5-kitchen.webp      (p. 7)
+smith-residence-6-elevations.webp   (p. 8)
+smith-residence-7-section.webp      (p. 9)
 ```
 
 To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Blackwood Cafe, for now) opens to one blank spread. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
