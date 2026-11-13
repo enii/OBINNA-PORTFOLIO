@@ -188,7 +188,7 @@ The covers use one render or drawing each. The Sting Rays render is still croppe
 
 ```
 sting-rays-render-hero.webp    (Sting Rays cover)
-vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the split-skillion cabin, cropped square around the stair, 1116 × 1116, full bleed with the title in white: coverStyle "image")
+vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the gable cabin at sunset, cropped square around its gable end and glazing, 1116 × 1116, full bleed with the title in white: coverStyle "image")
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
