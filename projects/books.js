@@ -10,7 +10,8 @@
  *   pageClass    extra classes for both covers (page--tangerine)
  *   coverTitle   the title as set on the cover; a line break (\n) starts a new line
  *   frames       Figma frames in reading order, each split across a two-page spread.
- *                Leave it empty ([]) and the book opens to one blank spread until its pages are ready.
+ *                Leave it empty ([]) and the book opens to one blank spread, with "Coming soon" on it,
+ *                until its pages are ready.
  *                Each one's alt text describes the frame and the words in it, for screen readers.
  */
 window.BOOKS = 
@@ -107,6 +108,15 @@ window.BOOKS =
         "alt": "Tangerine, visualisation: the stand rendered on its own in lilac and in tangerine against a clean background, its tube segments reading as one continuous branch, with the joints, pockets and base as quiet details."
       }
     ]
+  },
+  {
+    "slug": "splash-stool",
+    "title": "Splash Stool",
+    "discipline": "Product design · Furniture",
+    "coverStyle": "image",
+    "cover": "assets/images/splash-stool-hero.webp",
+    "coverTitle": "Splash\nstool",
+    "frames": []
   },
   {
     "slug": "vivonne-cabin",

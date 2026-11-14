@@ -58,12 +58,12 @@
       const scale = Math.min(1, 7.5 / longest).toFixed(3);
       title = `<h2 class="cover__title" style="font-size: calc(var(--fit) * ${scale} * 15cqw)">${esc(p.title)}</h2>`;
     }
-    // A book whose pages aren't ready yet ("frames": []) opens to one blank spread
-    const blank = `
+    // A book whose pages aren't ready yet ("frames": []) opens to one blank spread, "Coming soon" on its first page
+    const blank = (text) => `
       <div class="page page--blank" data-bare>
-        <div class="page__inner"></div>
+        <div class="page__inner page__inner--soon">${text ? `<p class="page__soon">${text}</p>` : ''}</div>
       </div>`;
-    const frames = !p.frames.length ? blank + blank : p.frames.map((f, k) => {
+    const frames = !p.frames.length ? blank('Coming soon') + blank('') : p.frames.map((f, k) => {
       const src = typeof f === 'string' ? f : f.src;
       const alt = (typeof f === 'object' && f.alt) || `${p.title}, frame ${k + 1}`;
       return ['l', 'r'].map((side) => `

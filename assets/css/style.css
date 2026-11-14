@@ -710,6 +710,15 @@ a.btn { color: inherit; text-decoration: none; }
   -webkit-tap-highlight-color: transparent;
 }
 .page--dark { background: var(--night); color: var(--night-ink); }
+/* a book whose pages aren't in yet: "Coming soon", quietly, in the middle of its first blank page */
+.page__inner--soon { align-items: center; justify-content: center; }
+.page__soon {
+  margin: 0;
+  font: 800 calc(var(--fit) * max(20px, 7.5cqw))/1 var(--font-display);
+  letter-spacing: -.035em;
+  color: var(--ink);
+  opacity: .32;
+}
 .page a > *, .page button > * { pointer-events: none; } /* let links and buttons take the click instead of turning the page */
 
 .page__inner {
