@@ -202,7 +202,7 @@ sting-rays-render-hero.webp    (Sting Rays cover)
 vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the gable cabin at sunset, framed square around the whole cabin, 1226 × 1226; the render was a little too short for a tall cover, so its sky and grass are extended slightly at the top and bottom; full bleed with the title in white: coverStyle "image")
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
-splash-stool-hero.webp         (Splash Stool cover: the render of the blue lattice seat and its glass legs on black, 1932 × 2000, full bleed with the title in white over the black: coverStyle "image")
+splash-stool-hero.webp         (Splash Stool cover: the render of the blue lattice seat and its glass legs on black, 1663 × 2000, full bleed with the title in white over the black: coverStyle "image")
 blackwood-cafe-hero.webp       (Blackwood Cafe cover: the photo of the brick building behind its tree, cropped square, 1042 × 1042, full bleed with the title in white: coverStyle "image")
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
