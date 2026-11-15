@@ -534,7 +534,7 @@
     if (pf) { try { pf.destroy(); } catch (e) { /* already gone */ } }
     pf = null;
     $$('.book', wrap).forEach((el) => el.remove());
-    wrap.classList.remove('is-ready', 'is-holding');
+    wrap.classList.remove('is-ready', 'is-holding', 'is-prev');
   }
 
   function build(L, startPage) {
@@ -894,6 +894,16 @@
     wrap.classList.add('is-holding');
     if (soundOn) { try { getAudio(); } catch (err) { /* audio unavailable */ } } // sound may only start from a press
   });
+  // The cursor's arrowhead points the way the page under it will turn: back on the left-hand page
+  // (the left fifth of a single page, as StPageFlip reads it), forward otherwise
+  wrap.addEventListener('pointermove', (e) => {
+    if (holding) return;
+    const el = $('.book', wrap);
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const edge = wrap.classList.contains('is-single') ? 0.2 : 0.5;
+    wrap.classList.toggle('is-prev', e.clientX < r.left + r.width * edge);
+  }, { passive: true });
   window.addEventListener('pointermove', (e) => {
     if (!holding || lastState !== 'user_fold') return;
     const dt = Math.max(1, e.timeStamp - lastPt.t);
@@ -1237,11 +1247,4 @@
     watchReveals(); // after the fonts, so text doesn't rise in a fallback face
     startLogos(); // measured in the real face too
   });
-
-  // Temporary: …/?cursorlab adds a bar for trying book cursors (assets/js/cursor-lab.js). Remove once one is chosen.
-  if (new URLSearchParams(location.search).has('cursorlab')) {
-    const lab = document.createElement('script');
-    lab.src = 'assets/js/cursor-lab.js';
-    document.body.appendChild(lab);
-  }
 })();
