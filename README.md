@@ -117,7 +117,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Sting Rays, Super Slides, Tangerine, Splash Stool, Vivonne Cabin, Smith Residence and Blackwood Cafe are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Vivonne Cabin, Smith Residence, Blackwood Cafe, Sting Rays, Super Slides, Tangerine and Splash Stool are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -134,7 +134,7 @@ Sting Rays, Super Slides, Tangerine, Splash Stool, Vivonne Cabin, Smith Residenc
 }
 ```
 
-- **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves. The product books come first, then architecture: a book counts as architecture when its `discipline` starts with "Architecture", and that's what the top bar's **Products** and **Architecture** links use to find each group.
+- **Carousel order** follows the order of the entries; the numbers (01, 02…) follow by themselves. The architecture books come first, so the site opens on them, then the products: a book counts as architecture when its `discipline` starts with "Architecture", and that's what the top bar's **Products** and **Architecture** links use to find each group.
 - **Covers:** `coverClass` and `pageClass` add the special cover treatments in `style.css` (`cover__img--centred` for Super Slides, `cover__img--photo` and `page--tangerine` for Tangerine).
 - **Loading:** only the covers load with the page. A book's spreads load when it's opened.
 - **Page turns:** every page peels like paper, covers included. To make the covers swing open rigidly like a hardback board instead, change `data-density="soft"` to `"hard"` in `renderBook` in `assets/js/main.js`.
@@ -146,13 +146,13 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
-| 02 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
-| 03 Tangerine | cover · moodboard · brief and sketching · CAD · colourways · the stand · back cover |
-| 04 Splash Stool | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
-| 05 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
-| 06 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
-| 07 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
+| 01 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
+| 02 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
+| 03 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
+| 04 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
+| 05 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
+| 06 Tangerine | cover · moodboard · brief and sketching · CAD · colourways · the stand · back cover |
+| 07 Splash Stool | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
 
 ### Spreads made from your Figma frames
 
