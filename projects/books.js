@@ -128,6 +128,15 @@ window.BOOKS =
     "frames": []
   },
   {
+    "slug": "elizabeth",
+    "title": "Elizabeth",
+    "discipline": "Architecture · Residential",
+    "coverStyle": "image",
+    "cover": "assets/images/elizabeth-hero.webp",
+    "coverTitle": "Elizabeth",
+    "frames": []
+  },
+  {
     "slug": "sting-rays",
     "title": "Sting Rays",
     "discipline": "Product design · Eyewear",
