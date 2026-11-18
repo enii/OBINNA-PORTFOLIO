@@ -19,6 +19,15 @@
 window.BOOKS = 
 [
   {
+    "slug": "elizabeth-street",
+    "title": "Elizabeth Street",
+    "discipline": "Architecture · Residential",
+    "coverStyle": "image",
+    "cover": "assets/images/elizabeth-hero.webp",
+    "coverTitle": "Elizabeth\nstreet",
+    "frames": []
+  },
+  {
     "slug": "vivonne-cabin",
     "title": "Vivonne Cabin",
     "discipline": "Architecture · Residential",
@@ -125,15 +134,6 @@ window.BOOKS =
     "coverStyle": "image",
     "cover": "assets/images/blackwood-cafe-hero.webp",
     "coverTitle": "Blackwood\ncafe",
-    "frames": []
-  },
-  {
-    "slug": "elizabeth",
-    "title": "Elizabeth",
-    "discipline": "Architecture · Residential",
-    "coverStyle": "image",
-    "cover": "assets/images/elizabeth-hero.webp",
-    "coverTitle": "Elizabeth",
     "frames": []
   },
   {

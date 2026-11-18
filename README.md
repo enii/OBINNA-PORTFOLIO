@@ -117,7 +117,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Vivonne Cabin, Smith Residence, Blackwood Cafe, Elizabeth, Sting Rays, Super Slides, Tangerine and Splash Stool are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Elizabeth Street, Vivonne Cabin, Smith Residence, Blackwood Cafe, Sting Rays, Super Slides, Tangerine and Splash Stool are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -146,10 +146,10 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
-| 02 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
-| 03 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
-| 04 Elizabeth | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
+| 01 Elizabeth Street | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
+| 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
+| 03 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
+| 04 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
 | 05 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 06 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
 | 07 Tangerine | cover · moodboard · brief and sketching · CAD · colourways · the stand · back cover |
@@ -192,7 +192,7 @@ smith-residence-6-elevations.webp   (p. 8)
 smith-residence-7-section.webp      (p. 9)
 ```
 
-To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Blackwood Cafe, Elizabeth and Splash Stool, for now) opens to one blank spread with "Coming soon" on it. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
+To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Elizabeth Street, Blackwood Cafe and Splash Stool, for now) opens to one blank spread with "Coming soon" on it. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
 ### Cover images
 
@@ -204,7 +204,7 @@ vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the gable cab
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 splash-stool-hero.webp         (Splash Stool cover: the render of the blue lattice seat and its glass legs on black, 1663 × 2000, full bleed with the title in white over the black: coverStyle "image")
-elizabeth-hero.webp            (Elizabeth cover: the aerial render of the terrace of gabled townhouses, cropped square, 1293 × 1293, full bleed with the title in white: coverStyle "image")
+elizabeth-hero.webp            (Elizabeth Street cover: the aerial render of the terrace of gabled townhouses, cropped square, 1293 × 1293, full bleed with the title in white: coverStyle "image")
 blackwood-cafe-hero.webp       (Blackwood Cafe cover: the photo of the brick building behind its tree, cropped square, 1042 × 1042, full bleed with the title in white: coverStyle "image")
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
