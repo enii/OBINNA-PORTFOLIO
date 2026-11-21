@@ -146,7 +146,7 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Elizabeth Street | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
+| 01 Elizabeth Street | cover · townhouses overview (A00) · ground floor layout (A01) · first floor layout (A02) · typical dwelling (A03) · elevations (A04) · back cover |
 | 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
 | 03 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
 | 04 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
@@ -190,9 +190,14 @@ smith-residence-4-floor-plan.webp   (p. 6)
 smith-residence-5-kitchen.webp      (p. 7)
 smith-residence-6-elevations.webp   (p. 8)
 smith-residence-7-section.webp      (p. 9)
+elizabeth-street-1-overview.webp        (Elizabeth St A00–A04 set: A00)
+elizabeth-street-2-ground-floor.webp    (A01)
+elizabeth-street-3-first-floor.webp     (A02)
+elizabeth-street-4-typical-dwelling.webp (A03)
+elizabeth-street-5-elevations.webp      (A04)
 ```
 
-To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Elizabeth Street, Blackwood Cafe and Splash Stool, for now) opens to one blank spread with "Coming soon" on it. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
+To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Blackwood Cafe and Splash Stool, for now) opens to one blank spread with "Coming soon" on it. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.
 
 ### Cover images
 
