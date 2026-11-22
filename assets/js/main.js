@@ -1080,6 +1080,38 @@
   }
   typeAbout();
 
+  /* ---------- 12a. Archives: files to download (archives/archives.js, written by the Studio) ---------- */
+  function renderArchives() {
+    const list = $('#archivesList');
+    if (!list) return;
+    const files = (Array.isArray(window.ARCHIVES) ? window.ARCHIVES : []).filter((f) => f && f.file && f.title);
+    const size = (b) => {
+      if (!b) return '';
+      if (b < 1024 * 1024) return `${Math.max(1, Math.round(b / 1024))} KB`;
+      const mb = b / (1024 * 1024);
+      return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} MB`;
+    };
+    const date = (d) => {
+      const t = new Date(`${d}T12:00:00`);
+      return Number.isNaN(t.getTime()) ? '' : t.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+    };
+    list.innerHTML = files.map((f) => {
+      const meta = [f.type, size(f.size), date(f.added)].filter(Boolean).join(' · ');
+      const name = String(f.file).split('/').pop();
+      return `
+      <li class="archives__item reveal">
+        <div class="archives__body">
+          <b>${esc(f.title)}</b>
+          ${f.note ? `<span>${esc(f.note)}</span>` : ''}
+          <small>${esc(meta)}</small>
+        </div>
+        <a class="btn" href="${assetUrl(encodeURI(f.file))}" download="${esc(name)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Download<span class="sr-only"> ${esc(f.title)}</span></a>
+      </li>`;
+    }).join('');
+    $('#archivesEmpty').hidden = files.length > 0;
+  }
+  renderArchives();
+
   /* ---------- 12b. Landing text rises into view as it scrolls in ---------- */
   function watchReveals() {
     const els = $$('.reveal');

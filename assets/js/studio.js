@@ -50,6 +50,9 @@ window.PROJECTS = `;
   let listDirty = false;
   let model = null; // the project in the editor
   let busy = false;
+  // Archives: files to download (archives/archives.js) and the file chosen for upload
+  let archives = Array.isArray(window.ARCHIVES) ? window.ARCHIVES.slice() : [];
+  let pendingFile = null;
 
   /* ---------- Helpers ---------- */
   const slugify = (t) => String(t).normalize('NFKD').replace(/[̀-ͯ]/g, '')
@@ -171,9 +174,11 @@ window.PROJECTS = `;
       if (!conn.branch) conn.branch = (await gh('')).default_branch; // no branch given: the repository's default
       await gh(`git/ref/heads/${branchPath()}`);
       projects = await readRemoteList();
+      archives = await readRemoteArchives();
       listDirty = false;
       showConnected(true);
       renderList();
+      renderArchiveList();
       return true;
     } catch (e) {
       conn = null;
@@ -218,8 +223,10 @@ window.PROJECTS = `;
     store.del('oo-studio');
     tabStore.del('oo-studio');
     projects = Array.isArray(window.PROJECTS) ? window.PROJECTS.slice() : [];
+    archives = Array.isArray(window.ARCHIVES) ? window.ARCHIVES.slice() : [];
     showConnected(false);
     renderList();
+    renderArchiveList();
   });
 
   /* ---------- Project list ---------- */
@@ -652,6 +659,149 @@ window.PROJECTS = `;
     }
   });
 
+  /* ---------- Archives: files visitors can download ----------
+     Uploading adds the file to archives/files/ and its entry to archives/archives.js, in one commit. */
+  const ARCHIVE_LIST = 'archives/archives.js';
+  const ARCHIVE_DIR = 'archives/files/';
+  const ARCHIVE_MAX = 50 * 1024 * 1024; // GitHub accepts up to 100 MB; past 50 MB uploads get slow and fragile
+  const ARCHIVE_HEAD = `/* Archives: files visitors can download from the Archives section of the site, newest first.
+ *
+ * The Studio (studio.html) writes this file when you upload or remove a file there. To edit it by
+ * hand, keep the first and last lines as they are; everything between the brackets is plain JSON.
+ * The files themselves live in archives/files/.
+ *
+ *   title   the name shown on the site
+ *   file    the file to download, e.g. "archives/files/elizabeth-st-drawing-set.pdf"
+ *   size    its size in bytes (shown as KB or MB)
+ *   type    the file type shown on the site (PDF, ZIP, DWG…)
+ *   added   the date it was added, as YYYY-MM-DD
+ *   note    optional: one line about it
+ */
+window.ARCHIVES = `;
+  const archiveList = $('#archiveList');
+  const archiveMsg = $('#archiveMsg');
+  const archiveTitle = $('#archiveTitle');
+  const archiveNote = $('#archiveNote');
+  const archiveDrop = $('#archiveDrop');
+  const archiveDropText = $('#archiveDropText');
+  const archiveDropIdle = archiveDropText.innerHTML;
+  const fmtSize = (b) => (b < 1024 * 1024 ? `${Math.max(1, Math.round(b / 1024))} KB` : `${(b / 1048576).toFixed(1)} MB`);
+  const fileType = (name) => {
+    const dot = name.lastIndexOf('.');
+    return dot > 0 ? name.slice(dot + 1).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6) || 'FILE' : 'FILE';
+  };
+  const safeFileName = (name) => { // a tidy name for the address: "Elizabeth St set (v2).PDF" → "elizabeth-st-set-v2.pdf"
+    const dot = name.lastIndexOf('.');
+    const base = dot > 0 ? name.slice(0, dot) : name;
+    const ext = dot > 0 ? name.slice(dot + 1).toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 8) : '';
+    return (slugify(base) || 'file') + (ext ? `.${ext}` : '');
+  };
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+  const serializeArchives = (list) => `${ARCHIVE_HEAD}${JSON.stringify(list, null, 2)};\n`;
+
+  async function readRemoteArchives() {
+    try {
+      const file = await gh(`contents/${ARCHIVE_LIST}?ref=${encodeURIComponent(conn.branch)}`);
+      return parseList(b64ToUtf8(file.content));
+    } catch (e) {
+      if (e.status === 404) return [];
+      throw e;
+    }
+  }
+
+  function renderArchiveList() {
+    archiveList.innerHTML = archives.map((f, i) => `
+      <li class="st-item st-file" data-i="${i}">
+        <span class="st-item__body"><b>${escapeHtml(f.title)}</b><small>${escapeHtml([f.type, f.size ? fmtSize(f.size) : '', f.added].filter(Boolean).join(' · '))}</small></span>
+        <button class="btn st-danger" type="button" data-act="remove">Remove</button>
+      </li>`).join('');
+  }
+
+  function chooseArchiveFile(files) {
+    const f = files && files[0];
+    if (!f) return;
+    if (f.size > ARCHIVE_MAX) {
+      setMsg(archiveMsg, `${f.name} is ${fmtSize(f.size)}. Files can be up to 50 MB: zip it, or split it into parts.`, 'error');
+      return;
+    }
+    pendingFile = f;
+    archiveDropText.innerHTML = `<b>${escapeHtml(f.name)}</b><small>${fmtSize(f.size)} · click to choose another</small>`;
+    archiveDrop.classList.add('has-file');
+    if (!archiveTitle.value.trim()) archiveTitle.value = f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim();
+    setMsg(archiveMsg, conn ? '' : 'Connect to GitHub to upload it.');
+    updateButtons();
+  }
+  dropZone(archiveDrop, $('#archiveInput'), chooseArchiveFile);
+
+  $('#archiveUploadBtn').addEventListener('click', async () => {
+    if (!conn) { setMsg(archiveMsg, 'Connect to GitHub to upload files.', 'error'); return; }
+    if (!pendingFile || busy) return;
+    const title = archiveTitle.value.trim() || pendingFile.name;
+    const note = archiveNote.value.trim();
+    setBusy(true);
+    setMsg(archiveMsg, 'Uploading…');
+    try {
+      const remote = await readRemoteArchives(); // keep files added elsewhere in the meantime
+      let name = safeFileName(pendingFile.name);
+      const taken = new Set(remote.map((f) => f.file));
+      while (taken.has(ARCHIVE_DIR + name)) name = name.replace(/(\.[a-z0-9]+)?$/, (ext) => `-${rand()}${ext}`);
+      const entry = { title, file: ARCHIVE_DIR + name, size: pendingFile.size, type: fileType(pendingFile.name), added: today() };
+      if (note) entry.note = note;
+      const next = [entry, ...remote];
+      await commit([
+        { path: entry.file, blob: pendingFile, label: pendingFile.name },
+        { path: ARCHIVE_LIST, text: serializeArchives(next) },
+      ], `Add to archives: ${title}`, (t) => setMsg(archiveMsg, t));
+      archives = next;
+      pendingFile = null;
+      archiveTitle.value = '';
+      archiveNote.value = '';
+      archiveDropText.innerHTML = archiveDropIdle;
+      archiveDrop.classList.remove('has-file');
+      renderArchiveList();
+      setMsg(archiveMsg, 'Uploaded. It appears in Archives on the site in a minute or two.', 'ok');
+    } catch (e) {
+      setMsg(archiveMsg, friendly(e), 'error');
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  // Remove: the first click arms the button, a second click within a few seconds removes the file
+  let armedRemove = null;
+  archiveList.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-act="remove"]');
+    if (!btn || busy) return;
+    if (!conn) { setMsg(archiveMsg, 'Connect to GitHub to remove files.', 'error'); return; }
+    const item = archives[Number(btn.closest('.st-file').dataset.i)];
+    if (armedRemove !== btn) {
+      if (armedRemove) { armedRemove.textContent = 'Remove'; armedRemove.classList.remove('is-armed'); }
+      armedRemove = btn;
+      btn.textContent = 'Click again to remove';
+      btn.classList.add('is-armed');
+      setTimeout(() => { if (armedRemove === btn) { btn.textContent = 'Remove'; btn.classList.remove('is-armed'); armedRemove = null; } }, 4000);
+      return;
+    }
+    armedRemove = null;
+    setBusy(true);
+    setMsg(archiveMsg, 'Removing…');
+    try {
+      const remote = await readRemoteArchives();
+      const next = remote.filter((f) => f.file !== item.file);
+      const changes = [{ path: ARCHIVE_LIST, text: serializeArchives(next) }];
+      if (String(item.file).startsWith(ARCHIVE_DIR)) changes.push({ path: item.file, remove: true });
+      await commit(changes, `Remove from archives: ${item.title}`);
+      archives = next;
+      renderArchiveList();
+      setMsg(archiveMsg, 'Removed. The site updates in a minute or two.', 'ok');
+    } catch (err) {
+      setMsg(archiveMsg, friendly(err), 'error');
+      renderArchiveList();
+    } finally {
+      setBusy(false);
+    }
+  });
+
   /* ---------- Buttons ---------- */
   function setBusy(on) {
     busy = on;
@@ -663,6 +813,9 @@ window.PROJECTS = `;
     $('#previewBtn').disabled = busy || !model || !model.frames.length;
     $('#saveListBtn').disabled = busy;
     deleteBtn.disabled = busy;
+    const up = $('#archiveUploadBtn');
+    up.disabled = busy || !pendingFile || !conn;
+    up.textContent = busy && pendingFile ? 'Uploading…' : 'Upload';
   }
 
   const startNew = () => { if (!busy) openEditor(null); };
@@ -672,6 +825,7 @@ window.PROJECTS = `;
 
   /* ---------- Start ---------- */
   renderList();
+  renderArchiveList();
   const remembered = store.get('oo-studio');
   const saved = remembered || tabStore.get('oo-studio');
   if (saved && saved.token) {

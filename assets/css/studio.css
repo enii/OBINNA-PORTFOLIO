@@ -150,6 +150,12 @@ body.studio { overflow: auto; }
   font-size: 13px;
   color: var(--desk-muted);
 }
+/* Archives: the uploaded files */
+.st-file { grid-template-columns: minmax(0, 1fr) auto; }
+.st-file .btn { height: 30px; padding: 0 12px; }
+.st-files:empty::before { content: "No files yet. Drop one below to add it."; }
+.st-drop--file { min-height: 96px; }
+.st-drop--file.has-file { border-style: solid; border-color: var(--desk-ink); }
 .st-savebar {
   display: flex;
   align-items: center;
