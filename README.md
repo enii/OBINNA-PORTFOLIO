@@ -58,7 +58,7 @@ The **About me** section sits under the company banner, just above the footer, a
 
 The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it, and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-The top bar has no link to it; visitors reach it by scrolling down. (In the top bar, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **Archives** goes to the files to download, **About** goes to the About me section, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
+The top bar has no link to it; visitors reach it by scrolling down. (In the top bar, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **About** goes to the About me section, **Archives** goes to the files to download under it, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 
@@ -75,7 +75,7 @@ Logos show about 34px tall on desktop; very wide ones are capped at 180px wide.
 
 ## Archives (files to download)
 
-The **Archives** section sits under the company banner, above About me, and **Archives** in the top bar scrolls to it. Each file has its name, type, size, the date it was added and a **Download** button. Until there's a file, it says "Nothing here yet".
+The **Archives** section sits under your About me introduction, and **Archives** in the top bar scrolls to it. Each file shows as a folder with its type on the front (3DM, PDF, ZIP…), its name, an optional note, its size and the date it was added; clicking the folder downloads the file. Until there's a file, it says "Nothing here yet".
 
 To add a file, open the Studio (see below), connect, and use the **Archives** card: drop a file (up to 50 MB; zip anything larger), give it a name and, if you like, a one-line note, then click **Upload**. The Studio saves the file to `archives/files/` and its entry to `archives/archives.js` in one go, and the site updates in a minute or two. **Remove** (click it twice) takes a file off the site and deletes it.
 

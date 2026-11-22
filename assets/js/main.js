@@ -1095,17 +1095,19 @@
       const t = new Date(`${d}T12:00:00`);
       return Number.isNaN(t.getTime()) ? '' : t.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
     };
+    // each file is a folder with its type on the front; the whole folder is the download link
     list.innerHTML = files.map((f) => {
-      const meta = [f.type, size(f.size), date(f.added)].filter(Boolean).join(' · ');
+      const meta = [size(f.size), date(f.added)].filter(Boolean).join(' · ');
       const name = String(f.file).split('/').pop();
       return `
       <li class="archives__item reveal">
-        <div class="archives__body">
-          <b>${esc(f.title)}</b>
-          ${f.note ? `<span>${esc(f.note)}</span>` : ''}
-          <small>${esc(meta)}</small>
-        </div>
-        <a class="btn" href="${assetUrl(encodeURI(f.file))}" download="${esc(name)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Download<span class="sr-only"> ${esc(f.title)}</span></a>
+        <a class="archives__folder" href="${assetUrl(encodeURI(f.file))}" download="${esc(name)}">
+          <span class="archives__icon"><svg class="folder" viewBox="0 0 120 92" aria-hidden="true"><path class="folder__back" d="M2 10a6 6 0 0 1 6-6h30.5a6 6 0 0 1 4.6 2.2L49 13h63a6 6 0 0 1 6 6v65a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/><path class="folder__paper" d="M13 19h94v44H13z"/><path class="folder__front" d="M2 29a5 5 0 0 1 5-5h106a5 5 0 0 1 5 5v55a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/></svg><span class="archives__type" aria-hidden="true">${esc(f.type || 'FILE')}</span></span>
+          <b class="archives__name">${esc(f.title)}</b>
+          ${f.note ? `<span class="archives__note">${esc(f.note)}</span>` : ''}
+          <small class="archives__meta">${esc([f.type, meta].filter(Boolean).join(' · '))}</small>
+          <span class="archives__get"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Download<span class="sr-only"> ${esc(f.title)}</span></span>
+        </a>
       </li>`;
     }).join('');
     $('#archivesEmpty').hidden = files.length > 0;

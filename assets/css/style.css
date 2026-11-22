@@ -555,25 +555,62 @@ a.btn { color: inherit; text-decoration: none; }
 .logos.is-moving .logos__track { flex-wrap: nowrap; width: auto; padding: 0 var(--logo-gap) 0 0; }
 @keyframes logos { to { transform: translateX(calc(-100% / var(--copies, 1))); } }
 
-/* Archives: files to download, one row each, between hairlines */
-.archives { padding: clamp(72px, 10vw, 144px) var(--gutter) 0; }
+/* Archives: under About, each file a folder in a grid, with its type on the folder's front.
+   Hovering opens the folder a little: the front tips forward and the paper inside rises. */
+.archives { padding: clamp(24px, 4vw, 56px) var(--gutter) clamp(72px, 9vw, 128px); }
 .archives__head { display: grid; gap: 14px; margin-bottom: clamp(28px, 4vw, 48px); }
 .archives__intro { margin: 0; font-size: 15px; color: var(--desk-muted); }
-.archives__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--desk-line); }
-.archives__list:empty { display: none; }
-.archives__item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px 24px;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--desk-line);
+.archives__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 40px clamp(20px, 3vw, 40px);
 }
-.archives__body { min-width: 0; display: grid; gap: 4px; }
-.archives__body b { font: 800 clamp(17px, 1.6vw, 22px)/1.2 var(--font-display); letter-spacing: -.015em; overflow-wrap: anywhere; }
-.archives__body span { font-size: 14px; line-height: 1.5; color: var(--desk-muted); }
-.archives__body small { font-size: 13px; color: var(--desk-muted); }
-.archives__item .btn { flex: none; }
+.archives__list:empty { display: none; }
+.archives__item { min-width: 0; }
+.archives__folder { display: grid; justify-items: start; gap: 6px; color: inherit; text-decoration: none; cursor: var(--cursor-hot); }
+.archives__icon { position: relative; display: block; width: 100%; max-width: 180px; margin-bottom: 8px; }
+.folder { display: block; width: 100%; height: auto; overflow: visible; }
+.folder path { stroke: currentColor; stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.folder__back { fill: color-mix(in srgb, var(--desk-ink) 7%, var(--desk)); }
+.folder__paper { fill: var(--desk); transition: transform .35s var(--ease); }
+.folder__front {
+  fill: color-mix(in srgb, var(--desk-ink) 12%, var(--desk));
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform .35s var(--ease);
+}
+.archives__type {
+  position: absolute;
+  left: 0; right: 0; bottom: 20%;
+  text-align: center;
+  font: 800 clamp(12px, 1.2vw, 15px)/1 var(--font-display);
+  letter-spacing: .1em;
+}
+.archives__name { font: 800 clamp(16px, 1.4vw, 19px)/1.2 var(--font-display); letter-spacing: -.015em; overflow-wrap: anywhere; }
+.archives__note { font-size: 14px; line-height: 1.45; color: var(--desk-muted); }
+.archives__meta { font-size: 13px; color: var(--desk-muted); }
+.archives__get {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--desk-line);
+  font: 800 11px/1 var(--font-display);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.archives__get svg { width: 13px; height: 13px; }
+.archives__folder:focus-visible { outline: 2px solid currentColor; outline-offset: 8px; border-radius: 6px; }
+@media (hover: hover) and (pointer: fine) {
+  .archives__folder:hover .folder__front { transform: perspective(300px) rotateX(-22deg); }
+  .archives__folder:hover .folder__paper { transform: translateY(-5px); }
+  .archives__folder:hover .archives__get { border-color: currentColor; }
+}
+@media (prefers-reduced-motion: reduce) { .folder__front, .folder__paper { transition: none; } }
 .archives__empty {
   margin: 0;
   padding: 18px 0;
@@ -582,7 +619,6 @@ a.btn { color: inherit; text-decoration: none; }
   font-size: 15px;
   color: var(--desk-muted);
 }
-@media (max-width: 520px) { .archives__item { flex-direction: column; align-items: flex-start; } }
 
 /* About: the portrait on the left, the name and text beside it; on phones the portrait comes first */
 .about {

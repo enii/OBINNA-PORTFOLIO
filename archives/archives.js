@@ -11,4 +11,13 @@
  *   added   the date it was added, as YYYY-MM-DD
  *   note    optional: one line about it
  */
-window.ARCHIVES = [];
+window.ARCHIVES = [
+  {
+    "title": "Stool 4",
+    "file": "archives/files/stool-4.3dm",
+    "size": 10130579,
+    "type": "3DM",
+    "added": "2026-11-22",
+    "note": "Rhino 8 3D model (.3dm)"
+  }
+];

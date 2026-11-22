@@ -43,8 +43,8 @@
         <nav class="bar__nav bar__sections" aria-label="Sections">
           <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="products">Products</a>
           <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="architecture">Architecture</a>
-          <a class="bar__link" href="#archives" data-scroll="archives">Archives</a>
           <a class="bar__link" href="#about" data-scroll="about">About</a>
+          <a class="bar__link" href="#archives" data-scroll="archives">Archives</a>
           <a class="bar__link" href="#testimonials" data-scroll="testimonials">Feedback</a>
         </nav>
         <div class="bar__nav bar__end">
@@ -207,18 +207,6 @@
     </section>
     </div>
 
-    <!-- ═══════════ ARCHIVES ═══════════
-         Files visitors can download. main.js lists them from archives/archives.js, which the Studio
-         (studio.html) updates when you upload or remove a file; the files are in archives/files/. -->
-    <section class="archives" id="archives" aria-labelledby="archivesTitle">
-      <div class="archives__head">
-        <h2 class="motion__title reveal" id="archivesTitle">Archives</h2>
-        <p class="archives__intro reveal">Drawings, documents and files to download.</p>
-      </div>
-      <ul class="archives__list" id="archivesList"></ul>
-      <p class="archives__empty" id="archivesEmpty" hidden>Nothing here yet. Files will appear here as they’re added.</p>
-    </section>
-
     <!-- ═══════════ ABOUT ═══════════
          The "Who am I?" text from the 2026 portfolio. Edit the paragraphs freely; each <p> is one paragraph.
          As the section scrolls into view, main.js types the name and text out and fades the portrait in. -->
@@ -237,6 +225,18 @@
           <p>I don’t believe in limitations; I see opportunities for innovation. When something seems difficult, I take it as a sign that there may be a better way to approach it.</p>
         </div>
       </div>
+    </section>
+
+    <!-- ═══════════ ARCHIVES ═══════════
+         Files visitors can download. main.js lists them from archives/archives.js, which the Studio
+         (studio.html) updates when you upload or remove a file; the files are in archives/files/. -->
+    <section class="archives" id="archives" aria-labelledby="archivesTitle">
+      <div class="archives__head">
+        <h2 class="motion__title reveal" id="archivesTitle">Archives</h2>
+        <p class="archives__intro reveal">Drawings, documents and files to download.</p>
+      </div>
+      <ul class="archives__list" id="archivesList" aria-label="Files to download"></ul>
+      <p class="archives__empty" id="archivesEmpty" hidden>Nothing here yet. Files will appear here as they’re added.</p>
     </section>
 
     <footer class="site-foot">
