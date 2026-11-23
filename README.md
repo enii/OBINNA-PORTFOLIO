@@ -41,7 +41,7 @@ architecture-animation.mp4          (and .webm, -poster.jpg: the same three for 
 
 The Tangerine video is two renders joined into one loop: the jointed branch stand bending (your 960 × 540 sample, scaled up; a full-size export will be sharper), crossfading into the trio of lights, which crossfades back into the start of the branch so the loop has no jump. Send new versions of either and I'll rejoin them.
 
-The Vivonne Cabin video, the first animation, is your section-box animation of the cabin on white, shown whole like Tangerine (`reel--whole`); it starts and ends on the same frame, so it loops without a join, and its poster is that first frame.
+The Vivonne Cabin video, the first animation, is your section-box animation of the cabin on white, shown whole like Tangerine (`reel--whole`) and filling the screen above the client banner with the cabin centred (`reel--screen`); it starts and ends on the same frame, so it loops without a join, and its poster is that first frame.
 
 The Architecture video is your portfolio flip-book animation on white (Blackwood Cafe, Vivonne Cabin, Smith Residence), shown whole in the strip like Tangerine (`reel--whole`). Its end dissolves back into its start over half a second, so the loop has no jump; the poster is the Smith Residence cover. Its **See the books** button scrolls up to the carousel and brings the first architecture book to the centre, like **Architecture** in the top bar.
 

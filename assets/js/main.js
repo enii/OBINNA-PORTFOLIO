@@ -1200,6 +1200,12 @@
     $$('img', logoBelt.firstElementChild).forEach((img) => img.addEventListener('load', fillLogos));
     if (window.ResizeObserver) new ResizeObserver(fillLogos).observe(logos);
   }
+  // the banner's height, for an animation that fills the screen above it (.reel--screen in style.css)
+  if (logos) {
+    const setLogosH = () => document.documentElement.style.setProperty('--logos-h', `${logos.offsetHeight}px`);
+    setLogosH();
+    if (window.ResizeObserver) new ResizeObserver(setLogosH).observe(logos);
+  }
 
   /* ---------- 12e. Auto-scroll: the page drifts slowly down on its own ----------
      It starts a few seconds after the page opens, and hands over to the visitor for good the first time

@@ -492,6 +492,13 @@ a.btn { color: inherit; text-decoration: none; }
 .reel--whole .reel__frame, .reel--whole .reel__video { background: #fff; }
 .reel--whole .reel__video { object-fit: contain; }
 .reel--whole .reel__big { background: rgba(13, 13, 13, .88); color: #fff; }
+/* reel--screen (Vivonne Cabin): fills the screen above the client banner, which sticks to the bottom while the
+   animations are on view (main.js measures it into --logos-h), so there's no black band above or below */
+.reel--screen .reel__frame { aspect-ratio: auto; height: calc(100svh - var(--logos-h, 0px)); min-height: 240px; max-height: none; }
+.reel--screen .reel__video { object-position: 50% 50%; }
+/* on a portrait screen, crop the video's empty white margins so the box spans almost the full width
+   (it fills the middle 61% of the video): 150% wide, centred, still shown whole top to bottom */
+@media (orientation: portrait) { .reel--screen .reel__video { left: -25%; width: 150%; } }
 
 /* ---------- Text rising into view on scroll (main.js adds .is-in, then drops both classes) ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
