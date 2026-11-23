@@ -27,7 +27,7 @@ Then open the printed URL.
 
 Scrolling down from the carousel reaches the animations (the top bar has no link to them). Each one plays on a loop as soon as it scrolls into view, without sound, and pauses once it has scrolled off screen. There's no control bar: clicking the video pauses it (a play button appears) and clicking again plays it; once paused, it stays paused. The carousel stops drifting while you're down there. Visitors who have reduced motion turned on in their device settings get the play button instead of autoplay.
 
-There are four animations, in this order: Sting Rays, Super Slides, Architecture and Tangerine. Tangerine is hidden for now: delete `hidden` from its `<article class="motion__item" hidden>` in `index.html` to show it again. To reorder them, move their `<article class="motion__item">` blocks in `index.html` and renumber the "01 —" lines. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
+There are five animations, in this order: Vivonne Cabin, Sting Rays, Super Slides, Architecture and Tangerine. Tangerine is hidden for now: delete `hidden` from its `<article class="motion__item" hidden>` in `index.html` to show it again. To reorder them, move their `<article class="motion__item">` blocks in `index.html` and renumber the "01 —" lines. While they're on screen, the companies banner sticks to the bottom of the window and they scroll behind it. To replace an animation, overwrite its files in `assets/media/`:
 
 ```
 sting-rays-animation.mp4            the video (H.264 MP4)
@@ -35,10 +35,13 @@ sting-rays-animation.webm           the same video as WebM, a fallback for the f
 sting-rays-animation-poster.jpg     the still shown before it plays
 super-slides-animation.mp4          (and .webm, -poster.jpg: the same three for Super Slides)
 tangerine-animation.mp4             (and .webm, -poster.jpg: the same three for Tangerine)
+vivonne-animation.mp4               (and .webm, -poster.jpg: the same three for Vivonne Cabin)
 architecture-animation.mp4          (and .webm, -poster.jpg: the same three for Architecture)
 ```
 
 The Tangerine video is two renders joined into one loop: the jointed branch stand bending (your 960 × 540 sample, scaled up; a full-size export will be sharper), crossfading into the trio of lights, which crossfades back into the start of the branch so the loop has no jump. Send new versions of either and I'll rejoin them.
+
+The Vivonne Cabin video, the first animation, is your section-box animation of the cabin on white, shown whole like Tangerine (`reel--whole`); it starts and ends on the same frame, so it loops without a join, and its poster is that first frame.
 
 The Architecture video is your portfolio flip-book animation on white (Blackwood Cafe, Vivonne Cabin, Smith Residence), shown whole in the strip like Tangerine (`reel--whole`). Its end dissolves back into its start over half a second, so the loop has no jump; the poster is the Smith Residence cover. Its **See the books** button scrolls up to the carousel and brings the first architecture book to the centre, like **Architecture** in the top bar.
 

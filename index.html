@@ -88,6 +88,30 @@
     <section class="motion" id="motion" aria-label="Motion">
       <h2 class="sr-only">Motion</h2>
       <article class="motion__item">
+        <!-- reel--whole: the section box animation on white, shown whole in the strip on its own white -->
+        <figure class="reel reel--whole">
+          <div class="reel__frame">
+            <video class="reel__video" poster="assets/media/vivonne-animation-poster.jpg"
+                   playsinline muted loop preload="none" aria-label="Animation of the Vivonne Cabin model inside an orange section box: the box slices through the gable-roofed cabin, revealing its rooms, wall framing and floor on its piers down to the bare footprint, then the cabin builds back up whole">
+              <source src="assets/media/vivonne-animation.mp4" type="video/mp4">
+              <source src="assets/media/vivonne-animation.webm" type="video/webm">
+            </video>
+            <button class="reel__big" type="button" aria-label="Play animation">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </figure>
+        <div class="motion__text">
+          <div>
+            <p class="motion__kicker reveal">01 — Architecture</p>
+            <h3 class="motion__title reveal">Vivonne cabin</h3>
+          </div>
+          <p class="motion__body reveal">Cut by a single plane, the cabin opens like a drawing: walls fall away to rooms, rooms to frame, frame to the floor on its piers, until only the footprint remains. Then, line by line, it stands again.</p>
+          <a class="btn reveal" href="#vivonne-cabin">Open the book</a>
+        </div>
+      </article>
+
+      <article class="motion__item">
         <figure class="reel">
           <div class="reel__frame">
             <video class="reel__video" poster="assets/media/sting-rays-animation-poster.jpg"
@@ -102,7 +126,7 @@
         </figure>
         <div class="motion__text">
           <div>
-            <p class="motion__kicker reveal">01 — Eyewear</p>
+            <p class="motion__kicker reveal">02 — Eyewear</p>
             <h3 class="motion__title reveal">Sting rays</h3>
           </div>
           <p class="motion__body reveal">Where the tide meets the frame, the ocean&#x2019;s quietest glider is cast in a single line. Drawn from the deep: wings for lenses, a tail for temples.</p>
@@ -125,7 +149,7 @@
         </figure>
         <div class="motion__text">
           <div>
-            <p class="motion__kicker reveal">02 — Footwear</p>
+            <p class="motion__kicker reveal">03 — Footwear</p>
             <h3 class="motion__title reveal">Super slides</h3>
           </div>
           <p class="motion__body reveal">Layer by layer it rises, the way wind lays down a dune, until a ripple becomes a sole. Made in one piece: a wave beneath the step, a single curve above it.</p>
@@ -149,7 +173,7 @@
         </figure>
         <div class="motion__text">
           <div>
-            <p class="motion__kicker reveal">03 — Architecture</p>
+            <p class="motion__kicker reveal">04 — Architecture</p>
             <h3 class="motion__title reveal">Building design</h3>
           </div>
           <p class="motion__body reveal">Page by page, a place takes shape: a café in shadow, a cabin raised on its piers, a house settling under the trees. Every line is drawn before the first stone is laid.</p>
@@ -175,7 +199,7 @@
         </figure>
         <div class="motion__text">
           <div>
-            <p class="motion__kicker reveal">04 — Lighting</p>
+            <p class="motion__kicker reveal">05 — Lighting</p>
             <h3 class="motion__title reveal">Tangerine</h3>
           </div>
           <p class="motion__body reveal">Out of the branches I pluck light. Ripe in three colours, each fruit carries a small sun, and opens to show the glow it keeps inside.</p>
