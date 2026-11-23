@@ -496,6 +496,9 @@ a.btn { color: inherit; text-decoration: none; }
    animations are on view (main.js measures it into --logos-h), so there's no black band above or below */
 .reel--screen .reel__frame { aspect-ratio: auto; height: calc(100svh - var(--logos-h, 0px)); min-height: 240px; max-height: none; }
 .reel--screen .reel__video { object-position: 50% 50%; }
+/* the cabin a little smaller than the frame, with white all round and more below than above, so it
+   looks centred to the eye (a picture set dead centre reads as sitting low) */
+.reel--screen .reel__video { top: 8%; height: 78%; }
 /* on a portrait screen, crop the video's empty white margins so the box spans almost the full width
    (it fills the middle 61% of the video): 150% wide, centred, still shown whole top to bottom */
 @media (orientation: portrait) { .reel--screen .reel__video { left: -25%; width: 150%; } }
