@@ -15,6 +15,8 @@
  *                Leave it empty ([]) and the book opens to one blank spread, with "Coming soon" on it,
  *                until its pages are ready.
  *                Each one's alt text describes the frame and the words in it, for screen readers.
+ *   comingSoon   true while a book's pages are in but the project is still in progress: its drawings
+ *                fade back like a watermark, with "Coming soon" over them. Delete the line when it's done.
  */
 window.BOOKS = 
 [
@@ -125,6 +127,7 @@ window.BOOKS =
     "coverStyle": "image",
     "cover": "assets/images/elizabeth-hero.webp",
     "coverTitle": "Elizabeth\nstreet",
+    "comingSoon": true,
     "frames": [
       {
         "src": "assets/images/elizabeth-street-1-overview.webp",

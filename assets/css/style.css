@@ -1136,6 +1136,12 @@ a.btn { color: inherit; text-decoration: none; }
   object-fit: contain;
 }
 .frame--r { left: -100%; }
+/* A book still in progress ("comingSoon": true in books.js): the drawings fade back to a grey watermark, with
+   "Coming soon" over them, once per spread (in the middle of its left page), and on every page on a phone */
+.page--wip .page__inner--frame { display: flex; align-items: center; justify-content: center; }
+.page--wip .frame { opacity: .14; filter: grayscale(1); }
+.page__soon--wip { position: relative; opacity: .55; }
+.is-spread .page--wip.page--r .page__soon--wip { display: none; }
 
 /* Cover style "image": a photo fills the whole cover */
 .cover__img--centred { object-position: 50% 53%; }

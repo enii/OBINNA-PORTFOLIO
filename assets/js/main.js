@@ -63,13 +63,16 @@
       <div class="page page--blank" data-bare>
         <div class="page__inner page__inner--soon">${text ? `<p class="page__soon">${text}</p>` : ''}</div>
       </div>`;
+    // A book still in progress ("comingSoon": true) shows its pages faded back like a watermark, "Coming soon" over them
+    const wip = p.comingSoon === true;
     const frames = !p.frames.length ? blank('Coming soon') + blank('') : p.frames.map((f, k) => {
       const src = typeof f === 'string' ? f : f.src;
       const alt = (typeof f === 'object' && f.alt) || `${p.title}, frame ${k + 1}`;
       return ['l', 'r'].map((side) => `
-      <div class="page page--frame" data-bare>
+      <div class="page page--frame${wip ? ' page--wip' : ''}" data-bare>
         <div class="page__inner page__inner--frame">
           <img class="frame frame--${side}" src="${assetUrl(src)}" alt="${side === 'l' ? esc(alt) : ''}" draggable="false">
+          ${wip ? `<p class="page__soon page__soon--wip"${side === 'r' ? ' aria-hidden="true"' : ''}>Coming soon</p>` : ''}
         </div>
       </div>`).join('');
     }).join('');
