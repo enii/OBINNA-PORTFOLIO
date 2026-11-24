@@ -128,7 +128,7 @@ New projects are added in the **Studio**, a private page on the site at `…/stu
 
 ## Editing the hand-built books
 
-Elizabeth Street, Vivonne Cabin, Smith Residence, Blackwood Cafe, Sting Rays, Super Slides, Tangerine and Splash Stool are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
+Vivonne Cabin, Smith Residence, Elizabeth Street, Blackwood Cafe, Sting Rays, Super Slides, Tangerine and Splash Stool are listed in `projects/books.js`, one entry per book. Every spread inside them is one of your Figma frames (see below). `main.js` builds each book from its entry, the same way it builds the Studio's projects: a cover, one spread per frame, and a back cover.
 
 ```js
 {
@@ -157,9 +157,9 @@ Current books:
 
 | Book | Pages |
 |---|---|
-| 01 Elizabeth Street | cover · townhouses overview (A00) · ground floor layout (A01) · first floor layout (A02) · typical dwelling (A03) · elevations (A04) · back cover |
-| 02 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
-| 03 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
+| 01 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
+| 02 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
+| 03 Elizabeth Street | cover · townhouses overview (A00) · ground floor layout (A01) · first floor layout (A02) · typical dwelling (A03) · elevations (A04) · back cover |
 | 04 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
 | 05 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 06 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |

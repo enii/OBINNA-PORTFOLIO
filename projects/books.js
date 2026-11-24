@@ -19,36 +19,6 @@
 window.BOOKS = 
 [
   {
-    "slug": "elizabeth-street",
-    "title": "Elizabeth Street",
-    "discipline": "Architecture · Residential",
-    "coverStyle": "image",
-    "cover": "assets/images/elizabeth-hero.webp",
-    "coverTitle": "Elizabeth\nstreet",
-    "frames": [
-      {
-        "src": "assets/images/elizabeth-street-1-overview.webp",
-        "alt": "Elizabeth Street, townhouses (sheet A00): an artist's impression from the driveway of the terrace of two-storey townhouses, with gabled roofs, timber-clad recessed upper levels and planter balconies over brick bases and garages, beside the drawing register. Overview: concept design for a residential flat building of eleven two-storey affordable townhouses at 3 & 5 Elizabeth Street, Reynella, with the existing dwelling retained."
-      },
-      {
-        "src": "assets/images/elizabeth-street-2-ground-floor.webp",
-        "alt": "Elizabeth Street, ground floor layout (sheet A01): eleven two-storey dwellings in two rows off a 6.0 m common driveway, with the existing dwelling retained on its own lot. Each dwelling has a single garage, a rear private open space and a rainwater tank."
-      },
-      {
-        "src": "assets/images/elizabeth-street-3-first-floor.webp",
-        "alt": "Elizabeth Street, first floor layout (sheet A02) across both rows. Dwellings are mirrored in pairs about shared party walls, so wet areas and stairs stack and back onto each other, keeping plumbing runs and party-wall openings to a minimum."
-      },
-      {
-        "src": "assets/images/elizabeth-street-4-typical-dwelling.webp",
-        "alt": "Elizabeth Street, typical dwelling (sheet A03): the ground and first floor plans of a three-bedroom dwelling. Ground floor: garage and store, powder room, laundry, kitchen, meals and family opening to the rear garden. First floor: three bedrooms, a study, a bathroom and an ensuite off bedroom 1."
-      },
-      {
-        "src": "assets/images/elizabeth-street-5-elevations.webp",
-        "alt": "Elizabeth Street, elevations (sheet A04): the driveway and rear elevations of the terrace row. Repeating gabled roof forms give each dwelling its own identity over a brick and render base; planter-edged upper windows face the driveway, and sliding doors open to the rear gardens."
-      }
-    ]
-  },
-  {
     "slug": "vivonne-cabin",
     "title": "Vivonne Cabin",
     "discipline": "Architecture · Residential",
@@ -145,6 +115,36 @@ window.BOOKS =
       {
         "src": "assets/images/smith-residence-7-section.webp",
         "alt": "Smith Residence, section and detail (sheet A06): a section through the house showing the roof framing on a raft slab, with a 3D detail and a section of the brick veneer wall meeting the slab and paving."
+      }
+    ]
+  },
+  {
+    "slug": "elizabeth-street",
+    "title": "Elizabeth Street",
+    "discipline": "Architecture · Residential",
+    "coverStyle": "image",
+    "cover": "assets/images/elizabeth-hero.webp",
+    "coverTitle": "Elizabeth\nstreet",
+    "frames": [
+      {
+        "src": "assets/images/elizabeth-street-1-overview.webp",
+        "alt": "Elizabeth Street, townhouses (sheet A00): an artist's impression from the driveway of the terrace of two-storey townhouses, with gabled roofs, timber-clad recessed upper levels and planter balconies over brick bases and garages, beside the drawing register. Overview: concept design for a residential flat building of eleven two-storey affordable townhouses at 3 & 5 Elizabeth Street, Reynella, with the existing dwelling retained."
+      },
+      {
+        "src": "assets/images/elizabeth-street-2-ground-floor.webp",
+        "alt": "Elizabeth Street, ground floor layout (sheet A01): eleven two-storey dwellings in two rows off a 6.0 m common driveway, with the existing dwelling retained on its own lot. Each dwelling has a single garage, a rear private open space and a rainwater tank."
+      },
+      {
+        "src": "assets/images/elizabeth-street-3-first-floor.webp",
+        "alt": "Elizabeth Street, first floor layout (sheet A02) across both rows. Dwellings are mirrored in pairs about shared party walls, so wet areas and stairs stack and back onto each other, keeping plumbing runs and party-wall openings to a minimum."
+      },
+      {
+        "src": "assets/images/elizabeth-street-4-typical-dwelling.webp",
+        "alt": "Elizabeth Street, typical dwelling (sheet A03): the ground and first floor plans of a three-bedroom dwelling. Ground floor: garage and store, powder room, laundry, kitchen, meals and family opening to the rear garden. First floor: three bedrooms, a study, a bathroom and an ensuite off bedroom 1."
+      },
+      {
+        "src": "assets/images/elizabeth-street-5-elevations.webp",
+        "alt": "Elizabeth Street, elevations (sheet A04): the driveway and rear elevations of the terrace row. Repeating gabled roof forms give each dwelling its own identity over a brick and render base; planter-edged upper windows face the driveway, and sliding doors open to the rear gardens."
       }
     ]
   },
