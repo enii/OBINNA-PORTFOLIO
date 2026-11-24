@@ -220,7 +220,7 @@ vivonne-cabin-hero.webp        (Vivonne Cabin cover: the render of the gable cab
 super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000)
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 splash-stool-hero.webp         (Splash Stool cover: the render of the blue lattice seat and its glass legs on black, 1663 × 2000, full bleed with the title in white over the black: coverStyle "image")
-elizabeth-hero.webp            (Elizabeth Street cover: the aerial render of the terrace of gabled townhouses, cropped square, 1293 × 1293, full bleed with the title in white: coverStyle "image")
+elizabeth-hero.webp            (Elizabeth Street cover: the aerial render of the terrace of gabled townhouses, with timber-clad gables and planter balconies over brick garages, cropped square around three of the gables, 1224 × 1224, full bleed with the title in white: coverStyle "image")
 blackwood-cafe-hero.webp       (Blackwood Cafe cover: the photo of the brick building behind its tree, cropped square, 1042 × 1042, full bleed with the title in white: coverStyle "image")
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
