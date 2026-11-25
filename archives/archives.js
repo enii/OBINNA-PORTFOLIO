@@ -17,6 +17,16 @@
  */
 window.ARCHIVES = [
   {
+    "title": "Tangerine",
+    "file": "archives/files/tangerine-2.3dm",
+    "size": 11061815,
+    "type": "3DM",
+    "added": "2026-11-25",
+    "note": "Rhino 8 3D model (.3dm)",
+    "model": "archives/models/tangerine-2.glb",
+    "alt": "The Tangerine lights: soft, rounded pods standing side by side, one opened to show its parts, with a large egg-shaped form beside them."
+  },
+  {
     "title": "Snap Pods",
     "file": "archives/files/snap-pods.3dm",
     "size": 10308695,
