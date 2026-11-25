@@ -17,6 +17,16 @@
  */
 window.ARCHIVES = [
   {
+    "title": "Snap Pods",
+    "file": "archives/files/snap-pods.3dm",
+    "size": 10308695,
+    "type": "3DM",
+    "added": "2026-11-25",
+    "note": "Rhino 8 3D model (.3dm)",
+    "model": "archives/models/snap-pods.glb",
+    "alt": "An earbud standing upright: a rounded head with a soft ear tip on one side, flowing down into a long curved stem with plus and minus buttons."
+  },
+  {
     "title": "Stool 4",
     "file": "archives/files/stool-4.3dm",
     "size": 10130579,
