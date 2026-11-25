@@ -1,10 +1,13 @@
 /* The Archives page (archives.html): the files in archives/archives.js, one at a time, newest first.
  *
  * A file with a 3D model ("model": a .glb) shows in the middle as a hidden-line drawing you can turn and
- * zoom: its outline and its sharp edges drawn in ink, its faces filled with the paper's own colour, so the
- * lines behind them stay hidden, like a technical view in Rhino. Smooth edges and seams aren't drawn. The
- * lines are found on screen from each frame (where the depth or the surface's direction jumps), so they
- * stay one weight however close you zoom. The drawing comes in from the bottom up, as if being plotted.
+ * zoom, with a little transparency: its outline and its sharp edges drawn in ink, its faces filled with the
+ * paper's own colour but letting a little of it through, so the lines behind them show faintly, like a
+ * technical view in Rhino with the surfaces ghosted. Smooth edges and seams aren't drawn. The lines in
+ * front are found on screen from each frame (where the depth or the surface's direction jumps), so they
+ * stay one weight however close you zoom; the faint ones behind are worked out from the model's faces
+ * (its outline as seen from the camera, and its sharp creases), keeping the parts hidden behind a face.
+ * The drawing comes in from the bottom up, as if being plotted.
  *
  * A file without a model shows as a folder. Every file has a Download button.
  * Leaving the page (Back) fades it out before the home page comes back. */
@@ -86,6 +89,7 @@ uniform float uDepthTol; // how far one surface must stand in front of another t
 uniform vec3 uInk;
 uniform vec3 uFill;
 uniform float uReveal;   // 0-1: how much of the drawing has been plotted, from the bottom up
+uniform float uFillAlpha; // how much of the paper the faces hide: a little less than all of it
 varying vec2 vUv;
 
 float dist(vec2 uv) {
@@ -140,13 +144,112 @@ void main() {
   }
   float front = uReveal * 1.25;
   float m = 1.0 - smoothstep(front - 0.25, front, vUv.y);
-  e *= m; a *= m;
+  e *= m; a *= m * uFillAlpha;
   float alpha = max(a, e);
   vec3 col = mix(uFill, uInk, e / max(alpha, 1e-4));
   gl_FragColor = vec4(col, 1.0);
   #include <colorspace_fragment>
   gl_FragColor = vec4(gl_FragColor.rgb * alpha, alpha);
 }`;
+
+// The faint lines behind the faces: drawn after the drawing, each fragment kept only where it lies behind
+// the nearest face (read from the same depth picture), so the lines in front aren't drawn twice.
+const BACK_VERT = /* glsl */`
+varying float vZ;
+void main() {
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vZ = -mv.z;
+  gl_Position = projectionMatrix * mv;
+}`;
+const BACK_FRAG = /* glsl */`
+precision highp float;
+uniform sampler2D tDepth;
+uniform vec2 uScreen;   // the canvas, in device pixels
+uniform float uNear;
+uniform float uFar;
+uniform float uEps;     // how far behind the nearest face a line must be to count as behind it
+uniform vec3 uInk;
+uniform float uAlpha;
+uniform float uReveal;
+varying float vZ;
+void main() {
+  vec2 uv = gl_FragCoord.xy / uScreen;
+  float d = texture2D(tDepth, uv).x;
+  if (d >= 1.0) discard; // nothing in front of it: an outline, already drawn
+  float front = (uNear * uFar) / (uFar - (uFar - uNear) * d);
+  if (vZ <= front + uEps) discard; // in front, or on the face: already drawn
+  float top = uReveal * 1.25;
+  float a = uAlpha * (1.0 - smoothstep(top - 0.25, top, uv.y));
+  gl_FragColor = vec4(uInk, 1.0);
+  #include <colorspace_fragment>
+  gl_FragColor = vec4(gl_FragColor.rgb * a, a);
+}`;
+
+// The model's faces as one welded set, for the lines behind: which faces meet at each edge, and the
+// edges that are always drawn (sharp creases and open edges). The outline is found again each frame.
+function buildBackLines(model) {
+  const pos = [];
+  const keyOf = new Map();
+  const tris = [];
+  const v = new THREE.Vector3();
+  model.updateMatrixWorld(true);
+  model.traverse((o) => {
+    if (!o.isMesh || !o.visible) return;
+    const g = o.geometry;
+    const pa = g.attributes.position;
+    const map = new Int32Array(pa.count);
+    for (let i = 0; i < pa.count; i++) {
+      v.fromBufferAttribute(pa, i).applyMatrix4(o.matrixWorld);
+      const k = `${Math.round(v.x * 1e4)},${Math.round(v.y * 1e4)},${Math.round(v.z * 1e4)}`; // weld at 1/10000 of the model
+      let id = keyOf.get(k);
+      if (id === undefined) { id = pos.length / 3; keyOf.set(k, id); pos.push(v.x, v.y, v.z); }
+      map[i] = id;
+    }
+    const idx = g.index ? g.index.array : null;
+    const n = idx ? idx.length : pa.count;
+    for (let i = 0; i + 2 < n; i += 3) {
+      const a = map[idx ? idx[i] : i]; const b = map[idx ? idx[i + 1] : i + 1]; const c = map[idx ? idx[i + 2] : i + 2];
+      if (a !== b && b !== c && a !== c) tris.push(a, b, c);
+    }
+  });
+  const P = new Float32Array(pos);
+  const T = tris.length / 3;
+  const N = new Float32Array(T * 3); // face normals
+  const C = new Float32Array(T * 3); // a corner of each face, for which way it faces the camera
+  const e1 = new THREE.Vector3(); const e2 = new THREE.Vector3(); const a = new THREE.Vector3(); const nn = new THREE.Vector3();
+  for (let t = 0; t < T; t++) {
+    const i0 = tris[t * 3] * 3; const i1 = tris[t * 3 + 1] * 3; const i2 = tris[t * 3 + 2] * 3;
+    a.set(P[i0], P[i0 + 1], P[i0 + 2]);
+    e1.set(P[i1] - a.x, P[i1 + 1] - a.y, P[i1 + 2] - a.z);
+    e2.set(P[i2] - a.x, P[i2 + 1] - a.y, P[i2 + 2] - a.z);
+    nn.crossVectors(e1, e2).normalize();
+    N.set([nn.x, nn.y, nn.z], t * 3);
+    C.set([a.x, a.y, a.z], t * 3);
+  }
+  const edgeOf = new Map();
+  const ev = []; const et = [];
+  const nv = P.length / 3;
+  for (let t = 0; t < T; t++) {
+    for (let j = 0; j < 3; j++) {
+      const p = tris[t * 3 + j]; const q = tris[t * 3 + ((j + 1) % 3)];
+      const key = p < q ? p * nv + q : q * nv + p;
+      const e = edgeOf.get(key);
+      if (e === undefined) { edgeOf.set(key, ev.length / 2); ev.push(p, q); et.push(t, -1); } else if (et[e * 2 + 1] < 0) et[e * 2 + 1] = t;
+    }
+  }
+  const E = ev.length / 2;
+  const fixed = []; const pairs = [];
+  const cosCrease = Math.cos(THREE.MathUtils.degToRad(35));
+  for (let e = 0; e < E; e++) {
+    const t0 = et[e * 2]; const t1 = et[e * 2 + 1];
+    const seg = () => { const p = ev[e * 2] * 3; const q = ev[e * 2 + 1] * 3; fixed.push(P[p], P[p + 1], P[p + 2], P[q], P[q + 1], P[q + 2]); };
+    if (t1 < 0) { seg(); continue; } // an open edge
+    const d = N[t0 * 3] * N[t1 * 3] + N[t0 * 3 + 1] * N[t1 * 3 + 1] + N[t0 * 3 + 2] * N[t1 * 3 + 2];
+    if (d < cosCrease) seg(); // a sharp crease
+    else pairs.push(e); // smooth: part of the outline whenever one face turns towards the camera and the other away
+  }
+  return { P, N, C, T, ev: Int32Array.from(ev), et: Int32Array.from(et), pairs: Int32Array.from(pairs), fixed: new Float32Array(fixed) };
+}
 
 const easeOut = (t) => 1 - (1 - t) ** 3;
 const START = { theta: THREE.MathUtils.degToRad(38), phi: THREE.MathUtils.degToRad(68) };
@@ -187,6 +290,7 @@ class HiddenLineViewer {
         uInk: { value: new THREE.Color(0x111111) },
         uFill: { value: new THREE.Color(0xffffff) },
         uReveal: { value: reduceMotion ? 1 : 0 },
+        uFillAlpha: { value: 0.86 },
       },
       depthTest: false,
       depthWrite: false,
@@ -195,6 +299,29 @@ class HiddenLineViewer {
     this.quadScene = new THREE.Scene();
     this.quadScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.edgeMat));
     this.quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    this.backMat = new THREE.ShaderMaterial({
+      vertexShader: BACK_VERT,
+      fragmentShader: BACK_FRAG,
+      uniforms: {
+        tDepth: { value: depthTexture },
+        uScreen: { value: new THREE.Vector2(1, 1) },
+        uNear: { value: 0.1 },
+        uFar: { value: 10 },
+        uEps: { value: 0.015 },
+        uInk: this.edgeMat.uniforms.uInk, // the same ink as the drawing, in either theme
+        uAlpha: { value: 0.3 },
+        uReveal: this.edgeMat.uniforms.uReveal,
+      },
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      blending: THREE.CustomBlending,
+      blendSrc: THREE.OneFactor,
+      blendDst: THREE.OneMinusSrcAlphaFactor,
+    });
+    this.backScene = new THREE.Scene();
+    this.back = null;
 
     const controls = new OrbitControls(this.camera, renderer.domElement);
     controls.enableDamping = true;
@@ -253,6 +380,7 @@ class HiddenLineViewer {
     u.uTexel.value.set(1 / rw, 1 / rh);
     u.uK.value = k;
     u.uR.value = 0.7 * pr * k; // lines about 1.4 px wide
+    this.backMat.uniforms.uScreen.value.set(Math.round(w * pr), Math.round(h * pr));
     this.camera.aspect = w / h;
     // frame the model so it fits the narrower side of the stage
     this.fitDist = 1.12 / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2)) / Math.min(1, this.camera.aspect);
@@ -283,6 +411,7 @@ class HiddenLineViewer {
         model.scale.multiplyScalar(s);
         this.root.add(model);
         this.model = model;
+        this.setBack(buildBackLines(model));
         this.edgeMat.uniforms.uReveal.value = reduceMotion ? 1 : 0; // a new drawing is plotted afresh
         this.home(!reduceMotion);
         resolve();
@@ -297,7 +426,52 @@ class HiddenLineViewer {
     this.root.remove(this.model);
     this.model.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
     this.model = null;
+    this.setBack(null);
     this.dirty = true;
+  }
+
+  // the lines behind: the creases and open edges once, and room for the outline, found again each frame
+  setBack(data) {
+    this.backScene.children.slice().forEach((o) => { this.backScene.remove(o); o.geometry.dispose(); });
+    this.back = data;
+    if (!data) return;
+    const fixed = new THREE.BufferGeometry();
+    fixed.setAttribute('position', new THREE.BufferAttribute(data.fixed, 3));
+    this.backScene.add(new THREE.LineSegments(fixed, this.backMat));
+    const outline = new THREE.BufferGeometry();
+    data.out = new Float32Array(data.pairs.length * 6);
+    data.outAttr = new THREE.BufferAttribute(data.out, 3).setUsage(THREE.DynamicDrawUsage);
+    outline.setAttribute('position', data.outAttr);
+    outline.setDrawRange(0, 0);
+    data.outGeo = outline;
+    data.facing = new Uint8Array(data.T);
+    const lines = new THREE.LineSegments(outline, this.backMat);
+    lines.frustumCulled = false;
+    this.backScene.add(lines);
+  }
+
+  // the outline as seen from the camera: every smooth edge between a face turned towards it and one turned away
+  updateOutline() {
+    const b = this.back;
+    if (!b) return;
+    const { x, y, z } = this.camera.position;
+    const { N, C, T, facing, ev, et, pairs, P, out } = b;
+    for (let t = 0; t < T; t++) {
+      const i = t * 3;
+      facing[t] = N[i] * (x - C[i]) + N[i + 1] * (y - C[i + 1]) + N[i + 2] * (z - C[i + 2]) > 0 ? 1 : 0;
+    }
+    let n = 0;
+    for (let k = 0; k < pairs.length; k++) {
+      const e = pairs[k];
+      if (facing[et[e * 2]] === facing[et[e * 2 + 1]]) continue;
+      const p = ev[e * 2] * 3; const q = ev[e * 2 + 1] * 3;
+      out[n++] = P[p]; out[n++] = P[p + 1]; out[n++] = P[p + 2];
+      out[n++] = P[q]; out[n++] = P[q + 1]; out[n++] = P[q + 2];
+    }
+    b.outAttr.clearUpdateRanges();
+    b.outAttr.addUpdateRange(0, Math.max(n, 1));
+    b.outAttr.needsUpdate = true;
+    b.outGeo.setDrawRange(0, n / 3);
   }
 
   place(theta, phi, dist) {
@@ -370,6 +544,16 @@ class HiddenLineViewer {
     renderer.setRenderTarget(null);
     renderer.clear();
     renderer.render(this.quadScene, this.quadCam);
+    // then, faintly, the lines behind the faces
+    if (this.back) {
+      this.updateOutline();
+      const b = this.backMat.uniforms;
+      b.uNear.value = camera.near;
+      b.uFar.value = camera.far;
+      renderer.autoClear = false;
+      renderer.render(this.backScene, camera);
+      renderer.autoClear = true;
+    }
   }
 
   // keyboard: arrows turn the model, + and - zoom
