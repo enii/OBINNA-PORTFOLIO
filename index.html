@@ -158,31 +158,6 @@
         </div>
       </article>
 
-      <article class="motion__item">
-        <!-- reel--whole: an animation on white, shown whole in the strip on its own white, like Tangerine -->
-        <figure class="reel reel--whole">
-          <div class="reel__frame">
-            <video class="reel__video" poster="assets/media/architecture-animation-poster.jpg"
-                   playsinline muted loop preload="none" aria-label="Animation of the architecture portfolio as a book turning its pages: the Blackwood Cafe cover and its drawing sheets, the Vivonne Cabin cover and its floor plan and sections, the Smith Residence title page and site plan, and the Smith Residence cover">
-              <source src="assets/media/architecture-animation.mp4" type="video/mp4">
-              <source src="assets/media/architecture-animation.webm" type="video/webm">
-            </video>
-            <button class="reel__big" type="button" aria-label="Play animation">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l11-6.5z"/><path class="i-pause" d="M9 6.5v11M15 6.5v11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-            </button>
-          </div>
-        </figure>
-        <div class="motion__text">
-          <div>
-            <p class="motion__kicker reveal">04 — Architecture</p>
-            <h3 class="motion__title reveal">Building design</h3>
-          </div>
-          <p class="motion__body reveal">Page by page, a place takes shape: a café in shadow, a cabin raised on its piers, a house settling under the trees. Every line is drawn before the first stone is laid.</p>
-          <!-- scrolls up to the books and brings the first architecture book to the centre, like the top bar's Architecture link -->
-          <a class="btn reveal" href="#shelf" data-scroll="shelf" data-group="architecture">See the books</a>
-        </div>
-      </article>
-
       <!-- Tangerine: hidden for now. Delete the word "hidden" on the next line to bring it back. -->
       <article class="motion__item" hidden>
         <!-- reel--whole: a render on white, shown whole in the strip on its own white instead of cropped -->
@@ -200,7 +175,7 @@
         </figure>
         <div class="motion__text">
           <div>
-            <p class="motion__kicker reveal">05 — Lighting</p>
+            <p class="motion__kicker reveal">04 — Lighting</p>
             <h3 class="motion__title reveal">Tangerine</h3>
           </div>
           <p class="motion__body reveal">Out of the branches I pluck light. Ripe in three colours, each fruit carries a small sun, and opens to show the glow it keeps inside.</p>
@@ -250,21 +225,6 @@
           <p>I don’t believe in limitations; I see opportunities for innovation. When something seems difficult, I take it as a sign that there may be a better way to approach it.</p>
         </div>
       </div>
-    </section>
-
-    <!-- ═══════════ ARCHIVES ═══════════
-         The files on the Archives page (archives.html), as folders. main.js lists them from archives/archives.js,
-         which the Studio (studio.html) updates when you upload or remove a file; the files are in archives/files/.
-         Clicking a folder, the button or Archives in the top bar opens the Archives page (data-archive):
-         the folder opens and the page grows out of it. -->
-    <section class="archives" id="archives" aria-labelledby="archivesTitle">
-      <div class="archives__head">
-        <h2 class="motion__title reveal" id="archivesTitle">Archives</h2>
-        <p class="archives__intro reveal">3D models, drawings and files. Turn the models around in 3D, and download them.</p>
-        <a class="btn reveal" href="archives.html" data-archive>Open the archive</a>
-      </div>
-      <ul class="archives__list" id="archivesList" aria-label="Files in the archive"></ul>
-      <p class="archives__empty" id="archivesEmpty" hidden>Nothing here yet. Files will appear here as they’re added.</p>
     </section>
 
     <footer class="site-foot">
@@ -331,7 +291,6 @@
 
 <script src="projects/books.js"></script>
 <script src="projects/projects.js"></script>
-<script src="archives/archives.js"></script>
 <script src="assets/js/vendor/page-flip.browser.js"></script>
 <script src="assets/js/main.js"></script>
 </body>

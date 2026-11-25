@@ -2,7 +2,7 @@
    One screen, laid out like an open book: Back and the switch in the top bar, the model in the middle on
    dotted paper, and its number, name and buttons along the bottom like the carousel's caption.
    The paper's colours (--vault-bg, --vault-ink, --vault-dot) are in style.css: the home page uses them too,
-   for the sheet that grows out of a folder on the way here. */
+   for the sheet that grows out of Archives in its top bar on the way here. */
 
 html, body.vault-page { height: 100%; overflow: hidden; }
 body.vault-page {
@@ -78,7 +78,27 @@ body.vault-page {
 .vault__hint.is-gone { opacity: 0; }
 .vault__hint[hidden] { display: none; }
 
-/* a file without a 3D model: its folder, big, in the middle; clicking it downloads the file */
+/* a file without a 3D model: its folder, big, in the middle, with its type on the front; clicking it
+   downloads the file. Hovering opens it a little: the front tips forward and the paper inside rises. */
+.archives__icon { position: relative; display: block; width: 100%; max-width: 180px; margin-bottom: 8px; }
+.folder { display: block; width: 100%; height: auto; overflow: visible; }
+.folder path { stroke: currentColor; stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.folder__back { fill: color-mix(in srgb, var(--desk-ink) 7%, var(--vault-bg)); }
+.folder__paper { fill: var(--vault-bg); transition: transform .35s var(--ease); }
+.folder__front {
+  fill: color-mix(in srgb, var(--desk-ink) 12%, var(--vault-bg));
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform .35s var(--ease);
+}
+.archives__type {
+  position: absolute;
+  left: 0; right: 0; bottom: 20%;
+  text-align: center;
+  font: 800 clamp(12px, 1.2vw, 15px)/1 var(--font-display);
+  letter-spacing: .1em;
+}
+@media (prefers-reduced-motion: reduce) { .folder__front, .folder__paper { transition: none; } }
 .vault__card {
   position: absolute;
   left: 50%; top: 50%;

@@ -1083,47 +1083,10 @@
   }
   typeAbout();
 
-  /* ---------- 12a. Archives: files to download (archives/archives.js, written by the Studio) ---------- */
-  function renderArchives() {
-    const list = $('#archivesList');
-    if (!list) return;
-    const files = (Array.isArray(window.ARCHIVES) ? window.ARCHIVES : []).filter((f) => f && f.file && f.title);
-    const size = (b) => {
-      if (!b) return '';
-      if (b < 1024 * 1024) return `${Math.max(1, Math.round(b / 1024))} KB`;
-      const mb = b / (1024 * 1024);
-      return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} MB`;
-    };
-    const date = (d) => {
-      const t = new Date(`${d}T12:00:00`);
-      return Number.isNaN(t.getTime()) ? '' : t.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
-    };
-    // each file is a folder with its type on the front; the whole folder opens it on the Archives page,
-    // where it can be turned around in 3D (if it has a model) and downloaded
-    const CUBE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 13.6 5v6.2L8 14.4l-5.6-3.2V5zM2.4 5 8 8.2 13.6 5M8 8.2v6.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
-    const ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    list.innerHTML = files.map((f) => {
-      const meta = [size(f.size), date(f.added)].filter(Boolean).join(' · ');
-      const slug = String(f.file).split('/').pop().replace(/\.[^.]+$/, '').toLowerCase();
-      return `
-      <li class="archives__item reveal">
-        <a class="archives__folder" href="archives.html#${esc(slug)}" data-archive>
-          <span class="archives__icon"><svg class="folder" viewBox="0 0 120 92" aria-hidden="true"><path class="folder__back" d="M2 10a6 6 0 0 1 6-6h30.5a6 6 0 0 1 4.6 2.2L49 13h63a6 6 0 0 1 6 6v65a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/><path class="folder__paper" d="M13 19h94v44H13z"/><path class="folder__front" d="M2 29a5 5 0 0 1 5-5h106a5 5 0 0 1 5 5v55a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/></svg><span class="archives__type" aria-hidden="true">${esc(f.type || 'FILE')}</span></span>
-          <b class="archives__name">${esc(f.title)}</b>
-          ${f.note ? `<span class="archives__note">${esc(f.note)}</span>` : ''}
-          <small class="archives__meta">${esc([f.type, meta].filter(Boolean).join(' · '))}</small>
-          <span class="archives__get">${f.model ? `${CUBE} View in 3D` : `${ARROW} Open`}<span class="sr-only">: ${esc(f.title)}</span></span>
-        </a>
-      </li>`;
-    }).join('');
-    $('#archivesEmpty').hidden = files.length > 0;
-  }
-  renderArchives();
-
-  /* ---------- 11c. Opening the Archives page (archives.html) ----------
-     The folder that was clicked opens, a sheet of the Archives page's dotted paper rises out of it and grows
-     to fill the window, and the page then loads onto the same paper, so it seems to open out of the folder.
-     From Archives in the top bar or the button, the sheet grows out of the link. Reduced motion: it just goes. */
+  /* ---------- 12a. Opening the Archives page (archives.html) ----------
+     Archives in the top bar: a sheet of the Archives page's dotted paper grows out of the link to fill the
+     window, and the page then loads onto the same paper, so it seems to open out of the link.
+     Reduced motion: it just goes. */
   let toArchive = false;
   function openArchive(link) {
     const url = link.href;
@@ -1131,8 +1094,7 @@
     if (toArchive) return;
     toArchive = true;
     stopPageDrift();
-    const folder = link.classList.contains('archives__folder');
-    const from = ((folder && link.querySelector('.folder__paper')) || link).getBoundingClientRect();
+    const from = link.getBoundingClientRect();
     const W = window.innerWidth;
     const H = window.innerHeight;
     const startClip = `inset(${from.top}px ${W - from.right}px ${H - from.bottom}px ${from.left}px round 6px)`;
@@ -1141,12 +1103,11 @@
     sheet.style.clipPath = startClip;
     sheet.style.opacity = '0';
     document.body.append(sheet);
-    link.classList.add('is-opening');
     const grow = sheet.animate([
       { clipPath: startClip, opacity: 0 },
       { clipPath: startClip, opacity: 1, offset: 0.08 },
       { clipPath: 'inset(0px 0px 0px 0px round 0px)', opacity: 1 },
-    ], { duration: 820, delay: folder ? 220 : 40, easing: 'cubic-bezier(.75, 0, .2, 1)', fill: 'forwards' });
+    ], { duration: 820, delay: 40, easing: 'cubic-bezier(.75, 0, .2, 1)', fill: 'forwards' });
     let gone = false;
     const go = () => { if (!gone) { gone = true; location.href = url; } };
     grow.finished.then(go, go);
@@ -1177,7 +1138,6 @@
     if (!e.persisted) return;
     toArchive = false;
     $$('.vault-wipe').forEach((n) => n.remove());
-    $$('.is-opening').forEach((n) => n.classList.remove('is-opening'));
   });
 
   /* ---------- 12b. Landing text rises into view as it scrolls in ---------- */
@@ -1350,7 +1310,7 @@
   if (window.ResizeObserver) new ResizeObserver(() => { if (!shelf.hidden) sizeCards(); }).observe(carousel);
   fontsReady.then(() => {
     route();
-    // arriving at a section's address (Back on the Archives page comes to #archives): go straight there
+    // arriving at a section's address (…/#about from another page): go straight there
     const section = location.hash.length > 1 && !books.some((b) => b.slug === location.hash.slice(1))
       ? document.getElementById(location.hash.slice(1)) : null;
     if (section && section.tagName === 'SECTION') {
