@@ -1,0 +1,106 @@
+/* The Archives page (archives.html), on top of style.css.
+   One screen, laid out like an open book: Back and the switch in the top bar, the model in the middle on
+   dotted paper, and its number, name and buttons along the bottom like the carousel's caption.
+   The paper's colours (--vault-bg, --vault-ink, --vault-dot) are in style.css: the home page uses them too,
+   for the sheet that grows out of a folder on the way here. */
+
+html, body.vault-page { height: 100%; overflow: hidden; }
+body.vault-page {
+  background-color: var(--vault-bg);
+  background-image: radial-gradient(var(--vault-dot) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  background-position: center;
+  color: var(--desk-ink);
+}
+.vault {
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+/* leaving: everything settles back and fades, then the home page comes in */
+.is-leaving .vault { opacity: 0; transform: scale(.985); }
+
+/* arriving: the bar and the caption come in after the sheet has filled the window; the drawing plots itself */
+@keyframes vault-in { from { opacity: 0; transform: translateY(10px); } }
+.vault > .bar { animation: vault-in .7s .1s var(--ease) both; }
+.vault__caption { animation: vault-in .8s .35s var(--ease) both; }
+@media (prefers-reduced-motion: reduce) { .vault > .bar, .vault__caption { animation: none; } .vault { transition: none; } }
+
+.vault__stage {
+  position: relative;
+  min-height: 0;
+  outline: none;
+}
+.vault__stage.is-3d { cursor: grab; }
+.vault__stage.is-3d:active { cursor: grabbing; }
+.vault__stage:focus-visible { box-shadow: inset 0 0 0 2px var(--desk-ink); }
+.vault__view, .vault__view canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.vault__view[hidden] { display: none; }
+
+/* loading: a short hairline filling up under the model */
+.vault__load {
+  position: absolute;
+  left: 50%; bottom: 50%;
+  width: min(160px, 40%);
+  height: 1px;
+  transform: translate(-50%, 50%);
+  background: var(--desk-line);
+  overflow: hidden;
+}
+.vault__load span {
+  position: absolute; inset: 0;
+  background: var(--desk-ink);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform .3s linear;
+}
+.vault__load[hidden] { display: none; }
+
+.vault__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  margin: 0;
+  padding: 6px 12px;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: var(--vault-bg);
+  color: var(--desk-muted);
+  font-size: 12px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity .6s var(--ease);
+}
+.vault__hint.is-gone { opacity: 0; }
+.vault__hint[hidden] { display: none; }
+
+/* a file without a 3D model: its folder, big, in the middle; clicking it downloads the file */
+.vault__card {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  width: min(260px, 60%);
+  color: inherit;
+  text-decoration: none;
+  cursor: var(--cursor-hot);
+  animation: vault-in .6s var(--ease) both;
+}
+.vault__card .archives__icon { max-width: none; margin: 0; }
+.vault__card .archives__type { font-size: clamp(16px, 2vw, 22px); }
+.vault__note { font-size: 13px; line-height: 1.45; text-align: center; color: var(--desk-muted); }
+@media (hover: hover) and (pointer: fine) {
+  .vault__card:hover .folder__front { transform: perspective(300px) rotateX(-22deg); }
+  .vault__card:hover .folder__paper { transform: translateY(-5px); }
+}
+.vault__noscript { position: absolute; inset: auto 0 45%; margin: 0; text-align: center; color: var(--desk-muted); }
+
+.vault__caption { position: relative; z-index: 1; }
+.vault__caption a.btn--solid { color: var(--vault-bg); } /* a link, so it needs its colour set: paper on ink */
+.vault__caption .shelf__meta { max-width: 62ch; }

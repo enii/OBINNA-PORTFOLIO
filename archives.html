@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Archives — Obinna Oti</title>
+  <meta name="description" content="3D models, drawings and files by Obinna Oti: turn the models around in 3D, and download them.">
+  <link rel="canonical" href="https://obinnaoti.com/archives.html">
+  <meta property="og:url" content="https://obinnaoti.com/archives.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Archives — Obinna Oti">
+  <meta property="og:description" content="3D models, drawings and files: turn the models around in 3D, and download them.">
+  <meta property="og:image" content="https://obinnaoti.com/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Obinna Oti, product design portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f2ee">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111">
+  <link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/TomatoGrotesk-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/TomatoGrotesk-ThinUpright.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/archive.css">
+  <script src="assets/js/boot.js"></script>
+  <link rel="modulepreload" href="assets/js/vendor/three/three.module.min.js">
+</head>
+<!-- ═══════════ ARCHIVES ═══════════
+     The files in archives/archives.js, one at a time. A file with a 3D model ("model" in archives.js)
+     shows as a hidden-line drawing you can turn and zoom; the rest show as a folder. archive.js builds it.
+     The home page opens onto this page by growing a sheet of its dotted paper out of the folder that was
+     clicked (main.js), so it arrives already on that paper. -->
+<body class="vault-page">
+<div class="vault" id="vault">
+  <header class="bar">
+    <a class="btn" href="index.html#archives" data-leave>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
+      Back
+    </a>
+    <span class="bar__title">Archives</span>
+    <div class="bar__actions">
+      <button class="bar__theme" type="button" aria-pressed="false" aria-label="Dark mode" title="Dark mode">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.6a6.4 6.4 0 0 1 0 12.8z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="vault__stage" id="stage" tabindex="-1">
+    <h1 class="sr-only">Archives</h1>
+    <div class="vault__view" id="view"></div>
+    <div class="vault__load" id="load" hidden><span id="loadBar"></span></div>
+    <p class="vault__hint" id="hint" hidden></p>
+    <noscript>
+      <p class="vault__noscript">Turn on JavaScript to see the archive.</p>
+    </noscript>
+  </main>
+
+  <div class="shelf__caption vault__caption">
+    <span class="shelf__num" id="num"></span>
+    <div class="shelf__text">
+      <h2 class="shelf__title" id="title"></h2>
+      <p class="shelf__meta" id="meta"></p>
+    </div>
+    <div class="shelf__controls">
+      <span class="shelf__pager" id="pager" hidden></span>
+      <button class="round-btn" id="prevBtn" type="button" aria-label="Previous file" hidden>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3m4-4L3 8l4 4"/></svg>
+      </button>
+      <button class="round-btn" id="nextBtn" type="button" aria-label="Next file" hidden>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <button class="round-btn" id="spinBtn" type="button" aria-pressed="true" title="Stop turning" aria-label="Turn the model by itself" hidden>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M13.2 6.2A5.5 5.5 0 1 0 13.5 9"/><path d="M13.6 2.8v3.6H10"/></svg>
+      </button>
+      <button class="round-btn" id="resetBtn" type="button" title="Back to the first view" aria-label="Back to the first view" hidden>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3M8 11v3M2 8h3M11 8h3"/><circle cx="8" cy="8" r="3"/></svg>
+      </button>
+      <a class="btn btn--solid" id="getBtn" download hidden>Download</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="archives/archives.js"></script>
+<script type="module" src="assets/js/archive.js"></script>
+</body>
+</html>

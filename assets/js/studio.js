@@ -664,11 +664,12 @@ window.PROJECTS = `;
   const ARCHIVE_LIST = 'archives/archives.js';
   const ARCHIVE_DIR = 'archives/files/';
   const ARCHIVE_MAX = 50 * 1024 * 1024; // GitHub accepts up to 100 MB; past 50 MB uploads get slow and fragile
-  const ARCHIVE_HEAD = `/* Archives: files visitors can download from the Archives section of the site, newest first.
+  const ARCHIVE_HEAD = `/* Archives: the files on the Archives page (archives.html), newest first. Visitors can download each one,
+ * and turn the ones with a 3D model around in 3D, drawn as a hidden-line drawing.
  *
  * The Studio (studio.html) writes this file when you upload or remove a file there. To edit it by
  * hand, keep the first and last lines as they are; everything between the brackets is plain JSON.
- * The files themselves live in archives/files/.
+ * The files themselves live in archives/files/, their 3D models in archives/models/.
  *
  *   title   the name shown on the site
  *   file    the file to download, e.g. "archives/files/elizabeth-st-drawing-set.pdf"
@@ -676,6 +677,9 @@ window.PROJECTS = `;
  *   type    the file type shown on the site (PDF, ZIP, DWG…)
  *   added   the date it was added, as YYYY-MM-DD
  *   note    optional: one line about it
+ *   model   optional: a 3D model of it to turn around on the page, as a .glb file (glTF binary, which
+ *           Rhino exports: File > Export Selected > glTF Binary, without Draco compression)
+ *   alt     optional: what the model looks like, in a sentence, for screen readers
  */
 window.ARCHIVES = `;
   const archiveList = $('#archiveList');
@@ -747,6 +751,7 @@ window.ARCHIVES = `;
       while (taken.has(ARCHIVE_DIR + name)) name = name.replace(/(\.[a-z0-9]+)?$/, (ext) => `-${rand()}${ext}`);
       const entry = { title, file: ARCHIVE_DIR + name, size: pendingFile.size, type: fileType(pendingFile.name), added: today() };
       if (note) entry.note = note;
+      if (/\.glb$/i.test(name)) entry.model = entry.file; // a glTF binary is its own 3D model: it shows in 3D
       const next = [entry, ...remote];
       await commit([
         { path: entry.file, blob: pendingFile, label: pendingFile.name },
@@ -790,6 +795,9 @@ window.ARCHIVES = `;
       const next = remote.filter((f) => f.file !== item.file);
       const changes = [{ path: ARCHIVE_LIST, text: serializeArchives(next) }];
       if (String(item.file).startsWith(ARCHIVE_DIR)) changes.push({ path: item.file, remove: true });
+      // its 3D model too, when it has one of its own in archives/models/
+      if (item.model && item.model !== item.file && String(item.model).startsWith('archives/models/')
+        && !next.some((f) => f.model === item.model)) changes.push({ path: item.model, remove: true });
       await commit(changes, `Remove from archives: ${item.title}`);
       archives = next;
       renderArchiveList();

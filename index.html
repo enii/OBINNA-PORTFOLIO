@@ -44,7 +44,7 @@
           <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="products">Products</a>
           <a class="bar__link" href="#shelf" data-scroll="shelf" data-group="architecture">Architecture</a>
           <a class="bar__link" href="#about" data-scroll="about">About</a>
-          <a class="bar__link" href="#archives" data-scroll="archives">Archives</a>
+          <a class="bar__link" href="archives.html" data-archive>Archives</a>
           <a class="bar__link" href="#testimonials" data-scroll="testimonials">Feedback</a>
         </nav>
         <div class="bar__nav bar__end">
@@ -253,14 +253,17 @@
     </section>
 
     <!-- ═══════════ ARCHIVES ═══════════
-         Files visitors can download. main.js lists them from archives/archives.js, which the Studio
-         (studio.html) updates when you upload or remove a file; the files are in archives/files/. -->
+         The files on the Archives page (archives.html), as folders. main.js lists them from archives/archives.js,
+         which the Studio (studio.html) updates when you upload or remove a file; the files are in archives/files/.
+         Clicking a folder, the button or Archives in the top bar opens the Archives page (data-archive):
+         the folder opens and the page grows out of it. -->
     <section class="archives" id="archives" aria-labelledby="archivesTitle">
       <div class="archives__head">
         <h2 class="motion__title reveal" id="archivesTitle">Archives</h2>
-        <p class="archives__intro reveal">Drawings, documents and files to download.</p>
+        <p class="archives__intro reveal">3D models, drawings and files. Turn the models around in 3D, and download them.</p>
+        <a class="btn reveal" href="archives.html" data-archive>Open the archive</a>
       </div>
-      <ul class="archives__list" id="archivesList" aria-label="Files to download"></ul>
+      <ul class="archives__list" id="archivesList" aria-label="Files in the archive"></ul>
       <p class="archives__empty" id="archivesEmpty" hidden>Nothing here yet. Files will appear here as they’re added.</p>
     </section>
 

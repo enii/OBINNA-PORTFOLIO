@@ -61,7 +61,7 @@ The **About me** section sits under the company banner, just above the footer, a
 
 The companies you've worked with drift slowly along a banner under the animations, in black (white in dark mode). The banner rises into view as you scroll down from the books, then sticks to the bottom of the window while the animations scroll behind it, and settles above the footer after the last one. The animations and the banner share `<div class="motion-run">` in `index.html`; that wrapper is what limits how long the banner sticks. It pauses while the pointer is over it, and stands still in a centred row for visitors who have reduced motion turned on.
 
-The top bar has no link to it; visitors reach it by scrolling down. (In the top bar, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **About** goes to the About me section, **Archives** goes to the files to download under it, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
+The top bar has no link to it; visitors reach it by scrolling down. (In the top bar, **Products** and **Architecture** return to the books and bring the first book of that kind to the centre, **About** goes to the About me section, **Archives** opens the Archives page, and **Feedback** shows as grey text until there's a section with `id="testimonials"` for it to link to; it becomes a link by itself once there is.)
 
 The list is in `index.html`, inside `<section class="logos">`: one `<li class="logos__item">` per company. Add, remove or reorder them there; the strip repeats them to fill any screen and loops without a seam.
 
@@ -76,11 +76,17 @@ For now each company is its name set in type. To show the real logo instead:
 
 Logos show about 34px tall on desktop; very wide ones are capped at 180px wide.
 
-## Archives (files to download)
+## Archives (3D models and files to download)
 
-The **Archives** section sits under your About me introduction, and **Archives** in the top bar scrolls to it. Each file shows as a folder with its type on the front (3DM, PDF, ZIP…), its name, an optional note, its size and the date it was added; clicking the folder downloads the file. Until there's a file, it says "Nothing here yet".
+The **Archives** section sits under your About me introduction. Each file shows as a folder with its type on the front (3DM, PDF, ZIP…), its name, an optional note, its size and the date it was added. Until there's a file, it says "Nothing here yet".
 
-To add a file, open the Studio (see below), connect, and use the **Archives** card: drop a file (up to 50 MB; zip anything larger), give it a name and, if you like, a one-line note, then click **Upload**. The Studio saves the file to `archives/files/` and its entry to `archives/archives.js` in one go, and the site updates in a minute or two. **Remove** (click it twice) takes a file off the site and deletes it.
+Clicking a folder, **Open the archive**, or **Archives** in the top bar opens the **Archives page** (`archives.html`): the folder opens, a sheet of dotted paper rises out of it and fills the window, and the Archives page arrives on the same paper. (Visitors with reduced motion turned on go straight there.) The page works like an open book: **Back** at the top left returns to the Archives section, and along the bottom are the file's number, name and details, arrows to the other files, and **Download**.
+
+A file with a 3D model shows in the middle as a **hidden-line drawing** you can turn around: drag to turn it (one finger on a phone), scroll or pinch to zoom, or click it and use the arrow keys and + / −. It turns slowly by itself until someone takes hold of it, and carries on a few seconds after they let go; the round buttons stop or start the turning and go back to the first view. The outline and the sharp edges are drawn in ink and the faces are filled with the paper's colour, so the lines behind them stay hidden, like Rhino's technical view. Smooth edges and seams aren't drawn. The lines are found on screen as it turns (wherever the depth or the surface's direction jumps), so they stay one weight however close you zoom; the drawing plots itself in from the bottom up when it opens. It follows the light and dark switch: dark lines on pale paper, or pale lines on dark paper. A file without a model shows as a big folder that downloads it when clicked.
+
+The 3D drawing uses three.js (free and open source, in `assets/js/vendor/three/`, with its licence); it loads only on the Archives page. **Stool 4** has a model: `archives/models/stool-4.glb`, made from the display meshes saved in your `STOOL_4.3dm` (its two solids; the construction curves are left out). A model is a `.glb` file (glTF binary), named in the file's `"model"` line in `archives/archives.js`, with an optional `"alt"` line saying what it looks like, for screen readers. To give another file a model, export it from Rhino with **File › Export Selected › glTF Binary (.glb)**, with Draco compression off, and send it to me with the file; or upload the `.glb` itself in the Studio, which shows it in 3D by itself.
+
+To add a file, open the Studio (see below), connect, and use the **Archives** card: drop a file (up to 50 MB; zip anything larger), give it a name and, if you like, a one-line note, then click **Upload**. The Studio saves the file to `archives/files/` and its entry to `archives/archives.js` in one go, and the site updates in a minute or two. A `.glb` you upload is its own 3D model and shows in 3D. **Remove** (click it twice) takes a file off the site and deletes it, with its 3D model.
 
 Like a Studio publish, each upload or removal goes straight to the live site and uses one Netlify deploy (see **Deploy**). Anyone with the address can download what's listed, so don't upload anything private: drawing sets often carry client names and addresses in their title blocks.
 
