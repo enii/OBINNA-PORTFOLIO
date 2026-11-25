@@ -70,7 +70,7 @@
   --accent: #2f45d8;
 
   /* the Archives page's dotted paper and its drawing ink (archives.html; the home page's opening sheet too) */
-  --vault-bg: #f3f2ee;
+  --vault-bg: #ffffff;
   --vault-ink: #161616;
   --vault-dot: rgba(0, 0, 0, .1);
 

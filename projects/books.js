@@ -261,5 +261,14 @@ window.BOOKS =
     "cover": "assets/images/splash-stool-hero.webp",
     "coverTitle": "Splash\nstool",
     "frames": []
+  },
+  {
+    "slug": "snap-pods",
+    "title": "Snap Pods",
+    "discipline": "Product design · Audio",
+    "coverStyle": "image",
+    "cover": "assets/images/snap-pods-hero.webp",
+    "coverTitle": "Snap\npods",
+    "frames": []
   }
 ];

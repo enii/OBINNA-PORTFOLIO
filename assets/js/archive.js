@@ -1,6 +1,9 @@
-/* The Archives page (archives.html): the files in archives/archives.js, one at a time, newest first.
+/* The Archives page (archives.html): the files in archives/archives.js, newest first, in a carousel like the
+ * books on the home page. The one in the middle is the one you look at; the ones either side are smaller
+ * and fainter, and turn slowly by themselves. The arrows, a click on one at the side, or a few seconds
+ * left alone slide the next one into the middle.
  *
- * A file with a 3D model ("model": a .glb) shows in the middle as a hidden-line drawing you can turn and
+ * A file with a 3D model ("model": a .glb) shows as a hidden-line drawing you can turn and
  * zoom, with a little transparency: its outline and its sharp edges drawn in ink, its faces filled with the
  * paper's own colour but letting a little of it through, so the lines behind them show faintly, like a
  * technical view in Rhino with the surfaces ghosted. Smooth edges and seams aren't drawn. The lines in
@@ -12,7 +15,6 @@
  * A file without a model shows as a folder. Every file has a Download button.
  * Leaving the page (Back) fades it out before the home page comes back. */
 import * as THREE from './vendor/three/three.module.min.js';
-import { OrbitControls } from './vendor/three/OrbitControls.js';
 import { GLTFLoader } from './vendor/three/GLTFLoader.js';
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -74,8 +76,9 @@ const EDGE_VERT = /* glsl */`
 varying vec2 vUv;
 void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
-// Reads the normals and depth of the model (drawn off screen) and inks every pixel where they jump:
-// the outline against the paper, one part passing in front of another, and sharp creases.
+// Reads the normals and depth of the models (drawn off screen) and inks every pixel where they jump:
+// the outline against the paper, one part passing in front of another, and sharp creases. The alpha
+// channel holds how strongly each model is drawn, so the ones at the sides come out fainter.
 const EDGE_FRAG = /* glsl */`
 precision highp float;
 uniform sampler2D tNormal;
@@ -98,16 +101,17 @@ float dist(vec2 uv) {
 }
 float pairEdge(vec4 c, vec3 n0, float z0, vec2 q) {
   vec4 o = texture2D(tNormal, q);
-  float e = abs(o.a - c.a); // the outline: model on one side, paper on the other
-  if (c.a > 0.5 && o.a > 0.5) {
+  float e = abs(o.a - c.a); // the outline: model on one side, paper on the other (fainter for a fainter model)
+  if (c.a > 0.01 && o.a > 0.01) {
+    float w = min(c.a, o.a); // how strongly this model is drawn
     vec3 n1 = o.rgb * 2.0 - 1.0;
     float turn = 1.0 - dot(n0, n1);
-    e = max(e, smoothstep(0.16, 0.26, turn)); // a crease sharper than about 35-40 degrees
+    e = max(e, w * smoothstep(0.16, 0.26, turn)); // a crease sharper than about 35-40 degrees
     float dz = abs(dist(q) - z0);
     // one surface in front of another: a jump in depth where the surface also changes direction,
     // or a big jump anywhere. A smooth surface seen almost edge-on changes depth fast without changing
     // direction, so it draws nothing, even where two of its faces meet.
-    e = max(e, smoothstep(uDepthTol, uDepthTol * 2.0, dz) * max(smoothstep(0.08, 0.16, turn), smoothstep(uDepthTol * 5.0, uDepthTol * 10.0, dz)));
+    e = max(e, w * smoothstep(uDepthTol, uDepthTol * 2.0, dz) * max(smoothstep(0.08, 0.16, turn), smoothstep(uDepthTol * 5.0, uDepthTol * 10.0, dz)));
   }
   return e;
 }
@@ -115,7 +119,7 @@ float edgeAt(vec2 p, out float cover) {
   vec4 c = texture2D(tNormal, p);
   cover = c.a;
   vec3 n0 = c.rgb * 2.0 - 1.0;
-  float z0 = c.a > 0.5 ? dist(p) : 0.0;
+  float z0 = c.a > 0.01 ? dist(p) : 0.0;
   vec2 s = uR * uTexel;
   vec2 d = s * 0.7071;
   float e = pairEdge(c, n0, z0, p + vec2(s.x, 0.0));
@@ -251,24 +255,56 @@ function buildBackLines(model) {
   return { P, N, C, T, ev: Int32Array.from(ev), et: Int32Array.from(et), pairs: Int32Array.from(pairs), fixed: new Float32Array(fixed) };
 }
 
-const easeOut = (t) => 1 - (1 - t) ** 3;
-const START = { theta: THREE.MathUtils.degToRad(38), phi: THREE.MathUtils.degToRad(68) };
-const INTRO_FROM = { theta: THREE.MathUtils.degToRad(-55), phi: THREE.MathUtils.degToRad(84), far: 1.55 };
+// The normal pass: each face's direction (as seen from the camera) in colour, and in the alpha channel how
+// strongly that model is drawn: 1 for the one in the middle, less for the ones at the sides.
+const NORMAL_VERT = /* glsl */`
+varying vec3 vN;
+void main() {
+  vN = normalize(normalMatrix * normal);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+const NORMAL_FRAG = /* glsl */`
+precision highp float;
+uniform float uFade;
+varying vec3 vN;
+void main() {
+  vec3 n = normalize(vN);
+  if (!gl_FrontFacing) n = -n;
+  gl_FragColor = vec4(n * 0.5 + 0.5, uFade);
+}`;
 
-class HiddenLineViewer {
-  constructor(host) {
+const easeOut = (t) => 1 - (1 - t) ** 3;
+const MOD = (a, n) => ((a % n) + n) % n;
+const CAM_PHI = THREE.MathUtils.degToRad(68); // the camera looks down on the models a little
+const START_YAW = THREE.MathUtils.degToRad(-38); // each model starts three-quarters on
+const SPIN = 0.105; // radians a second when it turns by itself: about one turn a minute
+const SIDE = { scale: 0.42, fade: 0.68 }; // the models at the sides: this much smaller, and this much fainter
+const ADVANCE = 9000; // ms: left alone this long, the carousel moves on to the next model
+
+/* A carousel of hidden-line drawings, like the books on the home page: the model in the middle is the one
+   you turn (drag) and zoom (scroll or pinch); the ones either side are smaller and fainter and turn slowly
+   by themselves. The arrows, a click on a model at the side, or nine seconds left alone slide the next
+   one into the middle. Every model keeps its own turn. Models load as they come near the middle. */
+class HiddenLineCarousel {
+  constructor(host, urls) {
     this.host = host;
+    this.urls = urls;
+    this.count = urls.length;
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
     renderer.setClearColor(0x000000, 0);
     this.renderer = renderer;
     host.append(renderer.domElement);
 
     this.scene = new THREE.Scene();
-    this.scene.overrideMaterial = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
-    this.root = new THREE.Group();
-    this.scene.add(this.root);
-    this.camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100);
+    this.scene.overrideMaterial = new THREE.ShaderMaterial({
+      vertexShader: NORMAL_VERT, fragmentShader: NORMAL_FRAG, uniforms: { uFade: { value: 1 } },
+      side: THREE.DoubleSide, blending: THREE.NoBlending,
+    });
+    this.camera = new THREE.PerspectiveCamera(30, 1, 0.05, 100);
     this.fitDist = 4;
+    this.dist = 4;
+    this.distGoal = 4;
+    this.spacing = 2;
 
     const depthTexture = new THREE.DepthTexture(1, 1);
     depthTexture.type = THREE.FloatType;
@@ -321,36 +357,24 @@ class HiddenLineViewer {
       blendDst: THREE.OneMinusSrcAlphaFactor,
     });
     this.backScene = new THREE.Scene();
-    this.back = null;
+    this.backGroup = new THREE.Group(); // the lines behind the model in the middle, placed with it each frame
+    this.backGroup.matrixAutoUpdate = false;
+    this.backScene.add(this.backGroup);
 
-    const controls = new OrbitControls(this.camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.enablePan = false;
-    controls.rotateSpeed = 0.7;
-    controls.zoomSpeed = 0.8;
-    controls.autoRotateSpeed = 1.1; // about one turn a minute
-    controls.minPolarAngle = 0.12;
-    controls.maxPolarAngle = Math.PI - 0.12;
-    this.controls = controls;
+    this.items = urls.map(() => ({ model: null, loading: false, failed: false, progress: 0, yaw: START_YAW, pitch: 0, vel: 0, back: null, pool: [] }));
+    this.slots = new Map(); // carousel position → the model shown there
+    this.pos = 0; // where the carousel is, in models (it slides between whole numbers)
+    this.goal = 0;
+    this.active = 0;
     this.spinning = !reduceMotion;
     this.held = false;
-    this.lastHandled = -Infinity; // when someone last turned or zoomed it: it waits a while before turning by itself
-    this.resumeTimer = 0;
-    controls.addEventListener('start', () => {
-      this.held = true;
-      this.intro = null; // a hand on the model ends the opening move where it is
-      this.edgeMat.uniforms.uReveal.value = 1;
-      clearTimeout(this.resumeTimer);
-      this.onInteract?.();
-    });
-    controls.addEventListener('end', () => {
-      this.held = false;
-      clearTimeout(this.resumeTimer);
-      this.resumeTimer = setTimeout(() => { this.dirty = true; }, 5000); // carries on turning a while after you let go
-      this.lastHandled = performance.now();
-    });
-    controls.addEventListener('change', () => { this.dirty = true; });
+    this.lastHandled = -Infinity; // when someone last turned, zoomed or moved the carousel
+    this.lastAdvance = performance.now();
+    this.intro = null;
+    this.started = false;
+    this.tween = null;
+    this.raycaster = new THREE.Raycaster();
+    this.listen();
 
     this.clock = new THREE.Clock();
     this.dirty = true;
@@ -382,62 +406,69 @@ class HiddenLineViewer {
     u.uR.value = 0.7 * pr * k; // lines about 1.4 px wide
     this.backMat.uniforms.uScreen.value.set(Math.round(w * pr), Math.round(h * pr));
     this.camera.aspect = w / h;
-    // frame the model so it fits the narrower side of the stage
-    this.fitDist = 1.12 / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2)) / Math.min(1, this.camera.aspect);
-    this.controls.minDistance = this.fitDist * 0.35;
-    this.controls.maxDistance = this.fitDist * 2.2;
     this.camera.updateProjectionMatrix();
+    // frame the model in the middle so it fits the narrower side of the stage
+    const zoom = this.distGoal / this.fitDist;
+    this.fitDist = 1.12 / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2)) / Math.min(1, this.camera.aspect);
+    this.distGoal = this.fitDist * zoom;
+    this.dist = this.distGoal;
+    // the models either side sit about at the edges of the stage, half in view (on a phone, just off it)
+    const halfW = this.fitDist * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect;
+    this.spacing = Math.max(1.7, halfW * 0.95 + 0.15);
     this.dirty = true;
   }
 
-  // Loads a .glb, centres it and scales it to a unit sphere, so the lines and the camera behave the same
-  // whatever the model's units. Lines and points in the file are left out: the drawing makes its own.
-  load(url, onProgress) {
-    const token = (this.token = {});
-    return new Promise((resolve, reject) => {
-      new GLTFLoader().load(url, (gltf) => {
-        if (token !== this.token) return;
-        this.clear();
-        const model = gltf.scene;
-        model.traverse((o) => {
-          if (o.isMesh) {
-            if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
-          } else if (o.isLine || o.isPoints) o.visible = false;
-        });
-        const box = new THREE.Box3().setFromObject(model);
-        const sphere = box.getBoundingSphere(new THREE.Sphere());
-        const s = 1 / (sphere.radius || 1);
-        model.position.sub(sphere.center).multiplyScalar(s);
-        model.scale.multiplyScalar(s);
-        this.root.add(model);
-        this.model = model;
-        this.setBack(buildBackLines(model));
-        this.edgeMat.uniforms.uReveal.value = reduceMotion ? 1 : 0; // a new drawing is plotted afresh
-        this.home(!reduceMotion);
-        resolve();
-      }, (e) => { if (token === this.token && e.total) onProgress?.(e.loaded / e.total); }, (err) => {
-        if (token === this.token) reject(err);
+  /* ---------- Loading ---------- */
+  // Loads a model's .glb, centres it and scales it to a unit sphere, so the lines and the camera behave the
+  // same whatever its units. Lines and points in the file are left out: the drawing makes its own.
+  ensure(i) {
+    const it = this.items[i];
+    if (it.model || it.loading || it.failed || !this.urls[i]) return;
+    it.loading = true;
+    new GLTFLoader().load(this.urls[i], (gltf) => {
+      const model = gltf.scene;
+      model.traverse((o) => {
+        if (o.isMesh) {
+          if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
+        } else if (o.isLine || o.isPoints) o.visible = false;
       });
+      const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
+      const s = 1 / (sphere.radius || 1);
+      model.position.sub(sphere.center).multiplyScalar(s);
+      model.scale.multiplyScalar(s);
+      it.model = model;
+      it.back = this.backLines(buildBackLines(model));
+      it.loading = false;
+      if (i === this.active) { this.showBack(i); this.begin(); }
+      this.dirty = true;
+      this.onLoaded?.(i);
+    }, (e) => {
+      if (e.total) { it.progress = e.loaded / e.total; this.onProgress?.(i, it.progress); }
+    }, () => {
+      it.loading = false;
+      it.failed = true;
+      this.onFailed?.(i);
     });
   }
 
-  clear() {
-    if (!this.model) return;
-    this.root.remove(this.model);
-    this.model.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
-    this.model = null;
-    this.setBack(null);
-    this.dirty = true;
+  // a copy of a loaded model for one place in the carousel (they share its geometry)
+  acquire(it) {
+    if (it.pool.length) return it.pool.pop();
+    const clone = it.model.clone(true);
+    clone.userData.fade = 1;
+    clone.traverse((o) => {
+      if (!o.isMesh) return;
+      o.onBeforeRender = (r, s, c, g, mat) => {
+        if (mat.uniforms && mat.uniforms.uFade) { mat.uniforms.uFade.value = clone.userData.fade; mat.uniformsNeedUpdate = true; }
+      };
+    });
+    return clone;
   }
 
-  // the lines behind: the creases and open edges once, and room for the outline, found again each frame
-  setBack(data) {
-    this.backScene.children.slice().forEach((o) => { this.backScene.remove(o); o.geometry.dispose(); });
-    this.back = data;
-    if (!data) return;
+  // the lines behind one model: its creases and open edges, and room for its outline, found each frame
+  backLines(data) {
     const fixed = new THREE.BufferGeometry();
     fixed.setAttribute('position', new THREE.BufferAttribute(data.fixed, 3));
-    this.backScene.add(new THREE.LineSegments(fixed, this.backMat));
     const outline = new THREE.BufferGeometry();
     data.out = new Float32Array(data.pairs.length * 6);
     data.outAttr = new THREE.BufferAttribute(data.out, 3).setUsage(THREE.DynamicDrawUsage);
@@ -445,16 +476,23 @@ class HiddenLineViewer {
     outline.setDrawRange(0, 0);
     data.outGeo = outline;
     data.facing = new Uint8Array(data.T);
-    const lines = new THREE.LineSegments(outline, this.backMat);
-    lines.frustumCulled = false;
-    this.backScene.add(lines);
+    const a = new THREE.LineSegments(fixed, this.backMat);
+    const b = new THREE.LineSegments(outline, this.backMat);
+    a.frustumCulled = false;
+    b.frustumCulled = false;
+    data.objects = [a, b];
+    return data;
+  }
+
+  showBack(i) {
+    this.backGroup.clear();
+    const b = this.items[i] && this.items[i].back;
+    if (b) this.backGroup.add(...b.objects);
   }
 
   // the outline as seen from the camera: every smooth edge between a face turned towards it and one turned away
-  updateOutline() {
-    const b = this.back;
-    if (!b) return;
-    const { x, y, z } = this.camera.position;
+  updateOutline(b, cam) {
+    const { x, y, z } = cam;
     const { N, C, T, facing, ev, et, pairs, P, out } = b;
     for (let t = 0; t < T; t++) {
       const i = t * 3;
@@ -474,65 +512,255 @@ class HiddenLineViewer {
     b.outGeo.setDrawRange(0, n / 3);
   }
 
-  place(theta, phi, dist) {
-    this.camera.position.setFromSphericalCoords(dist, phi, theta);
-    this.controls.target.set(0, 0, 0);
-    this.camera.lookAt(0, 0, 0);
+  /* ---------- Moving ---------- */
+  // the first model to arrive: it swings round into view while the drawing is plotted
+  begin() {
+    if (this.started) return;
+    this.started = true;
+    if (reduceMotion) { this.edgeMat.uniforms.uReveal.value = 1; return; }
+    const it = this.items[this.active];
+    this.intro = { start: performance.now(), from: START_YAW - 2.3, to: it.yaw, i: this.active };
+    it.yaw = this.intro.from;
+    this.dist = this.fitDist * 1.35;
   }
 
-  // The first view: three-quarters, a little from above. With intro, the camera swings round into it
-  // from low on the other side while the drawing is plotted.
-  home(intro) {
-    const to = { theta: START.theta, phi: START.phi, dist: this.fitDist };
-    if (!intro) {
-      this.intro = null;
-      this.place(to.theta, to.phi, to.dist);
-      this.edgeMat.uniforms.uReveal.value = 1;
-      this.controls.update();
-      this.dirty = true;
-      return;
-    }
-    const sph = new THREE.Spherical().setFromVector3(this.camera.position);
-    const fresh = !this.model || this.edgeMat.uniforms.uReveal.value < 1 || sph.radius === 0;
-    const from = fresh
-      ? { theta: INTRO_FROM.theta, phi: INTRO_FROM.phi, dist: this.fitDist * INTRO_FROM.far }
-      : { theta: sph.theta, phi: sph.phi, dist: sph.radius };
-    if (!fresh) { // going back to the first view: the short way round
-      const turn = Math.PI * 2;
-      from.theta = to.theta + ((((from.theta - to.theta) % turn) + turn * 1.5) % turn) - turn / 2;
-    } else this.edgeMat.uniforms.uReveal.value = 0;
-    this.intro = { from, to, start: performance.now(), length: fresh ? 2200 : 1100, reveal: fresh };
-    this.place(from.theta, from.phi, from.dist);
+  endIntro() {
+    if (!this.intro) return;
+    this.intro = null;
+    this.edgeMat.uniforms.uReveal.value = 1;
+  }
+
+  grab() {
+    this.held = true;
+    this.endIntro();
+    this.tween = null;
+    this.lastHandled = performance.now();
+    this.onInteract?.();
+  }
+
+  jump(i) { this.pos = this.goal = i; this.active = MOD(i, this.count); this.showBack(this.active); this.dirty = true; }
+
+  step(d) {
+    this.endIntro();
+    this.goal = Math.round(this.goal) + d;
+    if (reduceMotion) this.pos = this.goal;
+    this.lastHandled = performance.now();
     this.dirty = true;
   }
 
-  frame() {
-    const dt = this.clock.getDelta();
-    let dirty = this.dirty;
-    this.dirty = false;
-    if (this.intro) {
-      const { from, to, start, length, reveal } = this.intro;
-      const t = Math.min(1, (performance.now() - start) / length);
-      const k = easeOut(t);
-      this.place(from.theta + (to.theta - from.theta) * k, from.phi + (to.phi - from.phi) * k, from.dist + (to.dist - from.dist) * k);
-      if (reveal) this.edgeMat.uniforms.uReveal.value = Math.min(1, t * 1.35);
-      if (t >= 1) this.intro = null;
-      dirty = true;
-    } else {
-      const idle = !this.held && performance.now() - this.lastHandled > 5000;
-      this.controls.autoRotate = this.spinning && idle && !!this.model;
-      if (this.controls.update(dt)) dirty = true;
+  // back to the first view: the model in the middle turns the short way round to three-quarters on
+  reset() {
+    this.endIntro();
+    const it = this.items[this.active];
+    const turn = Math.PI * 2;
+    const to = it.yaw + ((((START_YAW - it.yaw) % turn) + turn * 1.5) % turn) - turn / 2;
+    it.vel = 0;
+    this.tween = { i: this.active, y0: it.yaw, y1: to, p0: it.pitch, start: performance.now() };
+    this.distGoal = this.fitDist;
+    this.lastHandled = -Infinity;
+    if (reduceMotion) { it.yaw = to; it.pitch = 0; this.dist = this.fitDist; this.tween = null; }
+    this.dirty = true;
+  }
+
+  zoomTo(d) { this.distGoal = THREE.MathUtils.clamp(d, this.fitDist * 0.35, this.fitDist * 2.2); this.dirty = true; }
+
+  // keyboard: the arrows turn and tip the model, + and - zoom
+  nudge(dYaw, dPitch, zoom) {
+    this.endIntro();
+    const it = this.items[this.active];
+    it.yaw += dYaw;
+    it.pitch = THREE.MathUtils.clamp(it.pitch + dPitch, -1.25, 1.25);
+    it.vel = 0;
+    this.zoomTo(this.distGoal * zoom);
+    this.lastHandled = performance.now();
+    this.dirty = true;
+  }
+
+  // drag to turn the model in the middle (with a little run-on when flicked), scroll or pinch to zoom,
+  // and a click on a model at the side brings it to the middle
+  listen() {
+    const el = this.renderer.domElement;
+    el.style.touchAction = 'none';
+    const pts = new Map();
+    let down = null;
+    let lx = 0; let ly = 0; let lt = 0;
+    let pinch0 = 0; let dist0 = 0;
+    el.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      try { el.setPointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 1) { down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 }; lx = e.clientX; ly = e.clientY; lt = performance.now(); }
+      if (pts.size === 2) {
+        const [a, b] = [...pts.values()];
+        pinch0 = Math.hypot(a.x - b.x, a.y - b.y);
+        dist0 = this.distGoal;
+        down = null;
+      }
+      this.items[this.active].vel = 0;
+      this.grab();
+    });
+    el.addEventListener('pointermove', (e) => {
+      if (!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size >= 2) {
+        const [a, b] = [...pts.values()];
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pinch0 > 0 && d > 0) this.zoomTo(dist0 * pinch0 / d);
+        return;
+      }
+      const now = performance.now();
+      const dx = e.clientX - lx; const dy = e.clientY - ly;
+      const dt = Math.max(8, now - lt) / 1000;
+      if (down) down.moved += Math.abs(dx) + Math.abs(dy);
+      const it = this.items[this.active];
+      const k = 0.0085; // radians a pixel
+      it.yaw += dx * k;
+      it.pitch = THREE.MathUtils.clamp(it.pitch + dy * k, -1.25, 1.25);
+      it.vel = it.vel * 0.5 + (dx * k / dt) * 0.5;
+      lx = e.clientX; ly = e.clientY; lt = now;
+      this.dirty = true;
+    });
+    const end = (e) => {
+      if (!pts.has(e.pointerId)) return;
+      pts.delete(e.pointerId);
+      if (pts.size === 1) { const [p] = [...pts.values()]; lx = p.x; ly = p.y; lt = performance.now(); pinch0 = 0; return; }
+      if (pts.size) return;
+      this.held = false;
+      this.lastHandled = performance.now();
+      if (performance.now() - lt > 90) this.items[this.active].vel = 0; // held still before letting go: no run-on
+      if (down && down.moved < 6 && performance.now() - down.t < 450) this.pick(e.clientX, e.clientY);
+      down = null;
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      this.grab();
+      this.held = false;
+      this.zoomTo(this.distGoal * Math.exp(e.deltaY * 0.0012));
+    }, { passive: false });
+  }
+
+  pick(x, y) {
+    const r = this.renderer.domElement.getBoundingClientRect();
+    this.raycaster.setFromCamera(new THREE.Vector2(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1), this.camera);
+    const centre = Math.round(this.pos);
+    let best = null;
+    for (const [j, slot] of this.slots) {
+      if (j === centre) continue;
+      const hit = this.raycaster.intersectObject(slot.group, true)[0];
+      if (hit && (!best || hit.distance < best.d)) best = { j, d: hit.distance };
     }
-    if (dirty && this.model) this.render();
-    else if (dirty) this.renderer.clear();
+    if (best) this.step(best.j - Math.round(this.goal));
+  }
+
+  // place the models: the one at each whole position near the carousel's, smaller and fainter away from the middle
+  layout() {
+    const N = this.count;
+    const pos = this.pos;
+    const want = [];
+    if (N === 1) want.push(0);
+    else if (N === 2) want.push(Math.floor(pos), Math.floor(pos) + 1); // two models: the other one waits on the right
+    else for (let j = Math.floor(pos) - 1; j <= Math.ceil(pos) + 1; j++) if (Math.abs(j - pos) < 1.6) want.push(j);
+    for (const [j, slot] of this.slots) {
+      if (want.includes(j)) continue;
+      this.scene.remove(slot.group);
+      slot.group.remove(slot.clone);
+      this.items[slot.item].pool.push(slot.clone);
+      this.slots.delete(j);
+    }
+    for (const j of want) {
+      const i = MOD(j, N);
+      const it = this.items[i];
+      this.ensure(i);
+      if (!it.model) continue;
+      let slot = this.slots.get(j);
+      if (!slot) {
+        const clone = this.acquire(it);
+        const group = new THREE.Group();
+        group.add(clone);
+        this.scene.add(group);
+        slot = { group, clone, item: i, fade: 1 };
+        this.slots.set(j, slot);
+      }
+      const d = j - pos;
+      const ad = Math.min(1, Math.abs(d));
+      slot.group.position.set(d * this.spacing, 0, 0);
+      slot.group.scale.setScalar(1 - SIDE.scale * ad);
+      slot.group.rotation.set(it.pitch, it.yaw, 0);
+      slot.fade = 1 - SIDE.fade * ad;
+      slot.clone.userData.fade = slot.fade;
+    }
+  }
+
+  frame() {
+    const dt = Math.min(0.1, this.clock.getDelta());
+    const now = performance.now();
+    let moving = this.dirty;
+    this.dirty = false;
+    const N = this.count;
+
+    if (this.intro) {
+      const t = Math.min(1, (now - this.intro.start) / 2200);
+      const k = easeOut(t);
+      this.items[this.intro.i].yaw = this.intro.from + (this.intro.to - this.intro.from) * k;
+      this.dist = this.fitDist * (1.35 - 0.35 * k);
+      this.distGoal = this.fitDist;
+      this.edgeMat.uniforms.uReveal.value = Math.min(1, t * 1.35);
+      if (t >= 1) this.endIntro();
+      moving = true;
+    }
+    if (this.tween) {
+      const t = Math.min(1, (now - this.tween.start) / 1000);
+      const k = easeOut(t);
+      const it = this.items[this.tween.i];
+      it.yaw = this.tween.y0 + (this.tween.y1 - this.tween.y0) * k;
+      it.pitch = this.tween.p0 * (1 - k);
+      if (t >= 1) this.tween = null;
+      moving = true;
+    }
+    // the carousel slides towards its goal
+    if (this.pos !== this.goal) {
+      this.pos += (this.goal - this.pos) * (1 - Math.exp(-dt * 5.5));
+      if (Math.abs(this.goal - this.pos) < 0.0005) this.pos = this.goal;
+      moving = true;
+    }
+    // zoom eases too
+    if (Math.abs(this.distGoal - this.dist) > 1e-4) { this.dist += (this.distGoal - this.dist) * (1 - Math.exp(-dt * 9)); moving = true; }
+    // the models turn: the one in the middle runs on after a flick, then (left alone a while) turns by itself
+    const idle = !this.held && now - this.lastHandled > 5000;
+    this.items.forEach((it, i) => {
+      if (!it.model) return;
+      const middle = i === this.active;
+      if (middle && (this.held || this.intro || this.tween)) return;
+      if (middle && Math.abs(it.vel) > 0.01) { it.yaw += it.vel * dt; it.vel *= Math.exp(-dt * 3.5); moving = true; } else if (this.spinning && (!middle || idle)) { it.yaw += SPIN * dt; moving = true; }
+    });
+    const a = MOD(Math.round(this.pos), N);
+    if (a !== this.active) {
+      this.active = a;
+      this.showBack(a);
+      this.onActive?.(a);
+    }
+    // left alone, the carousel moves on
+    if (N > 1 && this.spinning && !reduceMotion && this.started && !this.intro && !this.held && this.pos === this.goal
+      && now - this.lastHandled > ADVANCE && now - this.lastAdvance > ADVANCE && document.visibilityState === 'visible') {
+      this.goal += 1;
+      this.lastAdvance = now;
+    }
+    if (!moving) return;
+    this.layout();
+    this.render();
   }
 
   render() {
     const { camera, renderer } = this;
-    // keep the near and far planes snug round the model, for clean depth
-    const d = camera.position.length();
-    camera.near = Math.max(d - 1.3, d * 0.02);
-    camera.far = d + 1.3;
+    const d = this.dist;
+    camera.position.set(0, d * Math.cos(CAM_PHI), d * Math.sin(CAM_PHI));
+    camera.lookAt(0, 0, 0);
+    // keep the near and far planes snug round the models in view, for clean depth
+    const reach = this.count > 1 ? this.spacing + 1.2 : 1.3;
+    camera.near = Math.max(d * 0.02, d - reach);
+    camera.far = Math.hypot(d, reach) + reach;
     camera.updateProjectionMatrix();
     const u = this.edgeMat.uniforms;
     u.uNear.value = camera.near;
@@ -544,30 +772,22 @@ class HiddenLineViewer {
     renderer.setRenderTarget(null);
     renderer.clear();
     renderer.render(this.quadScene, this.quadCam);
-    // then, faintly, the lines behind the faces
-    if (this.back) {
-      this.updateOutline();
+    // then, faintly, the lines behind the faces of the model in the middle
+    const slot = this.slots.get(Math.round(this.pos));
+    const it = slot && this.items[slot.item];
+    if (it && it.back && this.backGroup.children.length) {
+      this.backGroup.matrix.copy(slot.group.matrixWorld);
+      this.backGroup.matrixWorldNeedsUpdate = true;
+      const cam = camera.position.clone().applyMatrix4(slot.group.matrixWorld.clone().invert());
+      this.updateOutline(it.back, cam);
       const b = this.backMat.uniforms;
       b.uNear.value = camera.near;
       b.uFar.value = camera.far;
+      b.uAlpha.value = 0.3 * slot.fade;
       renderer.autoClear = false;
       renderer.render(this.backScene, camera);
       renderer.autoClear = true;
     }
-  }
-
-  // keyboard: arrows turn the model, + and - zoom
-  nudge(dTheta, dPhi, zoom) {
-    const sph = new THREE.Spherical().setFromVector3(this.camera.position);
-    sph.theta += dTheta;
-    sph.phi = THREE.MathUtils.clamp(sph.phi + dPhi, this.controls.minPolarAngle, this.controls.maxPolarAngle);
-    sph.radius = THREE.MathUtils.clamp(sph.radius * zoom, this.controls.minDistance, this.controls.maxDistance);
-    this.intro = null;
-    this.edgeMat.uniforms.uReveal.value = 1;
-    this.camera.position.setFromSpherical(sph);
-    this.camera.lookAt(0, 0, 0);
-    this.lastHandled = performance.now();
-    this.dirty = true;
   }
 }
 
@@ -575,7 +795,7 @@ let viewer = null;
 function getViewer() {
   if (viewer !== null) return viewer;
   try {
-    viewer = new HiddenLineViewer(view);
+    viewer = new HiddenLineCarousel(view, files.map((f) => (f.model ? assetUrl(f.model) : null)));
     viewer.onInteract = () => { hint.classList.add('is-gone'); };
     syncTheme();
   } catch (e) {
@@ -587,14 +807,14 @@ function getViewer() {
 /* ---------- The page ---------- */
 const FOLDER = '<svg class="folder" viewBox="0 0 120 92" aria-hidden="true"><path class="folder__back" d="M2 10a6 6 0 0 1 6-6h30.5a6 6 0 0 1 4.6 2.2L49 13h63a6 6 0 0 1 6 6v65a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/><path class="folder__paper" d="M13 19h94v44H13z"/><path class="folder__front" d="M2 29a5 5 0 0 1 5-5h106a5 5 0 0 1 5 5v55a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6z"/></svg>';
 let current = -1;
+let hinted = false;
 
-function show(i, first) {
-  if (!files.length) return;
-  i = ((i % files.length) + files.length) % files.length;
-  if (i === current) return;
+// the caption, the Download button and the address follow the model in the middle
+function caption(i) {
   current = i;
   const f = files[i];
-  const three = !!f.model && !!getViewer();
+  const it = viewer && viewer.items[i];
+  const three = !!f.model && !!viewer && !it.failed;
   $('#num').textContent = pad(i + 1);
   $('#title').textContent = f.title;
   $('#meta').textContent = [f.note, [f.type, size(f.size)].filter(Boolean).join(' '), date(f.added) && `Added ${date(f.added)}`].filter(Boolean).join(' · ');
@@ -612,36 +832,22 @@ function show(i, first) {
   resetBtn.hidden = !three;
   $('.vault__card', stage)?.remove();
   if (three) {
-    view.hidden = false;
     stage.setAttribute('role', 'img');
     stage.setAttribute('aria-label', `3D drawing of ${f.title}${f.alt ? `: ${f.alt}` : ''}. Drag to turn it; scroll or pinch to zoom; or use the arrow keys.`);
     stage.tabIndex = 0;
-    load.hidden = false;
-    loadBar.style.transform = 'scaleX(0)';
-    viewer.clear();
-    viewer.load(assetUrl(f.model), (p) => { loadBar.style.transform = `scaleX(${p})`; }).then(() => {
-      load.hidden = true;
-      if (first) showHint();
-    }, () => {
-      load.hidden = true;
-      folderCard(f, 'The 3D view didn’t load. You can still download the file.');
-    });
+    load.hidden = !!it.model;
+    loadBar.style.transform = `scaleX(${it.progress || 0})`;
   } else {
-    if (viewer) viewer.clear();
-    view.hidden = !!viewer;
     stage.removeAttribute('role');
     stage.removeAttribute('aria-label');
     stage.tabIndex = -1;
     load.hidden = true;
-    hint.hidden = true;
-    folderCard(f, f.model ? 'This device can’t show the 3D view. You can still download the file.' : '');
+    const note = !f.model ? '' : viewer ? 'The 3D view didn’t load. You can still download the file.' : 'This device can’t show the 3D view. You can still download the file.';
+    folderCard(f, note);
   }
 }
 
 function folderCard(f, note) {
-  stage.classList.remove('is-3d');
-  spinBtn.hidden = true;
-  resetBtn.hidden = true;
   const card = document.createElement('a');
   card.className = 'vault__card';
   card.href = assetUrl(f.file);
@@ -652,24 +858,35 @@ function folderCard(f, note) {
 }
 
 function showHint() {
-  if (reduceMotion) return;
-  hint.textContent = coarse ? 'Drag to turn · Pinch to zoom' : 'Drag to turn · Scroll to zoom';
+  if (reduceMotion || hinted) return;
+  hinted = true;
+  hint.textContent = coarse ? 'Drag to turn · Pinch to zoom' : files.length > 1 ? 'Drag to turn · Scroll to zoom · Click the next one to bring it round' : 'Drag to turn · Scroll to zoom';
   hint.hidden = false;
-  setTimeout(() => hint.classList.add('is-gone'), 6000);
+  setTimeout(() => hint.classList.add('is-gone'), 7000);
 }
 
 if (files.length) {
   const wanted = location.hash.slice(1).toLowerCase();
   const at = Math.max(0, files.findIndex((f) => slugOf(f) === wanted));
+  const v = getViewer();
+  if (v) {
+    v.onActive = (i) => caption(i);
+    v.onProgress = (i, p) => { if (i === current) loadBar.style.transform = `scaleX(${p})`; };
+    v.onLoaded = (i) => { if (i === current) { load.hidden = true; showHint(); } };
+    v.onFailed = (i) => { if (i === current) caption(i); };
+    v.jump(at);
+  } else view.hidden = true;
+  caption(at);
   if (files.length > 1) {
     $('#pager').hidden = false;
     $('#prevBtn').hidden = false;
     $('#nextBtn').hidden = false;
-    $('#prevBtn').addEventListener('click', () => show(current - 1));
-    $('#nextBtn').addEventListener('click', () => show(current + 1));
+    const go = (d) => { if (viewer) viewer.step(d); else caption(MOD(current + d, files.length)); };
+    $('#prevBtn').addEventListener('click', () => go(-1));
+    $('#nextBtn').addEventListener('click', () => go(1));
   }
-  show(at, true);
 } else {
+  view.hidden = true;
   $('#title').textContent = 'Nothing here yet';
   $('#meta').textContent = 'Files will appear here as they’re added.';
 }
@@ -679,17 +896,18 @@ spinBtn.addEventListener('click', () => {
   if (!viewer) return;
   viewer.spinning = !viewer.spinning;
   viewer.lastHandled = -Infinity;
+  viewer.lastAdvance = performance.now();
   spinBtn.setAttribute('aria-pressed', String(viewer.spinning));
   spinBtn.title = viewer.spinning ? 'Stop turning' : 'Turn by itself';
 });
 if (reduceMotion) { spinBtn.setAttribute('aria-pressed', 'false'); spinBtn.title = 'Turn by itself'; }
-resetBtn.addEventListener('click', () => { if (viewer) { viewer.lastHandled = -Infinity; viewer.home(!reduceMotion); } });
+resetBtn.addEventListener('click', () => { if (viewer) viewer.reset(); });
 
 stage.addEventListener('keydown', (e) => {
   if (!viewer || !stage.classList.contains('is-3d')) return;
   const step = THREE.MathUtils.degToRad(e.shiftKey ? 45 : 15);
   const moves = {
-    ArrowLeft: [step, 0, 1], ArrowRight: [-step, 0, 1], ArrowUp: [0, -step, 1], ArrowDown: [0, step, 1],
+    ArrowLeft: [-step, 0, 1], ArrowRight: [step, 0, 1], ArrowUp: [0, -step, 1], ArrowDown: [0, step, 1],
     '+': [0, 0, 0.85], '=': [0, 0, 0.85], '-': [0, 0, 1 / 0.85],
   }[e.key];
   if (!moves) return;
