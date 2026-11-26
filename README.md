@@ -225,7 +225,7 @@ super-slides-hero.webp         (Super Slides cover: the bone slide, 1600 × 2000
 tangerine-hero.webp            (Tangerine cover: your cover frame, the three lights falling diagonally off the edges, 1400 × 1633)
 splash-stool-hero.webp         (Splash Stool cover: the render of the blue lattice seat and its glass legs on black, 1663 × 2000, full bleed with the title in white over the black: coverStyle "image")
 snap-pods-hero.webp            (Snap Pods cover: the render of the two red translucent earbuds on black, 1546 × 1622, full bleed with the title in white: coverStyle "image")
-elizabeth-hero.webp            (Elizabeth Street cover: the aerial render of the terrace of gabled townhouses, with timber-clad gables and planter balconies over brick garages, cropped square around three of the gables, 1224 × 1224, full bleed with the title in white: coverStyle "image")
+elizabeth-hero.webp            (Elizabeth Street cover: the aerial render of a flat-roofed dwelling, a board-marked concrete upper storey over timber cladding, with planted openings and a garage, cropped square around the building, 1400 × 1400, full bleed with the title in white: coverStyle "image")
 blackwood-cafe-hero.webp       (Blackwood Cafe cover: the photo of the brick building behind its tree, cropped square, 1042 × 1042, full bleed with the title in white: coverStyle "image")
 smith-residence-hero.webp      (Smith Residence cover: the render, cropped square around the entry porch, 887 × 887, full bleed with the title in white: coverStyle "image")
 ```
