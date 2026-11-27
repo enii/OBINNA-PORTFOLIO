@@ -162,7 +162,7 @@ Current books:
 |---|---|
 | 01 Vivonne Cabin | cover · site and proposal · option 01 (gable): 3D view, floor plan and elevations (A02), section (A03), details (A04), schedules, compliance blow-out · option 02 (split skillion): title page, 3D view, floor plan and elevations (A06), section (A07), roof and tie-down (A08), compliance blow-out · back cover |
 | 02 Smith Residence | cover · title page · site plan (A01) · project overview · floor plan (A03) · kitchen blow-out (A04) · elevations (A05) · section and detail (A06) · back cover |
-| 03 Elizabeth Street | cover · the flat-roofed scheme: driveway view (B01) · site plan (B02) · ground floor layout (B03) · first floor layout (B04) · back cover |
+| 03 Elizabeth Street | cover · the flat-roofed scheme: driveway view (B00) · site plan (B01) · ground floor layout (B02) · first floor layout (B03) · elevations (B04) · back cover |
 | 04 Blackwood Cafe | cover · one spread with "Coming soon" (its pages aren't in yet) · back cover |
 | 05 Sting Rays | cover · moodboard · concept sketching · CAD · visualisation · visualisation detail · back cover |
 | 06 Super Slides | cover · moodboard · concept sketching · CAD · colourways · render · back cover |
@@ -205,10 +205,11 @@ smith-residence-4-floor-plan.webp   (p. 6)
 smith-residence-5-kitchen.webp      (p. 7)
 smith-residence-6-elevations.webp   (p. 8)
 smith-residence-7-section.webp      (p. 9)
-elizabeth-street-6-driveway-view.webp   (B01: the flat-roofed scheme, sheets set in the title block of the earlier A00–A04 set: your render and drawings in the drawing area, the card's words set again in the set's own Tomato Grotesk)
-elizabeth-street-7-site-plan.webp       (B02)
-elizabeth-street-8-ground-floor-b.webp  (B03)
-elizabeth-street-9-first-floor-b.webp   (B04)
+elizabeth-street-6-driveway-view.webp   (B00: the flat-roofed scheme, sheets set in the title block of the earlier A00–A04 set: your render and drawings in the drawing area, the card's words set again in the set's own Tomato Grotesk)
+elizabeth-street-7-site-plan.webp       (B01)
+elizabeth-street-8-ground-floor-b.webp  (B02)
+elizabeth-street-9-first-floor-b.webp   (B03)
+elizabeth-street-10-elevations.webp     (B04: the east and west rows, each front above its rear, aligned on the building, at one scale, with one column of level labels)
 ```
 
 To update a spread, send the new PDF (or export the frame from Figma as PNG at 2×), convert it to WebP and overwrite the file. To add one, add a `{ "src": …, "alt": … }` line to the book's `frames` in `projects/books.js`. A book with an empty `frames` list (Blackwood Cafe, Splash Stool and Snap Pods, for now) opens to one blank spread with "Coming soon" on it. A book whose pages are in but whose project is still in progress gets `"comingSoon": true` (none, for now): its drawings fade back to a grey watermark with "Coming soon" over each spread; delete that line to show the drawings in full. The words are part of the image, so a description of each frame and its text is written into the image's `alt` text for screen readers. On a phone, where one page shows at a time, that text is small.

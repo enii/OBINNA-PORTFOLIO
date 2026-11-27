@@ -130,19 +130,23 @@ window.BOOKS =
     "frames": [
       {
         "src": "assets/images/elizabeth-street-6-driveway-view.webp",
-        "alt": "Elizabeth Street, driveway view (sheet B01): an artist's impression of the reworked terrace seen from the driveway, with flat roofs behind a concrete parapet, a rendered upper level with planted openings, and timber-clad garages and entries, beside the existing dwelling. Overview: the terrace reworked with flat roofs behind a concrete parapet, a rendered upper level with planted openings over timber-clad garages and entries."
+        "alt": "Elizabeth Street, driveway view (sheet B00): an artist's impression of the terrace seen from the driveway, with flat roofs behind a concrete parapet, a rendered upper level with planted openings, and timber-clad garages and entries, beside the existing dwelling."
       },
       {
         "src": "assets/images/elizabeth-street-7-site-plan.webp",
-        "alt": "Elizabeth Street, site plan (sheet B02): the lot with its boundary bearings and lengths (36.58 m by 50.38 m) and north point; eleven dwellings in two rows either side of a 6.0 m wide common driveway, and the existing dwelling retained on Lot 13 with its carport. Each dwelling has a private open space to the rear."
+        "alt": "Elizabeth Street, site plan (sheet B01): the lot with its boundary bearings and lengths (36.58 m by 50.38 m) and north point; eleven two-storey dwellings in two rows either side of a 6.0 m wide common driveway, and the existing dwelling retained on Lot 13 with its carport. Each dwelling has a private open space to the rear."
       },
       {
         "src": "assets/images/elizabeth-street-8-ground-floor-b.webp",
-        "alt": "Elizabeth Street, ground floor layout (sheet B03): seven dwellings in one row and four in the other, off the common driveway, each with a garage and store, a laundry and powder room, and an open kitchen, meals and family area opening to private open space at the rear; the existing dwelling on Lot 13 beside its carport."
+        "alt": "Elizabeth Street, ground floor layout (sheet B02): seven dwellings in one row and four in the other, off the common driveway, each with a garage and store, a laundry and powder room, and an open kitchen, meals and family area opening to private open space at the rear; the existing dwelling on Lot 13 beside its carport."
       },
       {
         "src": "assets/images/elizabeth-street-9-first-floor-b.webp",
-        "alt": "Elizabeth Street, first floor layout (sheet B04): three bedrooms, a study, a bathroom and an ensuite to bed 1 in each dwelling. Dwellings are mirrored in pairs so stairs and wet areas stack back to back."
+        "alt": "Elizabeth Street, first floor layout (sheet B03): three bedrooms, a study, a bathroom and an ensuite to bed 1 in each dwelling. Dwellings are mirrored in pairs so stairs and wet areas stack back to back."
+      },
+      {
+        "src": "assets/images/elizabeth-street-10-elevations.webp",
+        "alt": "Elizabeth Street, elevations (sheet B04): the east row of four dwellings and the west row of seven, each drawn with its front to the driveway above and its rear below, aligned on the building and at one scale, with the levels marked: NGL 0, FFL 150, FCL 2700, FFL-G 2850 and Level 3 at 5400. A rendered upper level with planters to the windows over timber cladding, garages and entries; the rears with glazed doors to the private open space."
       }
     ]
   },
