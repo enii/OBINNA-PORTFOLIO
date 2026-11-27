@@ -147,6 +147,10 @@ window.BOOKS =
       {
         "src": "assets/images/elizabeth-street-10-elevations.webp",
         "alt": "Elizabeth Street, elevations (sheet B04): the east row of four dwellings and the west row of seven, each drawn with its front to the driveway above and its rear below, aligned on the building and at one scale, with the levels marked: NGL 0, FFL 150, FCL 2700, FFL-G 2850 and Level 3 at 5400. A rendered upper level with planters to the windows over timber cladding, garages and entries; the rears with glazed doors to the private open space."
+      },
+      {
+        "src": "assets/images/elizabeth-street-11-axonometric.webp",
+        "alt": "Elizabeth Street, axonometric view (sheet B05): a line drawing of the whole site from above, with the west row of seven two-storey dwellings and the east row of four either side of the common driveway, their flat roofs behind parapets, timber cladding, garages and planters to the upper windows. The existing hipped-roof dwelling sits at the front with its carport under a pergola, and each dwelling has a fenced private open space at the rear."
       }
     ]
   },
