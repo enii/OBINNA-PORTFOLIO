@@ -28,6 +28,7 @@
   const prevBtn = $('#prevBtn');
   const nextBtn = $('#nextBtn');
   const soundBtn = $('#soundBtn');
+  const pdfBtn = $('#pdfBtn');
   const fsBtn = $('#fsBtn');
   const hint = $('#hint');
 
@@ -40,6 +41,8 @@
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const assetUrl = (u) => esc(/^(blob:|data:|https?:)/.test(u) ? u : String(u || '').replace(/^\/+/, ''));
   const valid = (p) => p && p.slug && p.title && Array.isArray(p.frames); // no frames yet: blank pages
+  // A book can be downloaded as a PDF (bookpdf.js makes it) once its pages are in and it's no longer "Coming soon"
+  const hasPDF = (p) => !!(window.bookPDF && p.frames.length && p.comingSoon !== true);
 
   function renderBook(p, number) {
     const style = ['dark', 'light', 'image'].includes(p.coverStyle) ? p.coverStyle : 'dark';
@@ -97,6 +100,7 @@
             <div class="backcover__actions">
               <button class="pill" type="button" data-action="next">Next project</button>
               <button class="pill" type="button" data-action="restart">Read again</button>
+              ${hasPDF(p) ? '<button class="pill" type="button" data-action="pdf">Download PDF</button>' : ''}
               <button class="pill" type="button" data-action="close">All projects</button>
             </div>
           </div>
@@ -121,12 +125,13 @@
      Each book is parsed in a <template>, which doesn't download images: a book's pages only load
      when it's opened. Only the covers, shown in the carousel, load straight away. */
   const library = $('#library');
-  const sources = bookList().map((p, i) => {
+  const projects = bookList();
+  const sources = projects.map((p, i) => {
     const tpl = document.createElement('template');
     tpl.innerHTML = renderBook(p, pad(i + 1));
     return tpl.content.firstElementChild;
   });
-  const books = sources.map((src) => {
+  const books = sources.map((src, k) => {
     const pages = $$(':scope > .page', src);
     const total = pages.length;
     pages.forEach((page, i) => {
@@ -147,6 +152,7 @@
       title: src.dataset.title || '',
       meta: src.dataset.meta || '',
       total,
+      project: projects[k],
     };
   });
   books.forEach((b, i) => {
@@ -477,6 +483,7 @@
     shelf.hidden = true;
     reader.hidden = false;
     readerTitle.textContent = `${b.number} — ${b.title}`;
+    pdfBtn.hidden = !hasPDF(b.project);
     document.title = `${b.title} — Obinna Oti`;
     current = 0;
     autoOpen = true;
@@ -749,12 +756,51 @@
     const action = btn.dataset.action;
     if (action === 'close') closeBook();
     if (action === 'restart' && pf) pf.flip(0);
+    if (action === 'pdf') downloadPDF(book);
     if (action === 'next') {
       const nextBook = books[(books.indexOf(book) + 1) % books.length];
       try { history.replaceState(null, '', `#${nextBook.slug}`); } catch (err) { /* sandboxed */ }
       showReader(nextBook);
     }
   });
+
+  /* Download PDF (the top bar, and the back cover): the open book as a PDF, made here in the browser by
+     bookpdf.js from the book's own images. A ring fills round the button while it's being made. */
+  let pdfBusy = false;
+  function pdfState(text, part) {
+    pdfBtn.style.setProperty('--p', (part || 0).toFixed(3));
+    $$('[data-action="pdf"]', wrap).forEach((pill) => { pill.textContent = text; });
+  }
+  async function downloadPDF(b) {
+    if (!b || pdfBusy || !hasPDF(b.project)) return;
+    pdfBusy = true;
+    pdfBtn.classList.add('is-busy');
+    pdfBtn.setAttribute('aria-busy', 'true');
+    pdfBtn.title = 'Making the PDF…';
+    pdfState('Making the PDF…', 0);
+    try {
+      const blob = await window.bookPDF(b.project, (done, all) => pdfState(`Making the PDF… ${Math.round((done / all) * 100)}%`, done / all));
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Obinna Oti - ${b.title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      pdfState('Download PDF');
+    } catch (err) {
+      console.error(err);
+      pdfState('Couldn’t make the PDF');
+      setTimeout(() => { if (!pdfBusy) pdfState('Download PDF'); }, 4000);
+    } finally {
+      pdfBusy = false;
+      pdfBtn.classList.remove('is-busy');
+      pdfBtn.removeAttribute('aria-busy');
+      pdfBtn.title = 'Download PDF';
+    }
+  }
+  pdfBtn.addEventListener('click', () => downloadPDF(book));
 
   document.addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;

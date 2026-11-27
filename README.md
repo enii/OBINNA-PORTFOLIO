@@ -236,6 +236,15 @@ The Tangerine cover shows your cover frame full bleed, with the title across the
 
 The covers show their title and, in the bottom-right corner, **ISSUE 01** in a light weight (the `<p class="cover__issue">` line in `renderBook` in `assets/js/main.js`; change the number there for a new issue). The back covers show only their title and buttons: `book-text-off` on the `<html>` tag at the top of `index.html` hides the small top line and the "01 — Product design…" line. Remove it to bring those back.
 
+### PDF downloads
+
+Every book with pages can be downloaded as a PDF: the **download** button in the reader's top bar (next to the sound button), or **Download PDF** on the back cover. A ring fills round the button while it's being made, which takes a second or two (longer on a phone). Nothing is stored: the visitor's browser makes the PDF there and then from the book's own images (`assets/js/bookpdf.js`), so a book's PDF is always up to date with its pages, including projects added with the Studio, and there are no PDF files to replace when a book changes.
+
+- **What's in it:** the front cover, each Figma frame as one landscape page (960 × 540 pt, a 16:9 slide, at the frames' full resolution), and the back cover. The covers are drawn to match the site's; the back cover has one button, **obinnaoti.com**, which opens the site from the PDF.
+- **File name:** "Obinna Oti - Vivonne Cabin.pdf", and so on. Its title and author are set too.
+- **Size:** about 0.8 MB a page (Vivonne Cabin is about 11 MB). To make the files smaller, lower `QUALITY` at the top of `bookpdf.js` (0.9 now; 0.8 makes them about a quarter smaller).
+- Books with no pages yet ("Coming soon"), and books marked `"comingSoon": true`, have no download.
+
 ### Copy
 
 Body copy is short placeholder text written for each project. The intro line is from your Frame 3. The contact email (top right and in the footer) is otimarvelous@gmail.com. Edit all of these in `index.html`.
