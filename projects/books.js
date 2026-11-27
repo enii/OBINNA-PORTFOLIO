@@ -148,6 +148,22 @@ window.BOOKS =
       {
         "src": "assets/images/elizabeth-street-5-elevations.webp",
         "alt": "Elizabeth Street, elevations (sheet A04): the driveway and rear elevations of the terrace row. Repeating gabled roof forms give each dwelling its own identity over a brick and render base; planter-edged upper windows face the driveway, and sliding doors open to the rear gardens."
+      },
+      {
+        "src": "assets/images/elizabeth-street-6-driveway-view.webp",
+        "alt": "Elizabeth Street, driveway view (sheet B01): an artist's impression of the reworked terrace seen from the driveway, with flat roofs behind a concrete parapet, a rendered upper level with planted openings, and timber-clad garages and entries, beside the existing dwelling. Overview: the terrace reworked with flat roofs behind a concrete parapet, a rendered upper level with planted openings over timber-clad garages and entries."
+      },
+      {
+        "src": "assets/images/elizabeth-street-7-site-plan.webp",
+        "alt": "Elizabeth Street, site plan (sheet B02): the lot with its boundary bearings and lengths (36.58 m by 50.38 m) and north point; eleven dwellings in two rows either side of a 6.0 m wide common driveway, and the existing dwelling retained on Lot 13 with its carport. Each dwelling has a private open space to the rear."
+      },
+      {
+        "src": "assets/images/elizabeth-street-8-ground-floor-b.webp",
+        "alt": "Elizabeth Street, ground floor layout (sheet B03): seven dwellings in one row and four in the other, off the common driveway, each with a garage and store, a laundry and powder room, and an open kitchen, meals and family area opening to private open space at the rear; the existing dwelling on Lot 13 beside its carport."
+      },
+      {
+        "src": "assets/images/elizabeth-street-9-first-floor-b.webp",
+        "alt": "Elizabeth Street, first floor layout (sheet B04): three bedrooms, a study, a bathroom and an ensuite to bed 1 in each dwelling. Dwellings are mirrored in pairs so stairs and wet areas stack back to back."
       }
     ]
   },
